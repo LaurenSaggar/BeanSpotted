@@ -5,6 +5,7 @@
 //  Created by Lauren Saggar on 10/14/24.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -13,5 +14,6 @@ struct BeanSpottedApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: CoffeeShop.self)
     }
 }
