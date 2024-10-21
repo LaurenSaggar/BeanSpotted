@@ -10,15 +10,19 @@ import SwiftData
 
 @Model
 class CoffeeShop {
-    var title: String
+    var name: String
+    var address: String
     var openingHour: Date
     var closingHour: Date
-    var review: String
+    var decafAvailable: Bool
+    var local: Bool
     
-    init(title: String, openingHour: Date, closingHour: Date, review: String) {
-        self.title = title
+    init(name: String, address: String, openingHour: Date, closingHour: Date, decafAvailable: Bool, local: Bool) {
+        self.name = name
+        self.address = address
         self.openingHour = openingHour
         self.closingHour = closingHour
-        self.review = review
+        self.decafAvailable = decafAvailable
+        self.local = local
     }
 }
