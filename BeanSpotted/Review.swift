@@ -11,6 +11,7 @@ import SwiftData
 @Model
 class Review {
     var coffeeShopName: String
+    var coffeeShopAddress: String
     var coffee: Int
     var nonCoffeeDrinks: Int
     var safety: Int
@@ -23,8 +24,9 @@ class Review {
     var cleanliness: Int
     var staffFriendliness: Int
     
-    init(coffeeShopName: String, coffee: Int, nonCoffeeDrinks: Int, safety: Int, wifiQuality: Int, seating: Int, quiet: Int, parking: Int, food: Int, value: Int, cleanliness: Int, staffFriendliness: Int) {
+    init(coffeeShopName: String, coffeeShopAddress: String, coffee: Int, nonCoffeeDrinks: Int, safety: Int, wifiQuality: Int, seating: Int, quiet: Int, parking: Int, food: Int, value: Int, cleanliness: Int, staffFriendliness: Int) {
         self.coffeeShopName = coffeeShopName
+        self.coffeeShopAddress = coffeeShopAddress
         self.coffee = coffee
         self.nonCoffeeDrinks = nonCoffeeDrinks
         self.safety = safety

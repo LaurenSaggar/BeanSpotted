@@ -12,16 +12,16 @@ import SwiftData
 class CoffeeShop {
     var name: String
     var address: String
-    var openingHour: Date
-    var closingHour: Date
+    var openingTime: Date
+    var closingTime: Date
     var decafAvailable: Bool
     var local: Bool
     
-    init(name: String, address: String, openingHour: Date, closingHour: Date, decafAvailable: Bool, local: Bool) {
+    init(name: String, address: String, openingTime: Date, closingTime: Date, decafAvailable: Bool, local: Bool) {
         self.name = name
         self.address = address
-        self.openingHour = openingHour
-        self.closingHour = closingHour
+        self.openingTime = openingTime
+        self.closingTime = closingTime
         self.decafAvailable = decafAvailable
         self.local = local
     }

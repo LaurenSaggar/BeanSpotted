@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4367FA752CC6F55100E395C4 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4367FA742CC6F55100E395C4 /* Review.swift */; };
+		4367FA7B2CC855FF00E395C4 /* AddReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4367FA7A2CC855FF00E395C4 /* AddReviewView.swift */; };
 		43B57E602CBDFD27001C81BE /* BeanSpottedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B57E5F2CBDFD27001C81BE /* BeanSpottedApp.swift */; };
 		43B57E622CBDFD27001C81BE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B57E612CBDFD27001C81BE /* ContentView.swift */; };
 		43B57E642CBDFD2A001C81BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43B57E632CBDFD2A001C81BE /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		4367FA742CC6F55100E395C4 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		4367FA7A2CC855FF00E395C4 /* AddReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReviewView.swift; sourceTree = "<group>"; };
 		43B57E5C2CBDFD27001C81BE /* BeanSpotted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeanSpotted.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43B57E5F2CBDFD27001C81BE /* BeanSpottedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeanSpottedApp.swift; sourceTree = "<group>"; };
 		43B57E612CBDFD27001C81BE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			children = (
 				43B57E5F2CBDFD27001C81BE /* BeanSpottedApp.swift */,
 				43B57E612CBDFD27001C81BE /* ContentView.swift */,
+				4367FA7A2CC855FF00E395C4 /* AddReviewView.swift */,
 				43DAF7342CBE02CA00925DCD /* CoffeeShop.swift */,
 				4367FA742CC6F55100E395C4 /* Review.swift */,
 				43B57E632CBDFD2A001C81BE /* Assets.xcassets */,
@@ -144,6 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43DAF7352CBE02CA00925DCD /* CoffeeShop.swift in Sources */,
+				4367FA7B2CC855FF00E395C4 /* AddReviewView.swift in Sources */,
 				4367FA752CC6F55100E395C4 /* Review.swift in Sources */,
 				43B57E622CBDFD27001C81BE /* ContentView.swift in Sources */,
 				43B57E602CBDFD27001C81BE /* BeanSpottedApp.swift in Sources */,
