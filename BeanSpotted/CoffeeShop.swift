@@ -16,8 +16,10 @@ class CoffeeShop {
     var closingTime: Date
     var decafAvailable: Bool
     var local: Bool
+    let createTime = Date.now
+    var modifyTime = Date.now
     
-    init(name: String, address: String, openingTime: Date, closingTime: Date, decafAvailable: Bool, local: Bool) {
+    init(name: String = "Mom n' Em", address: String = "4310 Whetsel Ave, Cincinnati, OH 45227", openingTime: Date = Date.now, closingTime: Date = Date.now, decafAvailable: Bool = true, local: Bool = true) {
         self.name = name
         self.address = address
         self.openingTime = openingTime

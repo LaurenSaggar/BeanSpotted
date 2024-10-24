@@ -4,19 +4,35 @@
 //
 //  Created by Lauren Saggar on 10/22/24.
 //
-
+import SwiftData
 import SwiftUI
 
 struct AddReviewView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
+    @Query var coffeeShops: [CoffeeShop]
     
+    // Coffee shop variables
     @State private var name = ""
     @State private var address = ""
     @State private var openingTime = Date()
     @State private var closingTime = Date()
     @State private var decafAvailable = true
     @State private var local = true
+    
+    // Shop review variables
+    @State private var coffee = 0
+    @State private var nonCoffeeDrinks = 0
+    @State private var safety = 0
+    @State private var wifiQuality = 0
+    @State private var seating = 0
+    @State private var quiet = 0
+    @State private var parking = 0
+    @State private var food = 0
+    @State private var value = 0
+    @State private var cleanliness = 0
+    @State private var staffFriendliness = 0
+    @State private var comment = ""
     
     var body: some View {
         NavigationStack {
@@ -61,14 +77,96 @@ struct AddReviewView: View {
                 
                 // Shop review inputs
                 Section("Write a review") {
-                    // More to come
+                    HStack {
+                        Text("Coffee")
+                        Spacer()
+                        RatingView(rating: $coffee)
+                    }
+                    
+                    HStack {
+                        Text("Non-Coffee Drinks")
+                        Spacer()
+                        RatingView(rating: $nonCoffeeDrinks)
+                    }
+                    
+                    HStack {
+                        Text("Safety")
+                        Spacer()
+                        RatingView(rating: $safety)
+                    }
+                    
+                    HStack {
+                        Text("Wifi Quality")
+                        Spacer()
+                        RatingView(rating: $wifiQuality)
+                    }
+                    
+                    HStack {
+                        Text("Seating")
+                        Spacer()
+                        RatingView(rating: $seating)
+                    }
+                    
+                    HStack {
+                        Text("Quiet")
+                        Spacer()
+                        RatingView(rating: $quiet)
+                    }
+                    
+                    HStack {
+                        Text("Parking")
+                        Spacer()
+                        RatingView(rating: $parking)
+                    }
+                    
+                    HStack {
+                        Text("Food")
+                        Spacer()
+                        RatingView(rating: $food)
+                    }
+                    
+                    HStack {
+                        Text("Value")
+                        Spacer()
+                        RatingView(rating: $value)
+                    }
+                    
+                    HStack {
+                        Text("Cleanliness")
+                        Spacer()
+                        RatingView(rating: $cleanliness)
+                    }
+                    
+                    HStack {
+                        Text("Staff Friendliness")
+                        Spacer()
+                        RatingView(rating: $staffFriendliness)
+                    }
+                    
+                    ZStack(alignment: .leading) {
+                        TextEditor(text: $comment)
+                        if comment.isEmpty {
+                            Text("Add additional comments here...\n\n")
+                                .foregroundStyle(.gray)
+                        }
+                    }
+                       
                 }
                 
                 Section {
                     Button("Save") {
-                        if validCoffeeShop() {
-                            let newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
-                            modelContext.insert(newCoffeeShop)
+                        // Add logic to check for valid review and add review to modelContext
+                        if validReview() {
+                            
+                            // Add coffee shop to coffee shops array only if it is net new
+                            if coffeeShopIsNew(name: name, address: address) {
+                                let newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
+                                modelContext.insert(newCoffeeShop)
+                            }
+                            
+                            // Add review to reviews array regardless of if it is net new or not
+                            let newReview = Review(coffeeShopName: name, coffeeShopAddress: address, coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment)
+                            modelContext.insert(newReview)
                             dismiss()
                         } else {
                             ()
@@ -81,16 +179,28 @@ struct AddReviewView: View {
         }
     }
     
-    func validCoffeeShop() -> Bool {
-        if (name.isEmpty || address.isEmpty) {
+    // Ensure shop name, address, and all review attributes except for comment have a value/are selected before saving
+    func validReview() -> Bool {
+        if (name.isEmpty || address.isEmpty || coffee == 0 || nonCoffeeDrinks == 0 || safety == 0 || wifiQuality == 0 || seating == 0 || quiet == 0 || parking == 0 || food == 0 || value == 0 || cleanliness == 0 || staffFriendliness == 0 || comment.isEmpty) {
             return false
         }
         
+        return true
+    }
+    
+    // Returns true if coffee shop is net new (name + address combo is unique)
+    func coffeeShopIsNew(name: String, address: String) -> Bool {
+        for shop in coffeeShops {
+            if shop.name == name && shop.address == address {
+                return false
+            }
+        }
         return true
     }
 }
 
 #Preview {
     AddReviewView()
+    //AddReviewView(coffeeShops: .constant([CoffeeShop()]))
 }
 
