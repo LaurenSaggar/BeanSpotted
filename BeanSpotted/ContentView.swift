@@ -14,6 +14,10 @@ struct ContentView: View {
     
     // @Query queries model objects from SwiftUI view & stays up to date/reinvokes every time your data changes
     @Query var coffeeShops: [CoffeeShop]
+    @Query var reviews: [Review]
+    
+    //Created to access review functions
+    var review = Review()
     
     @State private var showingReviewScreen = false
     
@@ -21,10 +25,21 @@ struct ContentView: View {
         NavigationStack {
             List {
                 ForEach(coffeeShops) { shop in
-                    VStack(alignment: .leading) {
-                        Text(shop.name)
-                            .font(.headline)
-                        Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
+                    NavigationLink(value: shop) {
+                        HStack {
+                            // Vertically display coffee shop name and hours on left of each row
+                            VStack(alignment: .leading) {
+                                Text(shop.name)
+                                    .font(.headline)
+                                Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
+                                Text("\(shop.reviews.count)")
+                            }
+                            
+                            Spacer()
+                            
+                            // Display star rating on right of each row
+                            RatingDisplayView(rating: shop.averageShopReview())
+                        }
                     }
                 }
                 .onDelete(perform: deleteShops)
