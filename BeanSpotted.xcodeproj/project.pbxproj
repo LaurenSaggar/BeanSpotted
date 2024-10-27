@@ -3,16 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		4367FA752CC6F55100E395C4 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4367FA742CC6F55100E395C4 /* Review.swift */; };
-		4367FA7B2CC855FF00E395C4 /* AddReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4367FA7A2CC855FF00E395C4 /* AddReviewView.swift */; };
-		4367FA7D2CC99A4B00E395C4 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4367FA7C2CC99A4B00E395C4 /* RatingView.swift */; };
-		4367FA7F2CCAEBAE00E395C4 /* RatingDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4367FA7E2CCAEBAE00E395C4 /* RatingDisplayView.swift */; };
 		43B57E602CBDFD27001C81BE /* BeanSpottedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B57E5F2CBDFD27001C81BE /* BeanSpottedApp.swift */; };
-		43B57E622CBDFD27001C81BE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B57E612CBDFD27001C81BE /* ContentView.swift */; };
 		43B57E642CBDFD2A001C81BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43B57E632CBDFD2A001C81BE /* Assets.xcassets */; };
 		43B57E672CBDFD2A001C81BE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43B57E662CBDFD2A001C81BE /* Preview Assets.xcassets */; };
 		43DAF7352CBE02CA00925DCD /* CoffeeShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DAF7342CBE02CA00925DCD /* CoffeeShop.swift */; };
@@ -20,16 +16,17 @@
 
 /* Begin PBXFileReference section */
 		4367FA742CC6F55100E395C4 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
-		4367FA7A2CC855FF00E395C4 /* AddReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReviewView.swift; sourceTree = "<group>"; };
-		4367FA7C2CC99A4B00E395C4 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
-		4367FA7E2CCAEBAE00E395C4 /* RatingDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingDisplayView.swift; sourceTree = "<group>"; };
 		43B57E5C2CBDFD27001C81BE /* BeanSpotted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeanSpotted.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43B57E5F2CBDFD27001C81BE /* BeanSpottedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeanSpottedApp.swift; sourceTree = "<group>"; };
-		43B57E612CBDFD27001C81BE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		43B57E632CBDFD2A001C81BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43B57E662CBDFD2A001C81BE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		43DAF7342CBE02CA00925DCD /* CoffeeShop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShop.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4367FA822CCDABCA00E395C4 /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
+		4367FA832CCDABEA00E395C4 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		43B57E592CBDFD27001C81BE /* Frameworks */ = {
@@ -62,10 +59,8 @@
 			isa = PBXGroup;
 			children = (
 				43B57E5F2CBDFD27001C81BE /* BeanSpottedApp.swift */,
-				43B57E612CBDFD27001C81BE /* ContentView.swift */,
-				4367FA7A2CC855FF00E395C4 /* AddReviewView.swift */,
-				4367FA7C2CC99A4B00E395C4 /* RatingView.swift */,
-				4367FA7E2CCAEBAE00E395C4 /* RatingDisplayView.swift */,
+				4367FA832CCDABEA00E395C4 /* Views */,
+				4367FA822CCDABCA00E395C4 /* Models */,
 				43DAF7342CBE02CA00925DCD /* CoffeeShop.swift */,
 				4367FA742CC6F55100E395C4 /* Review.swift */,
 				43B57E632CBDFD2A001C81BE /* Assets.xcassets */,
@@ -96,6 +91,10 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4367FA822CCDABCA00E395C4 /* Models */,
+				4367FA832CCDABEA00E395C4 /* Views */,
 			);
 			name = BeanSpotted;
 			productName = BeanSpotted;
@@ -153,11 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43DAF7352CBE02CA00925DCD /* CoffeeShop.swift in Sources */,
-				4367FA7F2CCAEBAE00E395C4 /* RatingDisplayView.swift in Sources */,
-				4367FA7B2CC855FF00E395C4 /* AddReviewView.swift in Sources */,
 				4367FA752CC6F55100E395C4 /* Review.swift in Sources */,
-				4367FA7D2CC99A4B00E395C4 /* RatingView.swift in Sources */,
-				43B57E622CBDFD27001C81BE /* ContentView.swift in Sources */,
 				43B57E602CBDFD27001C81BE /* BeanSpottedApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

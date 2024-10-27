@@ -156,15 +156,14 @@ struct AddReviewView: View {
                 
                 Section {
                     Button("Save") {
-                        // Add logic to check for valid review and add review to modelContext
+                        // Check for valid review before saving review and potentially new coffee shop
                         if validReview() {
                             
                             let newReview = Review(coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment)
 //                            
 //                            // Add new review to existing coffee shop if shop already exists
                             if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
-//                                newReview = Review(coffeeShop: coffeeShops[shopIndex], coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment)
-//                                modelContext.insert(newReview)
+
                                 coffeeShops[shopIndex].reviews.append(newReview)
 //                            
 //                            // Add new coffee shop if it doesn't yet exist and add new review to newly created coffee shop
@@ -175,45 +174,8 @@ struct AddReviewView: View {
                                 newCoffeeShop.reviews.append(newReview)
                             }
                             
-                            //let existingShopArray = coffeeShops.filter( { $0.name == name && $0.address == address } )
-                            
-                            // Add new coffee shop if it doesn't yet exist and add new review to newly created coffee shop
-//                            if existingShopArray.isEmpty {
-//                                let newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
-//                                
-//                                modelContext.insert(newCoffeeShop)
-//                                newCoffeeShop.reviews.append(newReview)
-//                            
-//                            //
-//                            } else {
-//                                
-//                            }
-                            
-                            // Add coffee shop to coffee shops array only if it is net new
-//                            if coffeeShopIsNew(name: name, address: address) {
-//                                let newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
-//                                
-//                                modelContext.insert(newCoffeeShop)
-//                                newCoffeeShop.reviews.append(newReview)
-//                                
-//                            } else {
-//                                let existingShopArray = coffeeShops.filter( { $0.name == name && $0.address == address } )
-//                                existingShop.reviews.append(new)
-//                            }
-
-//                            let coffeeShop = coffeeShops.filter(
-//                                for shop in coffeeShops {
-//                                    if shop.name == name && shop.address == address {
-//                                        return true
-//                                    }
-//                                }
-//                            )
-                            // Add review to reviews array regardless of if it is net new or not
-                            
-//                            let newReview = Review(coffeeShop: CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local), coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment)
-//                            modelContext.insert(newReview)
-                            
                             dismiss()
+                            
                         } else {
                             ()
                         }
@@ -222,6 +184,7 @@ struct AddReviewView: View {
                 
             }
             .navigationTitle("Add Review")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     
@@ -233,17 +196,6 @@ struct AddReviewView: View {
         
         return true
     }
-    
-    // Returns true if coffee shop is net new (name + address combo is unique)
-//    func coffeeShopIsNew(name: String, address: String) -> Bool {
-//        
-//        for shop in coffeeShops {
-//            if shop.name == name && shop.address == address {
-//                return false
-//            }
-//        }
-//        return true
-//    }
 }
 
 #Preview {

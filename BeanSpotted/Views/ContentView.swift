@@ -25,26 +25,26 @@ struct ContentView: View {
         NavigationStack {
             List {
                 ForEach(coffeeShops) { shop in
-                    NavigationLink(value: shop) {
+                    NavigationLink(destination: DetailView(coffeeShop: shop)) {
                         HStack {
                             // Vertically display coffee shop name and hours on left of each row
                             VStack(alignment: .leading) {
                                 Text(shop.name)
                                     .font(.headline)
                                 Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
-                                Text("\(shop.reviews.count)")
+                                Text("Reviews: \(shop.reviews.count)")
                             }
                             
                             Spacer()
                             
                             // Display star rating on right of each row
-                            RatingDisplayView(rating: shop.averageShopReview())
+                            RatingDisplayView(rating: shop.averageOverallRating())
                         }
                     }
                 }
                 .onDelete(perform: deleteShops)
             }
-            .navigationTitle("Search")
+            .navigationTitle("Bean Spots")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Add Review") {
