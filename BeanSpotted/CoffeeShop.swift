@@ -18,8 +18,8 @@ class CoffeeShop {
     var local: Bool
     var createTime = Date.now
     var modifyTime = Date.now
-    //var reviews = [Review]()
     @Relationship(deleteRule: .cascade, inverse: \Review.coffeeShop) var reviews = [Review]()
+    //var avgOverallRating = 5
     
     init(name: String = "Mom n' Em", address: String = "4310 Whetsel Ave, Cincinnati, OH 45227", openingTime: Date = Date.now, closingTime: Date = Date.now, decafAvailable: Bool = true, local: Bool = true) {
         self.name = name

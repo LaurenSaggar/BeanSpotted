@@ -69,6 +69,7 @@ struct DetailView: View {
                             .bold()
                             .foregroundStyle(.white)
                         Spacer()
+                        // ********
                         RatingDisplayView(rating: coffeeShop.averageOverallRating())
                     }
                     .listRowBackground(Color.mint)

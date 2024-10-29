@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Review {
-    var overallRating = 0
+    var overallRating: Int = 0
     var coffee: Int
     var nonCoffeeDrinks: Int
     var safety: Int
