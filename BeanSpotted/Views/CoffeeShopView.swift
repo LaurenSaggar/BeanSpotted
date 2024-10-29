@@ -71,6 +71,12 @@ struct CoffeeShopView: View {
         for offset in offsets {
             let shop = coffeeShops[offset]
             modelContext.delete(shop)
+            
+            do {
+                try modelContext.save()
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
 }

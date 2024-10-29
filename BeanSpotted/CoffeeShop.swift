@@ -18,8 +18,8 @@ class CoffeeShop {
     var local: Bool
     var createTime = Date.now
     var modifyTime = Date.now
+    var avgRating: Int = 0
     @Relationship(deleteRule: .cascade, inverse: \Review.coffeeShop) var reviews = [Review]()
-    //var avgOverallRating = 5
     
     init(name: String = "Mom n' Em", address: String = "4310 Whetsel Ave, Cincinnati, OH 45227", openingTime: Date = Date.now, closingTime: Date = Date.now, decafAvailable: Bool = true, local: Bool = true) {
         self.name = name
@@ -28,6 +28,7 @@ class CoffeeShop {
         self.closingTime = closingTime
         self.decafAvailable = decafAvailable
         self.local = local
+        self.avgRating = reviews.map( {$0.overallRating} ).reduce(0, +) / reviews.count
     }
     
     // Returns average overall rating of all coffee shop reviews
@@ -37,7 +38,8 @@ class CoffeeShop {
         let ratings = reviews.map( {$0.overallRating} )
         
         if reviews.count > 0 {
-            return ratings.reduce(0, +) / reviews.count
+            self.avgRating = ratings.reduce(0, +) / reviews.count
+            return self.avgRating
         } else {
             print("No reviews for this coffee shop name + address")
             return 0

@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-//    // ModelContext tracks when model objects are created/modified/deleted before save to ModelContainer at later point
+    // ModelContext tracks when model objects are created/modified/deleted before save to ModelContainer at later point
 //    @Environment(\.modelContext) var modelContext
 //    
 //    // @Query queries model objects from SwiftUI view & stays up to date/reinvokes every time your data changes
@@ -17,7 +17,6 @@ struct ContentView: View {
 //    
 //    @State private var showingReviewScreen = false
     @State private var sortOrder = SortDescriptor(\CoffeeShop.name)
-    var coffee = CoffeeShop()
     
     var body: some View {
         NavigationStack {
@@ -28,6 +27,9 @@ struct ContentView: View {
                         Picker("Sort", selection: $sortOrder) {
                             Text("Name")
                                 .tag(SortDescriptor(\CoffeeShop.name))
+                            
+                            Text("Average Customer Rating")
+                                .tag(SortDescriptor(\CoffeeShop.avgRating))
                             
                             Text("Create Time")
                                 .tag(SortDescriptor(\CoffeeShop.createTime, order: .reverse))

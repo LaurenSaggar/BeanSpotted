@@ -163,15 +163,26 @@ struct AddReviewView: View {
 //                            
 //                            // Add new review to existing coffee shop if shop already exists
                             if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
-
                                 coffeeShops[shopIndex].reviews.append(newReview)
-//                            
+                                
+                                do {
+                                    try modelContext.save()
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+//
 //                            // Add new coffee shop if it doesn't yet exist and add new review to newly created coffee shop
                             } else {
                                 let newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
                                 
                                 modelContext.insert(newCoffeeShop)
                                 newCoffeeShop.reviews.append(newReview)
+                                
+                                do {
+                                    try modelContext.save()
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
                             }
                             
                             dismiss()
