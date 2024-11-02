@@ -28,7 +28,6 @@ class CoffeeShop {
         self.closingTime = closingTime
         self.decafAvailable = decafAvailable
         self.local = local
-        self.avgRating = reviews.map( {$0.overallRating} ).reduce(0, +) / reviews.count
     }
     
     // Returns average overall rating of all coffee shop reviews
@@ -38,8 +37,9 @@ class CoffeeShop {
         let ratings = reviews.map( {$0.overallRating} )
         
         if reviews.count > 0 {
-            self.avgRating = ratings.reduce(0, +) / reviews.count
-            return self.avgRating
+            //self.avgRating = ratings.reduce(0, +) / reviews.count
+            //return self.avgRating
+            return ratings.reduce(0, +) / reviews.count
         } else {
             print("No reviews for this coffee shop name + address")
             return 0

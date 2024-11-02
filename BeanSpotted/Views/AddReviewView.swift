@@ -163,7 +163,9 @@ struct AddReviewView: View {
 //                            
 //                            // Add new review to existing coffee shop if shop already exists
                             if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
-                                coffeeShops[shopIndex].reviews.append(newReview)
+                                let shop = coffeeShops[shopIndex]
+                                shop.reviews.append(newReview)
+                                shop.avgRating = shop.reviews.map( {$0.overallRating} ).reduce(0, +) / shop.reviews.count
                                 
                                 do {
                                     try modelContext.save()
@@ -177,6 +179,7 @@ struct AddReviewView: View {
                                 
                                 modelContext.insert(newCoffeeShop)
                                 newCoffeeShop.reviews.append(newReview)
+                                newCoffeeShop.avgRating = newCoffeeShop.reviews.map( {$0.overallRating} ).reduce(0, +) / newCoffeeShop.reviews.count
                                 
                                 do {
                                     try modelContext.save()

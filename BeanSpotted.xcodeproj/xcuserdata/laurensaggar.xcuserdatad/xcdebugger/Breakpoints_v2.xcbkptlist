@@ -16,8 +16,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "24"
             endingLineNumber = "24"
-            landmarkName = "init(name:address:openingTime:closingTime:decafAvailable:local:)"
-            landmarkType = "7">
+            landmarkName = "CoffeeShop"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

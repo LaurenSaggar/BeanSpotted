@@ -27,13 +27,14 @@ struct CoffeeShopView: View {
                                 .font(.headline)
                             Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
                             Text("Reviews: \(shop.reviews.count)")
+                            Text("Average Rating: \(shop.avgRating)")
                         }
                         
                         Spacer()
                         
                         // *******
                         // Display star rating on right of each row
-                        RatingDisplayView(rating: shop.averageOverallRating())
+                        RatingDisplayView(rating: shop.avgRating)
                     }
                 }
             }

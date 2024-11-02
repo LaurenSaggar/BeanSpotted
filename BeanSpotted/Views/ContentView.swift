@@ -16,7 +16,7 @@ struct ContentView: View {
 //    @Query var coffeeShops: [CoffeeShop]
 //    
 //    @State private var showingReviewScreen = false
-    @State private var sortOrder = SortDescriptor(\CoffeeShop.name)
+    @State private var sortOrder = SortDescriptor(\CoffeeShop.avgRating, order: .reverse)
     
     var body: some View {
         NavigationStack {
@@ -25,11 +25,11 @@ struct ContentView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu("Sort") {
                         Picker("Sort", selection: $sortOrder) {
+                            Text("Average Customer Rating")
+                                .tag(SortDescriptor(\CoffeeShop.avgRating, order: .reverse))
+                            
                             Text("Name")
                                 .tag(SortDescriptor(\CoffeeShop.name))
-                            
-                            Text("Average Customer Rating")
-                                .tag(SortDescriptor(\CoffeeShop.avgRating))
                             
                             Text("Create Time")
                                 .tag(SortDescriptor(\CoffeeShop.createTime, order: .reverse))
