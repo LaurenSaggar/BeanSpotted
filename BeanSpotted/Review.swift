@@ -10,6 +10,8 @@ import SwiftData
 
 @Model
 class Review {
+    // Make id unique and immutable (just have to ensure class methods don't change id); UUID provides simpler primary key indexing
+    @Attribute(.unique) private(set) var id = UUID()
     var overallRating: Int = 0
     var coffee: Int
     var nonCoffeeDrinks: Int
@@ -23,7 +25,7 @@ class Review {
     var cleanliness: Int
     var staffFriendliness: Int
     var comment: String
-    var createTime = Date.now
+    private(set) var createTime = Date.now
     var modifyTime = Date.now
     var coffeeShop: CoffeeShop?
     

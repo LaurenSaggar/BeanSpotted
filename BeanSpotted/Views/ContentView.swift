@@ -18,10 +18,29 @@ struct ContentView: View {
 //    @State private var showingReviewScreen = false
     @State private var sortOrder = SortDescriptor(\CoffeeShop.avgRating, order: .reverse)
     
+    let filters = ["None", "Decaf Available", "Local Only"]
+    @State private var selectedFilter: String = "None"
+    //@State private var filter = #Predicate<CoffeeShop>
+//    enum FilterType {
+//        case none,
+//            decafAvailable,
+//            localOnly
+//    }
+//    @State private var filter: FilterType = .none
+    
     var body: some View {
         NavigationStack {
-            CoffeeShopView(sort: sortOrder)
+            CoffeeShopView(sort: sortOrder, filter: selectedFilter)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Menu("Filter") {
+                        Picker("Filter", selection: $selectedFilter) {
+                            ForEach(filters, id: \.self) { filter in
+                                Text(filter)
+                            }
+                        }
+                    }
+                }
                 ToolbarItem(placement: .topBarLeading) {
                     Menu("Sort") {
                         Picker("Sort", selection: $sortOrder) {

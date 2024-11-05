@@ -157,7 +157,7 @@ struct DetailView: View {
 
 #Preview {
     do {
-        // In memory temporary storage; must have config and container before making any model object
+        // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: CoffeeShop.self, configurations: config)
         let example = CoffeeShop()

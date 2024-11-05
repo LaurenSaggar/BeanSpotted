@@ -10,13 +10,17 @@ import SwiftData
 
 @Model
 class CoffeeShop {
+    // #Unique<CoffeeShop>([\.id], [\.name, \.address]) -- only supported by iOS 18
+    // Make id unique and immutable (just have to ensure class methods don't change id); UUID provides simpler primary key indexing
+    @Attribute(.unique) private(set) var id = UUID()
+    @Attribute(.unique) var nameAndAddress: String
     var name: String
     var address: String
     var openingTime: Date
     var closingTime: Date
     var decafAvailable: Bool
     var local: Bool
-    var createTime = Date.now
+    private(set) var createTime = Date.now
     var modifyTime = Date.now
     var avgRating: Int = 0
     @Relationship(deleteRule: .cascade, inverse: \Review.coffeeShop) var reviews = [Review]()
@@ -24,6 +28,7 @@ class CoffeeShop {
     init(name: String = "Mom n' Em", address: String = "4310 Whetsel Ave, Cincinnati, OH 45227", openingTime: Date = Date.now, closingTime: Date = Date.now, decafAvailable: Bool = true, local: Bool = true) {
         self.name = name
         self.address = address
+        self.nameAndAddress = name + address
         self.openingTime = openingTime
         self.closingTime = closingTime
         self.decafAvailable = decafAvailable
