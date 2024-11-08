@@ -27,7 +27,6 @@ struct CoffeeShopView: View {
                                 .font(.headline)
                             Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
                             Text("Reviews: \(shop.reviews.count)")
-                            Text("Average Rating: \(shop.avgRating)")
                         }
                         
                         Spacer()
@@ -55,18 +54,19 @@ struct CoffeeShopView: View {
     
     // Initialize coffee shop view to change the query sort order based on what's passed in from content view
     init(sort: SortDescriptor<CoffeeShop>, filter: String) {
-        
         // Need to change the query object itself rather than the array inside of it, so access the underscored property
-        _coffeeShops = Query(sort: [sort])
-        
-        if filter == "Decaf Available" {
+            
+        if filter == "None" {
+            _coffeeShops = Query(sort: [sort])
+            
+        } else if (filter == "Decaf Available") {
             _coffeeShops = Query(filter: #Predicate<CoffeeShop> {
-                $0.decafAvailable == true
+                $0.decafAvailable
             }, sort: [sort])
             
         } else if (filter == "Local Only") {
             _coffeeShops = Query(filter: #Predicate<CoffeeShop> {
-                $0.local == true
+                $0.local
             }, sort: [sort])
         }
     }

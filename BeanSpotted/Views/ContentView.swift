@@ -9,24 +9,11 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    // ModelContext tracks when model objects are created/modified/deleted before save to ModelContainer at later point
-//    @Environment(\.modelContext) var modelContext
-//    
-//    // @Query queries model objects from SwiftUI view & stays up to date/reinvokes every time your data changes
-//    @Query var coffeeShops: [CoffeeShop]
-//    
-//    @State private var showingReviewScreen = false
+
     @State private var sortOrder = SortDescriptor(\CoffeeShop.avgRating, order: .reverse)
     
     let filters = ["None", "Decaf Available", "Local Only"]
-    @State private var selectedFilter: String = "None"
-    //@State private var filter = #Predicate<CoffeeShop>
-//    enum FilterType {
-//        case none,
-//            decafAvailable,
-//            localOnly
-//    }
-//    @State private var filter: FilterType = .none
+    @State private var selectedFilter = "None"
     
     var body: some View {
         NavigationStack {
@@ -41,6 +28,7 @@ struct ContentView: View {
                         }
                     }
                 }
+                
                 ToolbarItem(placement: .topBarLeading) {
                     Menu("Sort") {
                         Picker("Sort", selection: $sortOrder) {
