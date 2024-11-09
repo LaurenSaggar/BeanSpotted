@@ -12,25 +12,25 @@ import SwiftData
 class Review {
     // Make id unique and immutable (just have to ensure class methods don't change id); UUID provides simpler primary key indexing
     @Attribute(.unique) private(set) var id = UUID()
-    var overallRating: Int = 0
-    var coffee: Int
-    var nonCoffeeDrinks: Int
-    var safety: Int
-    var wifiQuality: Int
-    var seating: Int
-    var quiet: Int
-    var parking: Int
-    var food: Int
-    var value: Int
-    var cleanliness: Int
-    var staffFriendliness: Int
+    var overallRating: Double = 0
+    var coffee: Double
+    var nonCoffeeDrinks: Double
+    var safety: Double
+    var wifiQuality: Double
+    var seating: Double
+    var quiet: Double
+    var parking: Double
+    var food: Double
+    var value: Double
+    var cleanliness: Double
+    var staffFriendliness: Double
     var comment: String
     private(set) var createTime = Date.now
     var modifyTime = Date.now
     var coffeeShop: CoffeeShop?
     
-    init(coffeeShop: CoffeeShop? = nil, coffee: Int = 4, nonCoffeeDrinks: Int = 4, safety: Int = 4, wifiQuality: Int = 4, seating: Int = 4, quiet: Int = 4, parking: Int = 4, food: Int = 4, value: Int = 4, cleanliness: Int = 4, staffFriendliness: Int = 4, comment: String = "Incredible!") {
-        self.overallRating = (coffee + nonCoffeeDrinks + safety + wifiQuality + seating + quiet + parking + food + value + cleanliness + staffFriendliness) / 11
+    init(coffeeShop: CoffeeShop? = nil, coffee: Double = 4, nonCoffeeDrinks: Double = 4, safety: Double = 4, wifiQuality: Double = 4, seating: Double = 4, quiet: Double = 4, parking: Double = 4, food: Double = 4, value: Double = 4, cleanliness: Double = 4, staffFriendliness: Double = 4, comment: String = "Incredible!") {
+        self.overallRating = (coffee + nonCoffeeDrinks + safety + wifiQuality + seating + quiet + parking + food + value + cleanliness + staffFriendliness) / 11.0
         self.coffee = coffee
         self.nonCoffeeDrinks = nonCoffeeDrinks
         self.safety = safety

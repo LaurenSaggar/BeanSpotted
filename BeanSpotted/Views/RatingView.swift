@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RatingView: View {
     // Binding to rating allows us to share this variable declared in another view (and change that variable here as needed)
-    @Binding var rating: Int
+    @Binding var rating: Double
     
     // Could choose to add text before the rating visual
     var label = ""
@@ -34,11 +34,11 @@ struct RatingView: View {
             ForEach(1..<maximumRating + 1, id: \.self) { number in
                 // Creates 5 star buttons
                 Button {
-                    rating = number
+                    rating = Double(number)
                 // Reinvoked each time button is pressed
                 } label: {
                     image(for: number)
-                        .foregroundStyle(number > rating ? offColor: onColor)
+                        .foregroundStyle(number > Int(rating) ? offColor: onColor)
                 }
             }
         }
@@ -47,7 +47,7 @@ struct RatingView: View {
     
     // Determines the image shown for each potential rating position
     func image(for number: Int) -> Image {
-        if number > rating {
+        if number > Int(rating) {
             offImage ?? onImage
         } else {
             onImage
@@ -56,6 +56,6 @@ struct RatingView: View {
 }
 
 #Preview {
-    RatingView(rating: .constant(4))
+    RatingView(rating: .constant(4.2))
     // RatingView(rating: .constant(4), offImage: Image(systemName: "circle"))
 }

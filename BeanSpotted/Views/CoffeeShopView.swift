@@ -27,6 +27,7 @@ struct CoffeeShopView: View {
                                 .font(.headline)
                             Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
                             Text("Reviews: \(shop.reviews.count)")
+                            Text("Avg Rating: \(shop.avgRating)")
                         }
                         
                         Spacer()

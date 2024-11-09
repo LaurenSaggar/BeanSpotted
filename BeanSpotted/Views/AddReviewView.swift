@@ -22,17 +22,17 @@ struct AddReviewView: View {
     @State private var local = true
     
     // Shop review variables
-    @State private var coffee = 0
-    @State private var nonCoffeeDrinks = 0
-    @State private var safety = 0
-    @State private var wifiQuality = 0
-    @State private var seating = 0
-    @State private var quiet = 0
-    @State private var parking = 0
-    @State private var food = 0
-    @State private var value = 0
-    @State private var cleanliness = 0
-    @State private var staffFriendliness = 0
+    @State private var coffee: Double = 0.0
+    @State private var nonCoffeeDrinks: Double = 0.0
+    @State private var safety: Double = 0.0
+    @State private var wifiQuality: Double = 0.0
+    @State private var seating: Double = 0.0
+    @State private var quiet: Double = 0.0
+    @State private var parking: Double = 0.0
+    @State private var food: Double = 0.0
+    @State private var value: Double = 0.0
+    @State private var cleanliness: Double = 0.0
+    @State private var staffFriendliness: Double = 0.0
     @State private var comment = ""
     
     var body: some View {
@@ -165,7 +165,8 @@ struct AddReviewView: View {
                             if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
                                 let shop = coffeeShops[shopIndex]
                                 shop.reviews.append(newReview)
-                                shop.avgRating = shop.reviews.map( {$0.overallRating} ).reduce(0, +) / shop.reviews.count
+                                let ratings = shop.reviews.map( {$0.overallRating} )
+                                shop.avgRating = ratings.reduce(0, +) / Double(shop.reviews.count)
                                 
                                 do {
                                     try modelContext.save()
@@ -179,7 +180,8 @@ struct AddReviewView: View {
                                 
                                 modelContext.insert(newCoffeeShop)
                                 newCoffeeShop.reviews.append(newReview)
-                                newCoffeeShop.avgRating = newCoffeeShop.reviews.map( {$0.overallRating} ).reduce(0, +) / newCoffeeShop.reviews.count
+                                let ratings = newCoffeeShop.reviews.map( {$0.overallRating} )
+                                newCoffeeShop.avgRating = ratings.reduce(0, +) / Double(newCoffeeShop.reviews.count)
                                 
                                 do {
                                     try modelContext.save()
@@ -204,7 +206,7 @@ struct AddReviewView: View {
     
     // Ensure shop name, address, and all review attributes except for comment have a value/are selected before saving
     func validReview() -> Bool {
-        if (name.isEmpty || address.isEmpty || coffee == 0 || nonCoffeeDrinks == 0 || safety == 0 || wifiQuality == 0 || seating == 0 || quiet == 0 || parking == 0 || food == 0 || value == 0 || cleanliness == 0 || staffFriendliness == 0 || comment.isEmpty) {
+        if (name.isEmpty || address.isEmpty || coffee == 0.0 || nonCoffeeDrinks == 0.0 || safety == 0.0 || wifiQuality == 0.0 || seating == 0.0 || quiet == 0.0 || parking == 0.0 || food == 0.0 || value == 0 || cleanliness == 0.0 || staffFriendliness == 0.0 || comment.isEmpty) {
             return false
         }
         
