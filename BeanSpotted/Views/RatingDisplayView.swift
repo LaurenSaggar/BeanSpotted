@@ -19,11 +19,14 @@ struct RatingDisplayView: View {
     // Positions until rating will always be shown as half stars
     var halfStar = Image(systemName: "star.leadinghalf.fill")
     
+    // Off image
+    var offImage = Image(systemName: "star")
+    
     // Positions beyond rating will always be gray
-    var offColor = Color.gray
+    var offColor = Color.orange
     
     // Positions until rating will always be yellow
-    var onColor = Color.yellow
+    var onColor = Color.orange
     
     var body: some View {
         HStack {
@@ -42,14 +45,14 @@ struct RatingDisplayView: View {
                     halfStar.foregroundStyle(onColor)
                     
                 } else {
-                    fullStar.foregroundStyle(offColor)
+                    offImage.foregroundStyle(offColor)
                 }
             }
             
             // Fill in empty stars
             if (Int(rating.rounded(.down)) + 2 < maximumRating + 1) {
                 ForEach(Int(rating.rounded(.down)) + 2..<maximumRating + 1, id: \.self) { number in
-                    fullStar.foregroundStyle(offColor)
+                    offImage.foregroundStyle(offColor)
                 }
             }
         }

@@ -42,10 +42,10 @@ struct DetailView: View {
                             .bold()
                         if coffeeShop.decafAvailable {
                             Text("Yes")
-                                .foregroundStyle(.green)
+                                .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                         } else {
                             Text("No")
-                                .foregroundStyle(.red)
+                                .foregroundStyle(Color(.sRGB, red: 211/255, green: 4/255, blue: 4/255))
                         }
                     }
                     
@@ -54,10 +54,10 @@ struct DetailView: View {
                             .bold()
                         if coffeeShop.local {
                             Text("Yes")
-                                .foregroundStyle(.green)
+                                .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                         } else {
                             Text("No")
-                                .foregroundStyle(.red)
+                                .foregroundStyle(Color(.sRGB, red: 211/255, green: 4/255, blue: 4/255))
                         }
                     }
                 }
@@ -72,7 +72,7 @@ struct DetailView: View {
                         // ********
                         RatingDisplayView(rating: coffeeShop.avgRating)
                     }
-                    .listRowBackground(Color.mint)
+                    .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
 
                     HStack {
                         Text("Coffee")

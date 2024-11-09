@@ -16,14 +16,14 @@ struct RatingView: View {
     var maximumRating = 5
     
     // Optionally add an image for positions beyond rating
-    var offImage: Image?
+    var offImage = Image(systemName: "star")
     // Positions until rating will always be shown as filled stars
     var onImage = Image(systemName: "star.fill")
     
     // Positions beyond rating will always be gray
-    var offColor = Color.gray
+    var offColor = Color.orange
     // Positions until rating will always be yellow
-    var onColor = Color.yellow
+    var onColor = Color.orange
     
     var body: some View {
         HStack {
