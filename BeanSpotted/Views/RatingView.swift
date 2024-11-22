@@ -48,7 +48,7 @@ struct RatingView: View {
     // Determines the image shown for each potential rating position
     func image(for number: Int) -> Image {
         if number > Int(rating) {
-            offImage ?? onImage
+            offImage
         } else {
             onImage
         }
