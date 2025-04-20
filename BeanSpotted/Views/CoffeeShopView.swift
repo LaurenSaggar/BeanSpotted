@@ -56,10 +56,10 @@ struct CoffeeShopView: View {
     init(sort: SortDescriptor<CoffeeShop>, filter: [String]) {
         // Need to change the query object itself rather than the array inside of it, so access the underscored property
             
-//        if filter.contains("None") {
-//            _coffeeShops = Query(sort: [sort])
-//            
-//        }
+        if filter.isEmpty {
+            _coffeeShops = Query(sort: [sort])
+            
+        }
         
         if filter.contains("Decaf Available") {
             _coffeeShops = Query(filter: #Predicate<CoffeeShop> {
