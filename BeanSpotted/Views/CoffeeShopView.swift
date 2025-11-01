@@ -14,11 +14,22 @@ struct CoffeeShopView: View {
     // @Query queries model objects from SwiftUI view & stays up to date/reinvokes every time your data changes
     @Query var coffeeShops: [CoffeeShop]
     
+    @State private var searchText = ""
+    
+    private var filtered: [CoffeeShop] {
+            let cleanedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            // Return all coffee shops without filter if nothing in search
+            guard !cleanedSearch.isEmpty else { return coffeeShops }
+            return coffeeShops.filter {
+                $0.name.lowercased().contains(cleanedSearch) || $0.address.lowercased().contains(cleanedSearch)
+            }
+        }
+    
     @State private var showingAddReviewScreen = false
     
     var body: some View {
-        List {
-            ForEach(coffeeShops) { shop in
+        List() {
+            ForEach(filtered) { shop in
                 NavigationLink(destination: DetailView(coffeeShop: shop)) {
                     HStack {
                         // Vertically display coffee shop name and hours on left of each row
@@ -40,6 +51,14 @@ struct CoffeeShopView: View {
             .onDelete(perform: deleteShops)
         }
         .navigationTitle("Bean Spots")
+        .searchable(text: $searchText, prompt: "Search coffee shop (name or address)")
+        .autocorrectionDisabled(true)
+        .textInputAutocapitalization(.never)
+        .overlay {
+            if filtered.isEmpty {
+                ContentUnavailableView("No results", systemImage: "person.fill.questionmark")
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Add Review") {
