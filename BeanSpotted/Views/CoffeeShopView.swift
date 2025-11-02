@@ -72,20 +72,29 @@ struct CoffeeShopView: View {
     }
     
     // Initialize coffee shop view to change the query sort order based on what's passed in from content view
-    init(sort: SortDescriptor<CoffeeShop>, filter: String) {
+    init(sort: SortDescriptor<CoffeeShop>, filter: [String]) {
         // Need to change the query object itself rather than the array inside of it, so access the underscored property
             
-        if filter == "None" {
+        if filter.isEmpty {
             _coffeeShops = Query(sort: [sort])
             
-        } else if (filter == "Decaf Available") {
+        }
+        
+        if filter.contains("Decaf Available") {
             _coffeeShops = Query(filter: #Predicate<CoffeeShop> {
                 $0.decafAvailable
             }, sort: [sort])
+        }
             
-        } else if (filter == "Local Only") {
+        if filter.contains("Local Only") {
             _coffeeShops = Query(filter: #Predicate<CoffeeShop> {
                 $0.local
+            }, sort: [sort])
+        }
+        
+        if filter.contains("Decaf Available") && filter.contains("Local Only") {
+            _coffeeShops = Query(filter: #Predicate<CoffeeShop> {
+                $0.decafAvailable && $0.local
             }, sort: [sort])
         }
     }
@@ -115,6 +124,6 @@ struct CoffeeShopView: View {
 
 #Preview {
     let sortOrder = SortDescriptor(\CoffeeShop.name)
-    let filter = "None"
-    CoffeeShopView(sort: sortOrder, filter: filter)
+    let filters = ["None"]
+    CoffeeShopView(sort: sortOrder, filter: filters)
 }

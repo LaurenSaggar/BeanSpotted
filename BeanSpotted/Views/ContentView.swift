@@ -12,18 +12,33 @@ struct ContentView: View {
 
     @State private var sortOrder = SortDescriptor(\CoffeeShop.avgRating, order: .reverse)
     
-    let filters = ["None", "Decaf Available", "Local Only"]
-    @State private var selectedFilter = "None"
+    let filters = ["Decaf Available", "Local Only"]
+    @State private var selectedFilters = [String]()
     
     var body: some View {
         NavigationStack {
-            CoffeeShopView(sort: sortOrder, filter: selectedFilter)
+            CoffeeShopView(sort: sortOrder, filter: selectedFilters)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu("Filter") {
-                        Picker("Filter", selection: $selectedFilter) {
-                            ForEach(filters, id: \.self) { filter in
-                                Text(filter)
+                        ForEach(filters, id: \.self) { filter in
+                            Button(action: {
+                                if !selectedFilters.contains(filter) {
+                                    selectedFilters.append(filter)
+                                }
+                                else {
+                                    selectedFilters.removeAll(where: { $0 == filter })
+                                }
+                            }) {
+                                HStack {
+                                    if selectedFilters.contains(filter) {
+                                        Image(systemName: "checkmark")
+                                    }
+                                    Spacer()
+                                    Text("\(filter)")
+//                                    Image(systemName: "checkmark")
+//                                        .opacity(selectedFilters.contains(filter) ? 1.0 : 0.0)
+                                }
                             }
                         }
                     }
