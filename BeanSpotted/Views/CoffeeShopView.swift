@@ -61,6 +61,13 @@ struct CoffeeShopView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(destination: UserView()) {
+                    Image(systemName: "person.fill")
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button("Add Review") {
                     showingAddReviewScreen.toggle()
                 }

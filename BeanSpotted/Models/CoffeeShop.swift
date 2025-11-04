@@ -23,9 +23,11 @@ class CoffeeShop {
     private(set) var createTime = Date.now
     var modifyTime = Date.now
     var avgRating: Double = 0
-    @Relationship(deleteRule: .cascade, inverse: \Review.coffeeShop) var reviews = [Review]()
+    @Relationship(deleteRule: .cascade, inverse: \Review.coffeeShop)
+    var reviews = [Review]()
     
-    init(name: String = "Mom n' Em", address: String = "4310 Whetsel Ave, Cincinnati, OH 45227", openingTime: Date = Date.now, closingTime: Date = Date.now, decafAvailable: Bool = true, local: Bool = true) {
+    init(id: UUID = UUID(), name: String = "Mom n' Em", address: String = "4310 Whetsel Ave, Cincinnati, OH 45227", openingTime: Date = Date.now, closingTime: Date = Date.now, decafAvailable: Bool = true, local: Bool = true) {
+        self.id = id
         self.name = name
         self.address = address
         self.nameAndAddress = name + address
