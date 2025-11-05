@@ -22,7 +22,7 @@ struct UserView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                Section("User Information") {
                     TextField("First Name", text: $firstName)
                     TextField("Last Name", text: $lastName)
                     ZStack(alignment: .leading) {
@@ -49,6 +49,8 @@ struct UserView: View {
                 }
             }
         }
+        .navigationTitle("\(users[0].firstName)'s Profile")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

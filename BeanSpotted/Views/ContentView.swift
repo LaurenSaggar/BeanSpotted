@@ -20,7 +20,7 @@ struct ContentView: View {
             CoffeeShopView(sort: sortOrder, filter: selectedFilters)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Menu("Filter") {
+                    Menu {
                         ForEach(filters, id: \.self) { filter in
                             Button(action: {
                                 if !selectedFilters.contains(filter) {
@@ -41,11 +41,13 @@ struct ContentView: View {
                                 }
                             }
                         }
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease.circle")
                     }
                 }
                 
                 ToolbarItem(placement: .topBarLeading) {
-                    Menu("Sort") {
+                    Menu {
                         Picker("Sort", selection: $sortOrder) {
                             Text("Average Customer Rating")
                                 .tag(SortDescriptor(\CoffeeShop.avgRating, order: .reverse))
@@ -56,6 +58,8 @@ struct ContentView: View {
                             Text("Create Time")
                                 .tag(SortDescriptor(\CoffeeShop.createTime, order: .reverse))
                         }
+                    } label: {
+                        Image(systemName: "arrow.down.square")
                     }
                 }
             }

@@ -68,8 +68,10 @@ struct CoffeeShopView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Add Review") {
+                Button {
                     showingAddReviewScreen.toggle()
+                } label: {
+                    Image(systemName: "plus.app.fill")
                 }
             }
         }
