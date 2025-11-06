@@ -19,6 +19,9 @@ class User {
     var modifyTime = Date.now
     @Relationship(deleteRule: .cascade, inverse: \Review.user)
     var reviews = [Review]()
+    var haveBeen = [CoffeeShop]()
+    var wantToGo = [CoffeeShop]()
+    var favorites = [CoffeeShop]()
     
     init(id: UUID = UUID(), firstName: String = "Lauren", lastName: String = "Saggar", bio: String? = nil, createTime: Foundation.Date = Date.now, modifyTime: Foundation.Date = Date.now) {
         self.id = id

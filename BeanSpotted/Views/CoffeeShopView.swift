@@ -13,6 +13,7 @@ struct CoffeeShopView: View {
     
     // @Query queries model objects from SwiftUI view & stays up to date/reinvokes every time your data changes
     @Query var coffeeShops: [CoffeeShop]
+    @Query var users: [User]
     
     @State private var searchText = ""
     
@@ -59,6 +60,7 @@ struct CoffeeShopView: View {
                 ContentUnavailableView("No results", systemImage: "person.fill.questionmark")
             }
         }
+        // Navigation to user profile
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink(destination: UserView()) {
@@ -66,6 +68,15 @@ struct CoffeeShopView: View {
                 }
             }
         }
+        // Navigation to saved coffee shop view
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(destination: SavedView(user: users[0])) {
+                    Image(systemName: "square.and.arrow.down.fill")
+                }
+            }
+        }
+        //Navigation to add new review 
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
