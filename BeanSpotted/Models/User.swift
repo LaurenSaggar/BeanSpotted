@@ -14,19 +14,22 @@ class User {
     @Attribute(.unique) private(set) var id = UUID()
     var firstName: String
     var lastName: String
+    var username: String
+    var password: String
     var bio: String?
     private(set) var createTime = Date.now
     var modifyTime = Date.now
-    @Relationship(deleteRule: .cascade, inverse: \Review.user)
-    var reviews = [Review]()
-    var haveBeen = [CoffeeShop]()
-    var wantToGo = [CoffeeShop]()
-    var favorites = [CoffeeShop]()
+    var favorites: [CoffeeShop] = []
+    var haveBeen: [CoffeeShop] = []
+    var wantToGo: [CoffeeShop] = []
+    var reviews: [Review] = []
     
-    init(id: UUID = UUID(), firstName: String = "Lauren", lastName: String = "Saggar", bio: String? = nil, createTime: Foundation.Date = Date.now, modifyTime: Foundation.Date = Date.now) {
+    init(id: UUID = UUID(), firstName: String = "Lauren", lastName: String = "Saggar", username: String = "laurensaggar", password: String = "12345", bio: String? = nil, createTime: Date = Date.now, modifyTime: Date = Date.now) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
+        self.username = username
+        self.password = password
         self.bio = bio
         self.createTime = createTime
         self.modifyTime = modifyTime

@@ -25,49 +25,60 @@ struct SavedView: View {
             List {
                 Section("Saved Shops") {
                     HStack {
-                        VStack(alignment: .leading) {
-                            Text("Have Been")
-                                .font(.title3)
-                                .bold()
-                            Text("\(user.haveBeen.count) shops")
-                        }
-                        .foregroundStyle(.white)
-                        Spacer()
-                        Image(systemName: "arrow.right")
-                            .bold()
-                            .foregroundStyle(.white)
-                    }
-                    .listRowBackground(Color(.sRGB, red: 44/255, green: 100/255, blue: 220/255))
-                    
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("Want To Go")
-                                .font(.title3)
-                                .bold()
-                            Text("\(user.wantToGo.count) shops")
-                        }
-                        .foregroundStyle(.white)
-                        Spacer()
-                        Image(systemName: "arrow.right")
-                            .bold()
-                            .foregroundStyle(.white)
-                    }
-                    .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                    
-                    HStack {
+                        Image(systemName: "heart.fill")
+                            .foregroundStyle(.black)
+                        
                         VStack(alignment: .leading) {
                             Text("Favorites")
                                 .font(.title3)
                                 .bold()
                             Text("\(user.favorites.count) shops")
                         }
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.black)
                         Spacer()
                         Image(systemName: "arrow.right")
                             .bold()
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.black)
                     }
                     .listRowBackground(Color(.sRGB, red: 220/255, green: 145/255, blue: 100/255))
+                    
+                    HStack {
+                        Image(systemName: "arrowshape.left.fill")
+                            //.bold()
+                            .foregroundStyle(.black)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Have Been")
+                                .font(.title3)
+                                .bold()
+                            Text("\(user.haveBeen.count) shops")
+                        }
+                        .foregroundStyle(.black)
+                        Spacer()
+                        Image(systemName: "arrow.right")
+                            .bold()
+                            .foregroundStyle(.black)
+                    }
+                    .listRowBackground(Color(.sRGB, red: 44/255, green: 100/255, blue: 220/255))
+                    
+                    HStack {
+                        Image(systemName: "flag.fill")
+                            .foregroundStyle(.black)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Want To Go")
+                                .font(.title3)
+                                .bold()
+                            Text("\(user.wantToGo.count) shops")
+                        }
+                        .foregroundStyle(.black)
+                        Spacer()
+                        Image(systemName: "arrow.right")
+                            .bold()
+                            .foregroundStyle(.black)
+                    }
+                    .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                
                 }
             }
         }
@@ -76,6 +87,7 @@ struct SavedView: View {
 }
 
 #Preview {
+    
     do {
         // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
         let config = ModelConfiguration(isStoredInMemoryOnly: true)

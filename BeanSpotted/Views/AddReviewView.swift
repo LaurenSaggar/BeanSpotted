@@ -11,6 +11,8 @@ struct AddReviewView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @Query var coffeeShops: [CoffeeShop]
+    @Query var reviews: [Review]
+    @Query var users: [User]
     //@Query var reviews: [Review]
     
     // Coffee shop variables
@@ -34,6 +36,7 @@ struct AddReviewView: View {
     @State private var cleanliness: Double = 0.0
     @State private var staffFriendliness: Double = 0.0
     @State private var comment = ""
+//    @State private var coffeeShop: CoffeeShop? = nil
     
     var body: some View {
         NavigationStack {
@@ -159,8 +162,8 @@ struct AddReviewView: View {
                         // Check for valid review before saving review and potentially new coffee shop
                         if validReview() {
                             
-                            let newReview = Review(coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment)
-//                            
+                            let newReview = Review(coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment, coffeeShop: nil, user: nil)
+//
 //                            // Add new review to existing coffee shop if shop already exists
                             if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
                                 let shop = coffeeShops[shopIndex]
@@ -176,26 +179,43 @@ struct AddReviewView: View {
 //
 //                            // Add new coffee shop if it doesn't yet exist and add new review to newly created coffee shop
                             } else {
-                                let newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
-                                
+                                var newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
+                                print(1)
                                 modelContext.insert(newCoffeeShop)
+                                print(2)
+                                newReview.coffeeShop = newCoffeeShop
+                                if !users.isEmpty {
+                                    newReview.user = users[0]
+                                }
                                 newCoffeeShop.reviews.append(newReview)
+                                print(3)
                                 let ratings = newCoffeeShop.reviews.map( {$0.overallRating} )
+                                print(4)
                                 newCoffeeShop.avgRating = ratings.reduce(0, +) / Double(newCoffeeShop.reviews.count)
+                                print(5)
                                 
                                 do {
                                     try modelContext.save()
+                                    print(6)
                                 } catch {
                                     print(error.localizedDescription)
+                                    print(7)
                                 }
                             }
                             
                             dismiss()
+                            print(8)
                             
                         } else {
+                            print(9)
                             ()
                         }
                     }
+                    .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                    .foregroundStyle(.black)
+                    .bold()
+                    .frame(maxWidth: .infinity)   // expands hit area
+                    .multilineTextAlignment(.center)
                 }
                 
             }
@@ -214,8 +234,29 @@ struct AddReviewView: View {
     }
 }
 
+
+//@MainActor func previewFunc2() -> some View {
+//    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+//    let container = try! ModelContainer(for: CoffeeShop.self, Review.self, User.self, configurations: config)
+//
+//    for i in 1..<10 {
+//        let coffeeShop = CoffeeShop(name: "Exaample \(i)", address: "12345", openingTime: Date.now, closingTime: Date.now, decafAvailable: true, local: true)
+//        container.mainContext.insert(coffeeShop)
+//        let review = Review(coffee: 4, nonCoffeeDrinks: 4, safety: 4, wifiQuality: 4, seating: 4, quiet: 4, parking: 4, food: 4, value: 4, cleanliness: 4, staffFriendliness: 4, comment: "Incredible!", coffeeShop: nil, user: nil)
+//        container.mainContext.insert(review)
+//        let user = User(firstName: "Lauren", lastName: "Saggar", username: "laurensaggar", password: "12345", bio: nil, createTime: Date.now, modifyTime: Date.now)
+//        container.mainContext.insert(user)
+//    }
+//    
+//    return AddReviewView()
+//        .modelContainer(container)
+//}
+
+
 #Preview {
+    
     AddReviewView()
+//        .modelContainer(for: [CoffeeShop.self, Review.self, User.self])
     //AddReviewView(coffeeShops: .constant([CoffeeShop()]))
 }
 

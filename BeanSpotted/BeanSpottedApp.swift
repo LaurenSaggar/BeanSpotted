@@ -10,10 +10,12 @@ import SwiftUI
 
 @main
 struct BeanSpottedApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: CoffeeShop.self)
+        //.modelContainer(for: [CoffeeShop.self, Review.self, User.self])
+        .modelContainer(for: [CoffeeShop.self, Review.self, User.self])
     }
 }

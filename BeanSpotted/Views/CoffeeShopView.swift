@@ -29,7 +29,16 @@ struct CoffeeShopView: View {
     @State private var showingAddReviewScreen = false
     
     var body: some View {
+        
         List() {
+            
+//            modelContext.insert(User(firstName: "Lauren", lastName: "Saggar", username: "laurensaggar", password: "12345"))
+//            do {
+//                try modelContext.save()
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+            
             ForEach(filtered) { shop in
                 NavigationLink(destination: DetailView(coffeeShop: shop)) {
                     HStack {
@@ -63,26 +72,31 @@ struct CoffeeShopView: View {
         // Navigation to user profile
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink(destination: UserView()) {
+                NavigationLink(destination: ProfileView()) {
                     Image(systemName: "person.fill")
+                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                 }
             }
         }
         // Navigation to saved coffee shop view
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink(destination: SavedView(user: users[0])) {
-                    Image(systemName: "square.and.arrow.down.fill")
+                if !users.isEmpty {
+                    NavigationLink(destination: SavedView(user: users[0])) {
+                        Image(systemName: "square.and.arrow.down.fill")
+                            .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                    }
                 }
             }
         }
-        //Navigation to add new review 
+        //Navigation to add new review
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     showingAddReviewScreen.toggle()
                 } label: {
                     Image(systemName: "plus.app.fill")
+                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                 }
             }
         }
