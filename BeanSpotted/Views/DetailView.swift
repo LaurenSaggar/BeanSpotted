@@ -142,6 +142,28 @@ struct DetailView: View {
                         RatingDisplayView(rating: coffeeShop.averageStaffFriendlinessRating())
                     }
                 }
+                
+                Section("Detailed Reviews") {
+                    ForEach(coffeeShop.reviews) { review in
+                        VStack {
+                            HStack {
+                                Text("\(review.user?.username ?? "Anonymous")")
+                                Spacer()
+                                Text("\(formattedTime(review.createTime))")
+                            }
+                            
+                            HStack {
+                                RatingDisplayView(rating: coffeeShop.averageStaffFriendlinessRating())
+                                Spacer()
+                            }
+                            
+                            HStack {
+                                Text(review.comment)
+                                Spacer()
+                            }
+                        }
+                    }
+                }
             }
         }
         .navigationTitle(coffeeShop.name)

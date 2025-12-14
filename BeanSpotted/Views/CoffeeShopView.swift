@@ -18,13 +18,13 @@ struct CoffeeShopView: View {
     @State private var searchText = ""
     
     private var filtered: [CoffeeShop] {
-            let cleanedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-            // Return all coffee shops without filter if nothing in search
-            guard !cleanedSearch.isEmpty else { return coffeeShops }
-            return coffeeShops.filter {
-                $0.name.lowercased().contains(cleanedSearch) || $0.address.lowercased().contains(cleanedSearch)
-            }
+        let cleanedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        // Return all coffee shops without filter if nothing in search
+        guard !cleanedSearch.isEmpty else { return coffeeShops }
+        return coffeeShops.filter {
+            $0.name.lowercased().contains(cleanedSearch) || $0.address.lowercased().contains(cleanedSearch)
         }
+    }
     
     @State private var showingAddReviewScreen = false
     
