@@ -144,23 +144,51 @@ struct DetailView: View {
                 }
                 
                 Section("Detailed Reviews") {
-                    ForEach(coffeeShop.reviews) { review in
+                    ForEach(coffeeShop.reviews.reversed()) { review in
                         VStack {
+                            
+                            Spacer()
+                            
                             HStack {
                                 Text("\(review.user?.username ?? "Anonymous")")
+                                    .bold()
                                 Spacer()
-                                Text("\(formattedTime(review.createTime))")
+                                
+                                //distance = Date.now().distance(to: review.createTime)
+                                //let seconds = Date.now().timeIntervalSince(review.createTime)
+                                //Date.now().timeIntervalSince(review.createTime) < 86400
+                                
+                                let startOfDay = Calendar.current.startOfDay(for: review.createTime)
+                                
+                                if Date.now.timeIntervalSince(startOfDay) < 86400 {
+                                    Text("Today at \(formattedTime(review.createTime))")
+                                    
+                                } else if Date.now.timeIntervalSince(startOfDay) < 172800 {
+                                    Text("Yesterday")
+                                    
+                                } else if Date.now.timeIntervalSince(startOfDay) < 604800 {
+                                    Text("Last Week")
+                                    
+                                } else {
+                                    Text("\(formattedDate(review.createTime))")
+                                }
+//                                Text("\(review.createTime.formatted())")
+                                //Text("\(review.createTime.formatted(date: .short, time: .none)), \(formattedTime(review.createTime))")
                             }
                             
                             HStack {
-                                RatingDisplayView(rating: coffeeShop.averageStaffFriendlinessRating())
+                                RatingDisplayView(rating: review.overallRating)
                                 Spacer()
                             }
+                            
+                            Spacer()
                             
                             HStack {
                                 Text(review.comment)
                                 Spacer()
                             }
+                            
+                            Spacer()
                         }
                     }
                 }
@@ -175,6 +203,14 @@ struct DetailView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .none
         formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+    
+    // Helper function to format date as date and time
+    func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
         return formatter.string(from: date)
     }
 }

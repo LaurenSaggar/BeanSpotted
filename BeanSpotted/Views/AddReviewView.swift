@@ -167,6 +167,9 @@ struct AddReviewView: View {
 //                            // Add new review to existing coffee shop if shop already exists
                             if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
                                 let shop = coffeeShops[shopIndex]
+                                if !users.isEmpty {
+                                    newReview.user = users[0]
+                                }
                                 shop.reviews.append(newReview)
                                 let ratings = shop.reviews.map( {$0.overallRating} )
                                 shop.avgRating = ratings.reduce(0, +) / Double(shop.reviews.count)
@@ -179,7 +182,7 @@ struct AddReviewView: View {
 //
 //                            // Add new coffee shop if it doesn't yet exist and add new review to newly created coffee shop
                             } else {
-                                var newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
+                                let newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
                                 print(1)
                                 modelContext.insert(newCoffeeShop)
                                 print(2)
