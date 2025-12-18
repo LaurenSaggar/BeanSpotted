@@ -12,6 +12,7 @@ struct SavedDetailView: View {
     
     var savedType: String
     var savedArray: [CoffeeShop]
+    var image: Image
     
     var body: some View {
         
@@ -42,6 +43,13 @@ struct SavedDetailView: View {
             }
         }
         .navigationTitle("\(savedType)")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                image
+                    .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+            }
+        }
+        
     }
     
     // Helper function to format date as time only
@@ -61,8 +69,9 @@ struct SavedDetailView: View {
         let example = User()
         let array = example.favorites
         let type = "Favorites"
+        let image = Image(systemName: "heart.fill")
         
-        return SavedDetailView(savedType: type, savedArray: array)
+        return SavedDetailView(savedType: type, savedArray: array, image: image)
             .modelContainer(container)
         
     } catch {
