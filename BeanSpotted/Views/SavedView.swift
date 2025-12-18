@@ -24,61 +24,62 @@ struct SavedView: View {
         NavigationStack {
             List {
                 Section("Saved Shops") {
-                    HStack {
-                        Image(systemName: "heart.fill")
+                    NavigationLink(destination: SavedDetailView(savedType: "Favorites", savedArray: user.favorites)) {
+                        HStack {
+                            Image(systemName: "heart.fill")
+                            //.bold()
+                                .foregroundStyle(.black)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Have Been")
+                                    .font(.title3)
+                                    .bold()
+                                Text("\(user.haveBeen.count) shops")
+                            }
                             .foregroundStyle(.black)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Favorites")
-                                .font(.title3)
-                                .bold()
-                            Text("\(user.favorites.count) shops")
+                            Spacer()
                         }
-                        .foregroundStyle(.black)
-                        Spacer()
-                        Image(systemName: "arrow.right")
-                            .bold()
-                            .foregroundStyle(.black)
                     }
                     .listRowBackground(Color(.sRGB, red: 220/255, green: 145/255, blue: 100/255))
+                    .buttonStyle(.bordered)
                     
-                    HStack {
-                        Image(systemName: "arrowshape.left.fill")
+                    NavigationLink(destination: SavedDetailView(savedType: "Have Been", savedArray: user.haveBeen)) {
+                        HStack {
+                            Image(systemName: "arrowshape.left.fill")
                             //.bold()
+                                .foregroundStyle(.black)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Have Been")
+                                    .font(.title3)
+                                    .bold()
+                                Text("\(user.haveBeen.count) shops")
+                            }
                             .foregroundStyle(.black)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Have Been")
-                                .font(.title3)
-                                .bold()
-                            Text("\(user.haveBeen.count) shops")
+                            Spacer()
+//                            Image(systemName: "arrow.right")
+//                                .bold()
+//                                .foregroundStyle(.black)
                         }
-                        .foregroundStyle(.black)
-                        Spacer()
-                        Image(systemName: "arrow.right")
-                            .bold()
-                            .foregroundStyle(.black)
                     }
                     .listRowBackground(Color(.sRGB, red: 44/255, green: 100/255, blue: 220/255))
                     
-                    HStack {
-                        Image(systemName: "flag.fill")
+                    NavigationLink(destination: SavedDetailView(savedType: "Want To Go", savedArray: user.wantToGo)) {
+                        HStack {
+                            Image(systemName: "flag.fill")
+                                .foregroundStyle(.black)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Want To Go")
+                                    .font(.title3)
+                                    .bold()
+                                Text("\(user.wantToGo.count) shops")
+                            }
                             .foregroundStyle(.black)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Want To Go")
-                                .font(.title3)
-                                .bold()
-                            Text("\(user.wantToGo.count) shops")
+                            Spacer()
                         }
-                        .foregroundStyle(.black)
-                        Spacer()
-                        Image(systemName: "arrow.right")
-                            .bold()
-                            .foregroundStyle(.black)
                     }
                     .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                
                 }
             }
         }
