@@ -32,13 +32,6 @@ struct CoffeeShopView: View {
         
         List() {
             
-//            modelContext.insert(User(firstName: "Lauren", lastName: "Saggar", username: "laurensaggar", password: "12345"))
-//            do {
-//                try modelContext.save()
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-            
             ForEach(filtered) { shop in
                 NavigationLink(destination: DetailView(coffeeShop: shop)) {
                     HStack {

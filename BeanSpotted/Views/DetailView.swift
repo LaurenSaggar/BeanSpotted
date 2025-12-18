@@ -12,12 +12,34 @@ struct DetailView: View {
     @Environment(\.modelContext) var modelContext
     
     @Query var coffeeShops: [CoffeeShop]
+    @Query var users: [User]
     
     let coffeeShop: CoffeeShop
     
+    // Favorite bool and images
+    //@State private var favOn = false
+    var favOffImage = Image(systemName: "heart")
+    var favOnImage = Image(systemName: "heart.fill")
+    
+    // Have Been bool and images
+    //@State private var beenOn = false
+    var beenOffImage = Image(systemName: "arrowshape.left")
+    var beenOnImage = Image(systemName: "arrowshape.left.fill")
+    
+    // Want To Go bool and images
+    //@State private var toGoOn = false
+    var toGoOffImage = Image(systemName: "flag")
+    var toGoOnImage = Image(systemName: "flag.fill")
+    
+    // Off and on saved button colors
+    var offColor = Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255)
+    var onColor = Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255)
+    
     var body: some View {
         VStack(alignment: .leading) {
+            
             List {
+                
                 Section("Shop Info") {
 //                    HStack(alignment: .top) {
 //                        Text("Name:")
@@ -189,6 +211,90 @@ struct DetailView: View {
                             }
                             
                             Spacer()
+                        }
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    
+                    Button {
+                        if users.isEmpty ? false : !users[0].wantToGo.contains(where: { $0.id == coffeeShop.id }) {
+                            users[0].wantToGo.append(coffeeShop)
+                            
+                        } else if users.isEmpty ? false : users[0].wantToGo.contains(where: { $0.id == coffeeShop.id }) {
+                            users[0].wantToGo.removeAll { $0 == coffeeShop }
+                        }
+                        
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                        // Reinvoked each time button is pressed
+                    } label: {
+                        if users.isEmpty ? false : users[0].wantToGo.contains(where: { $0.id == coffeeShop.id }) {
+                            toGoOnImage
+                                .foregroundStyle(onColor)
+                        } else {
+                            toGoOffImage
+                                .foregroundStyle(offColor)
+                        }
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    
+                    Button {
+                        if users.isEmpty ? false : !users[0].haveBeen.contains(where: { $0.id == coffeeShop.id }) {
+                            users[0].haveBeen.append(coffeeShop)
+                            
+                        } else if users.isEmpty ? false : users[0].haveBeen.contains(where: { $0.id == coffeeShop.id }) {
+                            users[0].haveBeen.removeAll { $0 == coffeeShop }
+                        }
+                        
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                        // Reinvoked each time button is pressed
+                    } label: {
+                        if users.isEmpty ? false : users[0].haveBeen.contains(where: { $0.id == coffeeShop.id }) {
+                            beenOnImage
+                                .foregroundStyle(onColor)
+                        } else {
+                            beenOffImage
+                                .foregroundStyle(offColor)
+                        }
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    
+                    Button {
+                        if users.isEmpty ? false : !users[0].favorites.contains(where: { $0.id == coffeeShop.id }) {
+                            users[0].favorites.append(coffeeShop)
+                            
+                        } else if users.isEmpty ? false : users[0].favorites.contains(where: { $0.id == coffeeShop.id }) {
+                            users[0].favorites.removeAll { $0 == coffeeShop }
+                        }
+                        
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                        // Reinvoked each time button is pressed
+                    } label: {
+                        if users.isEmpty ? false : users[0].favorites.contains(where: { $0.id == coffeeShop.id }) {
+                            favOnImage
+                                .foregroundStyle(onColor)
+                        } else {
+                            favOffImage
+                                .foregroundStyle(offColor)
                         }
                     }
                 }
