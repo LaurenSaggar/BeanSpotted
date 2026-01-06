@@ -31,10 +31,10 @@ struct SavedView: View {
                                 .foregroundStyle(.black)
                             
                             VStack(alignment: .leading) {
-                                Text("Have Been")
+                                Text("Favorites")
                                     .font(.title3)
                                     .bold()
-                                Text("\(user.haveBeen.count) shops")
+                                Text("\(user.favorites.count) shops")
                             }
                             .foregroundStyle(.black)
                             Spacer()

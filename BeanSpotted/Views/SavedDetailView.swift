@@ -15,41 +15,40 @@ struct SavedDetailView: View {
     var image: Image
     
     var body: some View {
-        
-        List() {
-            
-            if savedArray.count > 0 {
-                ForEach(savedArray, id: \.id) { shop in
-                    NavigationLink(destination: DetailView(coffeeShop: shop)) {
-                        HStack {
-                            // Vertically display coffee shop name and hours on left of each row
-                            VStack(alignment: .leading) {
-                                Text(shop.name)
-                                    .font(.headline)
-                                Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
-                                Text("Reviews: \(shop.reviews.count)")
+        NavigationStack {
+            List() {
+                if savedArray.count > 0 {
+                    ForEach(savedArray, id: \.id) { shop in
+                        NavigationLink(destination: DetailView(coffeeShop: shop)) {
+                            HStack {
+                                // Vertically display coffee shop name and hours on left of each row
+                                VStack(alignment: .leading) {
+                                    Text(shop.name)
+                                        .font(.headline)
+                                    Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
+                                    Text("Reviews: \(shop.reviews.count)")
+                                }
+                                
+                                Spacer()
+                                
+                                // *******
+                                // Display star rating on right of each row
+                                RatingDisplayView(rating: shop.avgRating)
                             }
-                            
-                            Spacer()
-                            
-                            // *******
-                            // Display star rating on right of each row
-                            RatingDisplayView(rating: shop.avgRating)
                         }
                     }
+                } else {
+                    Text("No \(savedType) Yet")
                 }
-            } else {
-                Text("No \(savedType) Yet")
+            }
+            .navigationTitle("\(savedType)")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    image
+                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                }
             }
         }
-        .navigationTitle("\(savedType)")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                image
-                    .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-            }
-        }
-        
     }
     
     // Helper function to format date as time only
