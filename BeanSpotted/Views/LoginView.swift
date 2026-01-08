@@ -14,6 +14,8 @@ struct LoginView: View {
     @Query var users: [User]
     @State private var username: String = ""
     @State private var password: String = ""
+    @State private var loginValid = false
+    @State private var errorMessage = ""
     
     var body: some View {
         NavigationStack {
@@ -30,7 +32,9 @@ struct LoginView: View {
                     .foregroundColor(.secondary)
                     .padding(.vertical, 4)
                 
-                Button {
+                VStack {
+                    Button {
+                        validLogin()
                         
                     } label: {
                         Text("Login")
@@ -39,19 +43,33 @@ struct LoginView: View {
                             .foregroundColor(.white)
                             .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                             .cornerRadius(24)
-                            //.multilineTextAlignment(.center)
                     }
-                
-//                .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-//                .foregroundStyle(.black)
-//                .bold()
-//                .frame(maxWidth: .infinity)   // expands hit area
-//                .multilineTextAlignment(.center)
+                    .navigationDestination(isPresented: $loginValid) {
+                        ContentView()
+                    }
+                    
+                    if !errorMessage.isEmpty {
+                        Text("\(errorMessage)")
+                    }
+                }
             }
             .padding()
             Spacer()
         }
         .preferredColorScheme(.dark)
+    }
+    
+    // Check if login is valid, set state variables, and set appropriate error message if login not valid
+    func validLogin() {
+        if let index = users.firstIndex(where: { $0.username == username }) {
+            if users[index].password == password {
+                loginValid = true
+            } else {
+                errorMessage = "That username + password does not exist."
+            }
+        } else {
+            errorMessage = "That username does not exist."
+        }
     }
 }
 

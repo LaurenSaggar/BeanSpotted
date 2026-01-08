@@ -15,6 +15,9 @@ struct SignUpView: View {
     @State private var lastName: String = ""
     @State private var username: String = ""
     @State private var password: String = ""
+    @State private var bio: String = ""
+    @State private var signUpValid: Bool = false
+    @State private var errorMessage: String = ""
     
     var body: some View {
         NavigationStack {
@@ -45,6 +48,7 @@ struct SignUpView: View {
                     .padding(.bottom, 4)
                 
                 Button {
+                    validSignUp()
                         
                     } label: {
                         Text("Sign Up")
@@ -53,21 +57,47 @@ struct SignUpView: View {
                             .foregroundColor(.white)
                             .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                             .cornerRadius(24)
-                            //.multilineTextAlignment(.center)
                     }
-
-                
-//                .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-//                .foregroundStyle(.black)
-//                .bold()
-//                .frame(maxWidth: .infinity)   // expands hit area
-//                .multilineTextAlignment(.center)
+                    .navigationDestination(isPresented: $signUpValid) {
+                        ContentView()
+                    }
+                    
+                    if !errorMessage.isEmpty {
+                        Text("\(errorMessage)")
+                    }
             }
             .padding()
             Spacer()
         }
         .preferredColorScheme(.dark)
     }
+    
+    // Ensures profile attributes are valid before saving
+    func validSignUp() {
+        if firstName.isEmpty || lastName.isEmpty || username.isEmpty || password.isEmpty {
+            errorMessage = "The above fields cannot be empty. Please ensure all fields are entered."
+            
+        } else if users.contains(where: { $0.username == username }) {
+            errorMessage = "Username already exists. Please choose a different username."
+           
+        } else if users.contains(where: { $0.password == password }) {
+            errorMessage = "Password already exists. Please choose a different password."
+            
+        } else {
+            signUpValid = true
+            
+            let user = User(firstName: firstName, lastName: lastName, username: username, password: password, bio: bio)
+            modelContext.insert(user)
+
+            do {
+                try modelContext.save()
+                dismiss()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
 }
 
 #Preview {

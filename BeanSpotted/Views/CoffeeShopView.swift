@@ -54,6 +54,7 @@ struct CoffeeShopView: View {
             .onDelete(perform: deleteShops)
         }
         .navigationTitle("Bean Spots")
+        .navigationBarTitleDisplayMode(.large)
         .searchable(text: $searchText, prompt: "Search coffee shop (name or address)")
         .autocorrectionDisabled(true)
         .textInputAutocapitalization(.never)
