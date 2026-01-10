@@ -34,7 +34,7 @@ struct CoffeeShopView: View {
         List() {
             
             ForEach(filtered) { shop in
-                NavigationLink(destination: DetailView(coffeeShop: shop)) {
+                NavigationLink(destination: DetailView(coffeeShop: shop, user: user)) {
                     HStack {
                         // Vertically display coffee shop name and hours on left of each row
                         VStack(alignment: .leading) {

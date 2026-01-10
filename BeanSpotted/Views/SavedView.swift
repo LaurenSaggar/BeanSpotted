@@ -24,7 +24,7 @@ struct SavedView: View {
         NavigationStack {
             List {
                 Section("Saved Shops") {
-                    NavigationLink(destination: SavedDetailView(savedType: "Favorites", savedArray: user.favorites, image: Image(systemName: "heart.fill"))) {
+                    NavigationLink(destination: SavedDetailView(savedType: "Favorites", savedArray: user.favorites, image: Image(systemName: "heart.fill"), user: user)) {
                         HStack {
                             Image(systemName: "heart.fill")
                             //.bold()
@@ -43,7 +43,7 @@ struct SavedView: View {
                     .listRowBackground(Color(.sRGB, red: 220/255, green: 145/255, blue: 100/255))
                     .buttonStyle(.bordered)
                     
-                    NavigationLink(destination: SavedDetailView(savedType: "Have Been", savedArray: user.haveBeen, image: Image(systemName: "arrowshape.left.fill"))) {
+                    NavigationLink(destination: SavedDetailView(savedType: "Have Been", savedArray: user.haveBeen, image: Image(systemName: "arrowshape.left.fill"), user: user)) {
                         HStack {
                             Image(systemName: "arrowshape.left.fill")
                             //.bold()
@@ -64,7 +64,7 @@ struct SavedView: View {
                     }
                     .listRowBackground(Color(.sRGB, red: 44/255, green: 100/255, blue: 220/255))
                     
-                    NavigationLink(destination: SavedDetailView(savedType: "Want To Go", savedArray: user.wantToGo, image: Image(systemName: "flag.fill"))) {
+                    NavigationLink(destination: SavedDetailView(savedType: "Want To Go", savedArray: user.wantToGo, image: Image(systemName: "flag.fill"), user: user)) {
                         HStack {
                             Image(systemName: "flag.fill")
                                 .foregroundStyle(.black)

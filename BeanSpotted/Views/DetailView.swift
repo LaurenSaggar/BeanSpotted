@@ -15,6 +15,7 @@ struct DetailView: View {
     @Query var users: [User]
     
     let coffeeShop: CoffeeShop
+    let user: User
     
     // Favorite bool and images
     //@State private var favOn = false
@@ -219,11 +220,11 @@ struct DetailView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     
                     Button {
-                        if users.isEmpty ? false : !users[0].wantToGo.contains(where: { $0.id == coffeeShop.id }) {
-                            users[0].wantToGo.append(coffeeShop)
+                        if user.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
+                            user.wantToGo.append(coffeeShop)
                             
-                        } else if users.isEmpty ? false : users[0].wantToGo.contains(where: { $0.id == coffeeShop.id }) {
-                            users[0].wantToGo.removeAll { $0 == coffeeShop }
+                        } else if user.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
+                            user.wantToGo.removeAll { $0 == coffeeShop }
                         }
                         
                         do {
@@ -233,7 +234,7 @@ struct DetailView: View {
                         }
                         // Reinvoked each time button is pressed
                     } label: {
-                        if users.isEmpty ? false : users[0].wantToGo.contains(where: { $0.id == coffeeShop.id }) {
+                        if user.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
                             toGoOnImage
                                 .foregroundStyle(onColor)
                         } else {
@@ -247,11 +248,11 @@ struct DetailView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     
                     Button {
-                        if users.isEmpty ? false : !users[0].haveBeen.contains(where: { $0.id == coffeeShop.id }) {
-                            users[0].haveBeen.append(coffeeShop)
+                        if user.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
+                            user.haveBeen.append(coffeeShop)
                             
-                        } else if users.isEmpty ? false : users[0].haveBeen.contains(where: { $0.id == coffeeShop.id }) {
-                            users[0].haveBeen.removeAll { $0 == coffeeShop }
+                        } else if user.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
+                            user.haveBeen.removeAll { $0 == coffeeShop }
                         }
                         
                         do {
@@ -261,7 +262,7 @@ struct DetailView: View {
                         }
                         // Reinvoked each time button is pressed
                     } label: {
-                        if users.isEmpty ? false : users[0].haveBeen.contains(where: { $0.id == coffeeShop.id }) {
+                        if user.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
                             beenOnImage
                                 .foregroundStyle(onColor)
                         } else {
@@ -275,11 +276,11 @@ struct DetailView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     
                     Button {
-                        if users.isEmpty ? false : !users[0].favorites.contains(where: { $0.id == coffeeShop.id }) {
-                            users[0].favorites.append(coffeeShop)
+                        if user.favorites.contains(where: { $0.id == coffeeShop.id }) {
+                            user.favorites.append(coffeeShop)
                             
-                        } else if users.isEmpty ? false : users[0].favorites.contains(where: { $0.id == coffeeShop.id }) {
-                            users[0].favorites.removeAll { $0 == coffeeShop }
+                        } else if user.favorites.contains(where: { $0.id == coffeeShop.id }) {
+                            user.favorites.removeAll { $0 == coffeeShop }
                         }
                         
                         do {
@@ -289,7 +290,7 @@ struct DetailView: View {
                         }
                         // Reinvoked each time button is pressed
                     } label: {
-                        if users.isEmpty ? false : users[0].favorites.contains(where: { $0.id == coffeeShop.id }) {
+                        if user.favorites.contains(where: { $0.id == coffeeShop.id }) {
                             favOnImage
                                 .foregroundStyle(onColor)
                         } else {
@@ -326,9 +327,10 @@ struct DetailView: View {
         // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: CoffeeShop.self, configurations: config)
-        let example = CoffeeShop()
+        let exampleShop = CoffeeShop()
+        let exampleUser = User()
         
-        return DetailView(coffeeShop: example)
+        return DetailView(coffeeShop: exampleShop, user: exampleUser)
             .modelContainer(container)
         
     } catch {
