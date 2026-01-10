@@ -14,6 +14,7 @@ struct CoffeeShopView: View {
     // @Query queries model objects from SwiftUI view & stays up to date/reinvokes every time your data changes
     @Query var coffeeShops: [CoffeeShop]
     @Query var users: [User]
+    let user: User
     
     @State private var searchText = ""
     
@@ -66,7 +67,7 @@ struct CoffeeShopView: View {
         // Navigation to user profile
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink(destination: ProfileView()) {
+                NavigationLink(destination: ProfileView(user: user)) {
                     Image(systemName: "person.fill")
                         .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                 }
@@ -76,7 +77,7 @@ struct CoffeeShopView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 if !users.isEmpty {
-                    NavigationLink(destination: SavedView(user: users[0])) {
+                    NavigationLink(destination: SavedView(user: user)) {
                         Image(systemName: "square.and.arrow.down.fill")
                             .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                     }
@@ -95,12 +96,12 @@ struct CoffeeShopView: View {
             }
         }
         .sheet(isPresented: $showingAddReviewScreen) {
-            AddReviewView()
+            AddReviewView(user: user)
         }
     }
     
     // Initialize coffee shop view to change the query sort order based on what's passed in from content view
-    init(sort: SortDescriptor<CoffeeShop>, filter: [String]) {
+    init(sort: SortDescriptor<CoffeeShop>, filter: [String], user: User) {
         // Need to change the query object itself rather than the array inside of it, so access the underscored property
             
         if filter.isEmpty {
@@ -125,6 +126,8 @@ struct CoffeeShopView: View {
                 $0.decafAvailable && $0.local
             }, sort: [sort])
         }
+        
+        self.user = user
     }
     
     // Helper function to format date as time only
@@ -151,7 +154,20 @@ struct CoffeeShopView: View {
 }
 
 #Preview {
-    let sortOrder = SortDescriptor(\CoffeeShop.name)
-    let filters = ["None"]
-    CoffeeShopView(sort: sortOrder, filter: filters)
+    
+    do {
+        let sortOrder = SortDescriptor(\CoffeeShop.name)
+        let filters = ["None"]
+        
+        // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: User.self, configurations: config)
+        let example = User()
+        
+        return CoffeeShopView(sort: sortOrder, filter: filters, user: example)
+            .modelContainer(container)
+        
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
 }

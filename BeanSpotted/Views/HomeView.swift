@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     var body: some View {
         NavigationStack {
+                
             VStack {
                 
                 Spacer()
@@ -17,38 +18,46 @@ struct HomeView: View {
                 Text("Bean Spots")
                     .bold()
                     .font(.system(size: 40, weight: .bold, design: .default))
-                    //.padding(.bottom, 100)
                 
-                Spacer()
+                Image("Coffee_Bean_Logo")
+                    .resizable()  // Makes the image resizable
+                    .aspectRatio(contentMode: .fit)  // Maintains the original aspect ratio
+                    .cornerRadius(20)
+                    .padding(.bottom)
+                    //.padding()
+                    //.frame(width: 200, height: 200) // Sets a specific size for the image view
                 
-                
-                Button {
-                } label: {
-                    NavigationLink(destination: LoginView()) {
-                        Text("Login")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(.white)
-                            .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                            .cornerRadius(24)
+                VStack {
+                    Button {
+                    } label: {
+                        NavigationLink(destination: LoginView()) {
+                            Text("Login")
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .foregroundColor(.white)
+                                .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                                .cornerRadius(24)
+                        }
+                    }
+                    
+                    Button {
+                    } label: {
+                        NavigationLink(destination: CreateAccountView()) {
+                            Text("Create Account")
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .foregroundColor(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                                .background(.white)
+                                .cornerRadius(24)
+                        }
                     }
                 }
-
-                Button {
-                } label: {
-                    NavigationLink(destination: SignUpView()) {
-                        Text("Sign Up")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                            .background(.white)
-                            .cornerRadius(24)
-                    }
-                }
+                .padding(.vertical)
                 
                 Spacer()
             }
-            .padding()
+            .padding(35)
+            //.padding()
         }
         .preferredColorScheme(.dark)
     }

@@ -13,6 +13,7 @@ struct AddReviewView: View {
     @Query var coffeeShops: [CoffeeShop]
     @Query var reviews: [Review]
     @Query var users: [User]
+    let user: User
     //@Query var reviews: [Review]
     
     // Coffee shop variables
@@ -162,14 +163,12 @@ struct AddReviewView: View {
                         // Check for valid review before saving review and potentially new coffee shop
                         if validReview() {
                             
-                            let newReview = Review(coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment, coffeeShop: nil, user: nil)
+                            let newReview = Review(coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment, coffeeShop: nil, user: user)
 //
 //                            // Add new review to existing coffee shop if shop already exists
                             if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
                                 let shop = coffeeShops[shopIndex]
-                                if !users.isEmpty {
-                                    newReview.user = users[0]
-                                }
+                                
                                 shop.reviews.append(newReview)
                                 let ratings = shop.reviews.map( {$0.overallRating} )
                                 shop.avgRating = ratings.reduce(0, +) / Double(shop.reviews.count)
@@ -183,34 +182,28 @@ struct AddReviewView: View {
 //                            // Add new coffee shop if it doesn't yet exist and add new review to newly created coffee shop
                             } else {
                                 let newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
-                                print(1)
+
                                 modelContext.insert(newCoffeeShop)
-                                print(2)
+
                                 newReview.coffeeShop = newCoffeeShop
-                                if !users.isEmpty {
-                                    newReview.user = users[0]
-                                }
+
                                 newCoffeeShop.reviews.append(newReview)
-                                print(3)
+
                                 let ratings = newCoffeeShop.reviews.map( {$0.overallRating} )
-                                print(4)
+
                                 newCoffeeShop.avgRating = ratings.reduce(0, +) / Double(newCoffeeShop.reviews.count)
-                                print(5)
                                 
                                 do {
                                     try modelContext.save()
-                                    print(6)
+
                                 } catch {
                                     print(error.localizedDescription)
-                                    print(7)
                                 }
                             }
                             
                             dismiss()
-                            print(8)
                             
                         } else {
-                            print(9)
                             ()
                         }
                     }
@@ -258,7 +251,19 @@ struct AddReviewView: View {
 
 #Preview {
     
-    AddReviewView()
+    do {
+        // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: User.self, configurations: config)
+        let example = User()
+        
+        return AddReviewView(user: example)
+            .modelContainer(container)
+        
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
+    
 //        .modelContainer(for: [CoffeeShop.self, Review.self, User.self])
     //AddReviewView(coffeeShops: .constant([CoffeeShop()]))
 }

@@ -16,6 +16,7 @@ struct LoginView: View {
     @State private var password: String = ""
     @State private var loginValid = false
     @State private var errorMessage = ""
+    @State private var userIndex = 0
     
     var body: some View {
         NavigationStack {
@@ -34,7 +35,7 @@ struct LoginView: View {
                 
                 VStack {
                     Button {
-                        validLogin()
+                        checkValidLogin()
                         
                     } label: {
                         Text("Login")
@@ -43,9 +44,10 @@ struct LoginView: View {
                             .foregroundColor(.white)
                             .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                             .cornerRadius(24)
+                            .padding(.horizontal)
                     }
                     .navigationDestination(isPresented: $loginValid) {
-                        ContentView()
+                        ContentView(user: users[userIndex])
                     }
                     
                     if !errorMessage.isEmpty {
@@ -56,13 +58,15 @@ struct LoginView: View {
             .padding()
             Spacer()
         }
+        .navigationTitle("Login")
         .preferredColorScheme(.dark)
     }
     
     // Check if login is valid, set state variables, and set appropriate error message if login not valid
-    func validLogin() {
+    func checkValidLogin() {
         if let index = users.firstIndex(where: { $0.username == username }) {
             if users[index].password == password {
+                userIndex = index
                 loginValid = true
             } else {
                 errorMessage = "That username + password does not exist."

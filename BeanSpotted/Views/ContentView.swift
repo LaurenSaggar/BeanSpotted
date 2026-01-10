@@ -14,10 +14,11 @@ struct ContentView: View {
     
     let filters = ["Decaf Available", "Local Only"]
     @State private var selectedFilters = [String]()
+    var user: User
     
     var body: some View {
         NavigationStack {
-            CoffeeShopView(sort: sortOrder, filter: selectedFilters)
+            CoffeeShopView(sort: sortOrder, filter: selectedFilters, user: user)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
@@ -71,5 +72,17 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    do {
+        // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: User.self, configurations: config)
+        let example = User()
+        
+        return ContentView(user: example)
+            .modelContainer(container)
+        
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
+//    ContentView()
 }
