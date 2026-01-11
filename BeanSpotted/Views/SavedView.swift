@@ -22,68 +22,83 @@ struct SavedView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                Section("Saved Shops") {
-                    NavigationLink(destination: SavedDetailView(savedType: "Favorites", savedArray: user.favorites, image: Image(systemName: "heart.fill"), user: user)) {
-                        HStack {
-                            Image(systemName: "heart.fill")
-                            //.bold()
-                                .foregroundStyle(.black)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Favorites")
-                                    .font(.title3)
-                                    .bold()
-                                Text("\(user.favorites.count) shops")
-                            }
+            VStack {
+                NavigationLink(destination: SavedDetailView(savedType: "Favorites", savedArray: user.favorites, image: Image(systemName: "heart.fill"), user: user)) {
+                    HStack {
+                        Image(systemName: "heart.fill")
                             .foregroundStyle(.black)
-                            Spacer()
+                        
+                        VStack(alignment: .leading) {
+                            Text("Favorites")
+                                .font(.title3)
+                                .bold()
+                            Text("\(user.favorites.count) shops")
                         }
-                    }
-                    .listRowBackground(Color(.sRGB, red: 220/255, green: 145/255, blue: 100/255))
-                    .buttonStyle(.bordered)
-                    
-                    NavigationLink(destination: SavedDetailView(savedType: "Have Been", savedArray: user.haveBeen, image: Image(systemName: "arrowshape.left.fill"), user: user)) {
-                        HStack {
-                            Image(systemName: "arrowshape.left.fill")
-                            //.bold()
-                                .foregroundStyle(.black)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Have Been")
-                                    .font(.title3)
-                                    .bold()
-                                Text("\(user.haveBeen.count) shops")
-                            }
+                        .foregroundStyle(.black)
+                        Spacer()
+                        Image(systemName: "chevron.right")
                             .foregroundStyle(.black)
-                            Spacer()
-//                            Image(systemName: "arrow.right")
-//                                .bold()
-//                                .foregroundStyle(.black)
-                        }
+                        
                     }
-                    .listRowBackground(Color(.sRGB, red: 44/255, green: 100/255, blue: 220/255))
-                    
-                    NavigationLink(destination: SavedDetailView(savedType: "Want To Go", savedArray: user.wantToGo, image: Image(systemName: "flag.fill"), user: user)) {
-                        HStack {
-                            Image(systemName: "flag.fill")
-                                .foregroundStyle(.black)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Want To Go")
-                                    .font(.title3)
-                                    .bold()
-                                Text("\(user.wantToGo.count) shops")
-                            }
-                            .foregroundStyle(.black)
-                            Spacer()
-                        }
-                    }
-                    .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.white)
+                    .background(Color(.sRGB, red: 220/255, green: 145/255, blue: 100/255))
+                    .cornerRadius(24)
                 }
+                
+                NavigationLink(destination: SavedDetailView(savedType: "Have Been", savedArray: user.haveBeen, image: Image(systemName: "arrowshape.left.fill"), user: user)) {
+                    HStack {
+                        Image(systemName: "arrowshape.left.fill")
+                            .foregroundStyle(.black)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Have Been")
+                                .font(.title3)
+                                .bold()
+                            Text("\(user.haveBeen.count) shops")
+                        }
+                        .foregroundStyle(.black)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.black)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.white)
+                    .background(Color(.sRGB, red: 44/255, green: 100/255, blue: 220/255))
+                    .cornerRadius(24)
+                }
+                
+                NavigationLink(destination: SavedDetailView(savedType: "Want To Go", savedArray: user.wantToGo, image: Image(systemName: "flag.fill"), user: user)) {
+                    HStack {
+                        Image(systemName: "flag.fill")
+                            .foregroundStyle(.black)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Want To Go")
+                                .font(.title3)
+                                .bold()
+                            Text("\(user.wantToGo.count) shops")
+                        }
+                        .foregroundStyle(.black)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.black)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.white)
+                    .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                    .cornerRadius(24)
+                }
+                
             }
+            .padding()
+            
+            Spacer()
         }
-        .navigationTitle("Saved")
+        .navigationTitle("Saved Shops")
     }
 }
 

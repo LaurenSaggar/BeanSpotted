@@ -16,6 +16,7 @@ struct DetailView: View {
     
     let coffeeShop: CoffeeShop
     let user: User
+    @State private var showingAddReviewScreen = false
     
     // Favorite bool and images
     //@State private var favOn = false
@@ -37,6 +38,7 @@ struct DetailView: View {
     var onColor = Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255)
     
     var body: some View {
+        
         VStack(alignment: .leading) {
             
             List {
@@ -218,9 +220,22 @@ struct DetailView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingAddReviewScreen.toggle()
+                    } label: {
+                        Image(systemName: "plus.app.fill")
+                            .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                    }
+                }
+            }
+            .sheet(isPresented: $showingAddReviewScreen) {
+                AddReviewView(user: user, coffeeShop: coffeeShop)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
                     
                     Button {
-                        if user.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
+                        if !user.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
                             user.wantToGo.append(coffeeShop)
                             
                         } else if user.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
@@ -248,7 +263,7 @@ struct DetailView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     
                     Button {
-                        if user.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
+                        if !user.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
                             user.haveBeen.append(coffeeShop)
                             
                         } else if user.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
@@ -276,7 +291,7 @@ struct DetailView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     
                     Button {
-                        if user.favorites.contains(where: { $0.id == coffeeShop.id }) {
+                        if !user.favorites.contains(where: { $0.id == coffeeShop.id }) {
                             user.favorites.append(coffeeShop)
                             
                         } else if user.favorites.contains(where: { $0.id == coffeeShop.id }) {
@@ -302,7 +317,7 @@ struct DetailView: View {
             }
         }
         .navigationTitle(coffeeShop.name)
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.large)
     }
     
     // Helper function to format date as time only

@@ -14,15 +14,16 @@ struct AddReviewView: View {
     @Query var reviews: [Review]
     @Query var users: [User]
     let user: User
+    let coffeeShop: CoffeeShop?
     //@Query var reviews: [Review]
     
     // Coffee shop variables
-    @State private var name = ""
-    @State private var address = ""
-    @State private var openingTime = Date()
-    @State private var closingTime = Date()
-    @State private var decafAvailable = true
-    @State private var local = true
+    @State private var name: String
+    @State private var address: String
+    @State private var openingTime: Date
+    @State private var closingTime: Date
+    @State private var decafAvailable: Bool
+    @State private var local: Bool
     
     // Shop review variables
     @State private var coffee: Double = 0.0
@@ -42,42 +43,77 @@ struct AddReviewView: View {
     var body: some View {
         NavigationStack {
             Form {
-                // Coffee shop inputs
+                
                 Section("Coffee Shop Info") {
-                    // Set name of coffee shop
-                    TextField("Name of coffee shop", text: $name)
-                    // Set address of coffee shop
-                    TextField("Address of coffee shop", text: $address)
                     
-                    // DatePicker for opening time
-                    DatePicker("Opening Time", selection: $openingTime, displayedComponents: .hourAndMinute)
-                        .onAppear {
-                            // Set default opening time
-                            var components = Calendar.current.dateComponents([.hour, .minute], from: Date())
-                            components.hour = 8
-                            components.minute = 0
-                            if let defaultOpeningTime = Calendar.current.date(from: components) {
-                                openingTime = defaultOpeningTime
+                    // If coffee shop exists, read and display shop info; else set coffee shop info
+                    if let coffeeShop = coffeeShop {
+                        
+                        HStack(alignment: .top) {
+                            Text("Name:")
+                                .bold()
+                            Text("\(name)")
+                        }
+                        
+                        HStack(alignment: .top) {
+                            Text("Address:")
+                                .bold()
+                            Text("\(address)")
+                        }
+                        
+                        HStack(alignment: .top) {
+                            Text("Hours:")
+                                .bold()
+                            Text("\(formattedTime(coffeeShop.openingTime)) - \(formattedTime(coffeeShop.closingTime))")
+                        }
+                        
+                        HStack(alignment: .top) {
+                            Text("Decaf Available:")
+                                .bold()
+                            if coffeeShop.decafAvailable {
+                                Text("Yes")
+                                    .foregroundStyle(.green)
+                            } else {
+                                Text("No")
+                                    .foregroundStyle(.red)
+                            }
+                        }
+                        
+                        HStack(alignment: .top) {
+                            Text("Local:")
+                                .bold()
+                            if coffeeShop.local {
+                                Text("Yes")
+                                    .foregroundStyle(.green)
+                            } else {
+                                Text("No")
+                                    .foregroundStyle(.red)
                             }
                         }
                     
-                    // DatePicker for closing time
-                    DatePicker("Closing Time", selection: $closingTime, displayedComponents: .hourAndMinute)
-                        .onAppear {
-                            // Set default closing time
-                            var components = Calendar.current.dateComponents([.hour, .minute], from: Date())
-                            components.hour = 17
-                            components.minute = 0
-                            if let defaultClosingTime = Calendar.current.date(from: components) {
-                                closingTime = defaultClosingTime
-                            }
-                        }
-                    
-                    // Toggle for decaf available
-                    Toggle("Is decaf available?", isOn: $decafAvailable)
-                    
-                    // Toggle for local
-                    Toggle("Is the coffee shop local?", isOn: $local)
+                    // Set coffee shop info
+                    } else {
+                        // Set name of coffee shop
+                        TextField("Name of coffee shop", text: $name)
+                        
+                        // Set address of coffee shop
+                        TextField("Address of coffee shop", text: $address)
+                        
+                        // DatePicker for opening time
+                        DatePicker("Opening Time", selection: $openingTime, displayedComponents: .hourAndMinute)
+                            .onAppear {}
+                        
+                        // DatePicker for closing time
+                        DatePicker("Closing Time", selection: $closingTime, displayedComponents: .hourAndMinute)
+                            .onAppear {}
+                        
+                        // Toggle for decaf available
+                        Toggle("Is decaf available?", isOn: $decafAvailable)
+                        
+                        // Toggle for local
+                        Toggle("Is the coffee shop local?", isOn: $local)
+                        
+                    }
                 }
                 
                 // Shop review inputs
@@ -168,6 +204,10 @@ struct AddReviewView: View {
 //                            // Add new review to existing coffee shop if shop already exists
                             if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
                                 let shop = coffeeShops[shopIndex]
+//                                shop.openingTime = openingTime
+//                                shop.closingTime = closingTime
+//                                shop.decafAvailable = decafAvailable
+//                                shop.local = local
                                 
                                 shop.reviews.append(newReview)
                                 let ratings = shop.reviews.map( {$0.overallRating} )
@@ -220,6 +260,43 @@ struct AddReviewView: View {
         }
     }
     
+    // Optional coffee shop in initializer if adding review directly from coffee shop detail page view
+    init(user: User, coffeeShop: CoffeeShop? = nil) {
+        self.user = user
+        self.coffeeShop = coffeeShop
+        
+        // Initialize coffee shop properties if coffeeShop in initializer
+        if let coffeeShop = coffeeShop {
+            self.name = coffeeShop.name
+            self.address = coffeeShop.address
+            self.openingTime = coffeeShop.openingTime
+            self.closingTime = coffeeShop.closingTime
+            self.decafAvailable = coffeeShop.decafAvailable
+            self.local = coffeeShop.local
+            
+        } else {
+            self.name = ""
+            self.address = ""
+            var openingTimeComponents = DateComponents()
+                openingTimeComponents.year = Calendar.current.component(.year, from: Date())
+                openingTimeComponents.month = Calendar.current.component(.year, from: Date())
+                openingTimeComponents.day = Calendar.current.component(.year, from: Date())
+                openingTimeComponents.hour = 8
+                openingTimeComponents.minute = 0
+            self.openingTime = Calendar.current.date(from: openingTimeComponents) ?? Date.now
+            var closingTimeComponents = DateComponents()
+                closingTimeComponents.year = Calendar.current.component(.year, from: Date())
+                closingTimeComponents.month = Calendar.current.component(.year, from: Date())
+                closingTimeComponents.day = Calendar.current.component(.year, from: Date())
+                closingTimeComponents.hour = 17
+                closingTimeComponents.minute = 0
+            self.closingTime = Calendar.current.date(from: closingTimeComponents) ?? Date.now
+            self.decafAvailable = true
+            self.local = true
+            
+        }
+    }
+    
     // Ensure shop name, address, and all review attributes except for comment have a value/are selected before saving
     func validReview() -> Bool {
         if (name.isEmpty || address.isEmpty || coffee == 0.0 || nonCoffeeDrinks == 0.0 || safety == 0.0 || wifiQuality == 0.0 || seating == 0.0 || quiet == 0.0 || parking == 0.0 || food == 0.0 || value == 0 || cleanliness == 0.0 || staffFriendliness == 0.0 || comment.isEmpty) {
@@ -227,6 +304,14 @@ struct AddReviewView: View {
         }
         
         return true
+    }
+    
+    // Helper function to format date as time only
+    func formattedTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
     }
 }
 
@@ -255,9 +340,10 @@ struct AddReviewView: View {
         // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, configurations: config)
-        let example = User()
+        let exampleUser = User()
+        //let exampleShop = CoffeeShop()
         
-        return AddReviewView(user: example)
+        return AddReviewView(user: exampleUser)
             .modelContainer(container)
         
     } catch {

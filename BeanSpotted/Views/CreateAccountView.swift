@@ -82,9 +82,6 @@ struct CreateAccountView: View {
         } else if users.contains(where: { $0.username == username }) {
             errorMessage = "Username already exists. Please choose a different username."
            
-        } else if users.contains(where: { $0.password == password }) {
-            errorMessage = "Password already exists. Please choose a different password."
-            
         } else {
             
             let user = User(firstName: firstName, lastName: lastName, username: username, password: password, bio: bio)

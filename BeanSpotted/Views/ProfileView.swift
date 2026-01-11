@@ -109,10 +109,6 @@ struct ProfileView: View {
             errorMessage = "Username already exists. Please choose a different username."
             return false
            
-        } else if (users.contains(where: { $0.password == password }) && password != user.password) {
-            errorMessage = "Password already exists. Please choose a different password."
-            return false
-            
         } else {
             return true
         }
