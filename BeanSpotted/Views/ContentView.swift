@@ -17,57 +17,78 @@ struct ContentView: View {
     var user: User
     
     var body: some View {
-        NavigationStack {
-            CoffeeShopView(sort: sortOrder, filter: selectedFilters, user: user)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Menu {
-                        ForEach(filters, id: \.self) { filter in
-                            Button(action: {
-                                if !selectedFilters.contains(filter) {
-                                    selectedFilters.append(filter)
-                                }
-                                else {
-                                    selectedFilters.removeAll(where: { $0 == filter })
-                                }
-                            }) {
-                                HStack {
-                                    if selectedFilters.contains(filter) {
-                                        Image(systemName: "checkmark")
+        VStack {
+            NavigationStack {
+                CoffeeShopView(sort: sortOrder, filter: selectedFilters, user: user).toolbar(.visible, for: .bottomBar)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Menu {
+                            ForEach(filters, id: \.self) { filter in
+                                Button(action: {
+                                    if !selectedFilters.contains(filter) {
+                                        selectedFilters.append(filter)
                                     }
-                                    Spacer()
-                                    Text("\(filter)")
-//                                    Image(systemName: "checkmark")
-//                                        .opacity(selectedFilters.contains(filter) ? 1.0 : 0.0)
+                                    else {
+                                        selectedFilters.removeAll(where: { $0 == filter })
+                                    }
+                                }) {
+                                    HStack {
+                                        if selectedFilters.contains(filter) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                        Spacer()
+                                        Text("\(filter)")
+                                        //                                    Image(systemName: "checkmark")
+                                        //                                        .opacity(selectedFilters.contains(filter) ? 1.0 : 0.0)
+                                    }
                                 }
                             }
+                        } label: {
+                            Image(systemName: "line.3.horizontal.decrease.circle")
+                                .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                         }
-                    } label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
-                            .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                    }
+                    
+                    ToolbarItem(placement: .topBarLeading) {
+                        Menu {
+                            Picker("Sort", selection: $sortOrder) {
+                                Text("Average Customer Rating")
+                                    .tag(SortDescriptor(\CoffeeShop.avgRating, order: .reverse))
+                                
+                                Text("Name")
+                                    .tag(SortDescriptor(\CoffeeShop.name))
+                                
+                                Text("Create Time")
+                                    .tag(SortDescriptor(\CoffeeShop.createTime, order: .reverse))
+                            }
+                        } label: {
+                            Image(systemName: "arrow.down.square")
+                                .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .bottomBar) {
+                        FooterView(user: user)
+                        
                     }
                 }
+                // 1. Set the background color (ShapeStyle can be Color, Gradient, etc.)
+                .toolbarBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255), for: .bottomBar)
+                // 2. Force the background to always be visible (optional, but often needed)
+                .toolbarBackground(.visible, for: .bottomBar)
+                // 3. Adjust the color scheme for text/buttons to match the background
+                .toolbarColorScheme(.dark, for: .bottomBar)
                 
-                ToolbarItem(placement: .topBarLeading) {
-                    Menu {
-                        Picker("Sort", selection: $sortOrder) {
-                            Text("Average Customer Rating")
-                                .tag(SortDescriptor(\CoffeeShop.avgRating, order: .reverse))
-                            
-                            Text("Name")
-                                .tag(SortDescriptor(\CoffeeShop.name))
-                            
-                            Text("Create Time")
-                                .tag(SortDescriptor(\CoffeeShop.createTime, order: .reverse))
-                        }
-                    } label: {
-                        Image(systemName: "arrow.down.square")
-                            .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                    }
-                }
             }
+            .preferredColorScheme(.dark)
+            
+            //Spacer()
+            
+            //FooterView(user: user)
+//                .toolbar(.visible, for: .bottomBar)
+            
         }
-        .preferredColorScheme(.dark)
+        //.edgesIgnoringSafeArea(.bottom)
     }
 }
 

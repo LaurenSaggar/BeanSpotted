@@ -30,59 +30,34 @@ struct CoffeeShopView: View {
     @State private var showingAddReviewScreen = false
     
     var body: some View {
-        
-        VStack {
             
-            List() {
-                
-                ForEach(filtered) { shop in
-                    NavigationLink(destination: DetailView(coffeeShop: shop, user: user)) {
-                        HStack {
-                            // Vertically display coffee shop name and hours on left of each row
-                            VStack(alignment: .leading) {
-                                Text(shop.name)
-                                    .font(.headline)
-                                Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
-                                
-                                if shop.reviews.count == 1 {
-                                    Text("\(shop.reviews.count) Review")
-                                } else {
-                                    Text("\(shop.reviews.count) Reviews")
-                                }
+        List {
+            
+            ForEach(filtered) { shop in
+                NavigationLink(destination: DetailView(coffeeShop: shop, user: user).toolbar(.visible, for: .bottomBar)) {
+                    HStack {
+                        // Vertically display coffee shop name and hours on left of each row
+                        VStack(alignment: .leading) {
+                            Text(shop.name)
+                                .font(.headline)
+                            Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
+                            
+                            if shop.reviews.count == 1 {
+                                Text("\(shop.reviews.count) Review")
+                            } else {
+                                Text("\(shop.reviews.count) Reviews")
                             }
-                            
-                            Spacer()
-                            
-                            // *******
-                            // Display star rating on right of each row
-                            RatingDisplayView(rating: shop.avgRating)
                         }
+                        
+                        Spacer()
+                        
+                        // *******
+                        // Display star rating on right of each row
+                        RatingDisplayView(rating: shop.avgRating)
                     }
                 }
-                .onDelete(perform: deleteShops)
             }
-            
-            
-//            HStack {
-//                .padding()
-//                .frame(maxWidth: .infinity)
-//                .foregroundColor(.white)
-//                .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-//                .cornerRadius(24)
-//                    NavigationLink(destination: SavedView(user: user)) {
-//                        Image(systemName: "square.and.arrow.down.fill")
-//                            .foregroundStyle(.black)
-//                    }
-//                
-//                ZStack(alignment: .center) {
-//                    NavigationLink(destination: ProfileView(user: user)) {
-//                        Image(systemName: "person.fill")
-//                            .foregroundStyle(.black)
-//                    }
-//                }
-//                .border(.black)
-//            }
-//            .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+            .onDelete(perform: deleteShops)
         }
         .navigationTitle("Bean Spots")
         .navigationBarTitleDisplayMode(.large)
@@ -95,25 +70,25 @@ struct CoffeeShopView: View {
             }
         }
         // Navigation to user profile
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink(destination: ProfileView(user: user)) {
-                    Image(systemName: "person.fill")
-                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItem(placement: .topBarTrailing) {
+//                NavigationLink(destination: ProfileView(user: user)) {
+//                    Image(systemName: "person.fill")
+//                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+//                }
+//            }
+//        }
         // Navigation to saved coffee shop view
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                if !users.isEmpty {
-                    NavigationLink(destination: SavedView(user: user)) {
-                        Image(systemName: "square.and.arrow.down.fill")
-                            .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                    }
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItem(placement: .topBarTrailing) {
+//                if !users.isEmpty {
+//                    NavigationLink(destination: SavedView(user: user)) {
+//                        Image(systemName: "square.and.arrow.down.fill")
+//                            .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+//                    }
+//                }
+//            }
+//        }
         //Navigation to add new review
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

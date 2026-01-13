@@ -315,6 +315,11 @@ struct DetailView: View {
                     }
                 }
             }
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Text("Hi")
+                }
+            }
         }
         .navigationTitle(coffeeShop.name)
         .navigationBarTitleDisplayMode(.large)
