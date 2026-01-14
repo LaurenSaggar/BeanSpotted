@@ -38,6 +38,8 @@ struct MainTabsView: View {
                             .foregroundStyle(.black)
                     }
                 }
+//                .toolbarBackground(.visible, for: .tabBar)
+//                .toolbarBackground(Color.black, for: .tabBar)
             //            // 1. Set the background color (ShapeStyle can be Color, Gradient, etc.)
             //            .toolbarBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255), for: .bottomBar)
             //            // 2. Force the background to always be visible (optional, but often needed)
@@ -58,6 +60,8 @@ struct MainTabsView: View {
                             .foregroundStyle(.black)
                     }
                 }
+//                .toolbarBackground(.visible, for: .tabBar)
+//                .toolbarBackground(Color.black, for: .tabBar)
             
             ProfileView(user: user, selectedTab: $selectedTab)
                 .tag(AppTab.profile)
@@ -72,7 +76,10 @@ struct MainTabsView: View {
                             .foregroundStyle(.black)
                     }
                 }
+//                .toolbarBackground(.visible, for: .tabBar)
+//                .toolbarBackground(Color.black, for: .tabBar)
         }
+        .tint(.white) // selected tab icon color
     }
 }
 
