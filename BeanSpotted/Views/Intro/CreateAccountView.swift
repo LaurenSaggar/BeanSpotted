@@ -11,6 +11,10 @@ struct CreateAccountView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @Query var users: [User]
+    
+    @Binding var isLoggedIn: Bool
+    @Binding var user: User?
+    
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var username: String = ""
@@ -18,6 +22,7 @@ struct CreateAccountView: View {
     @State private var bio: String = ""
     @State private var accountValid: Bool = false
     @State private var errorMessage: String = ""
+    
     
     var body: some View {
         NavigationStack {
@@ -60,7 +65,7 @@ struct CreateAccountView: View {
                             .padding(.horizontal)
                     }
                     .navigationDestination(isPresented: $accountValid) {
-                        LoginView()
+                        LoginView(isLoggedIn: $isLoggedIn, user: $user)
                     }
                     
                     if !errorMessage.isEmpty {
@@ -99,5 +104,5 @@ struct CreateAccountView: View {
 }
 
 #Preview {
-    CreateAccountView()
+    CreateAccountView(isLoggedIn: .constant(true), user: .constant(User()))
 }

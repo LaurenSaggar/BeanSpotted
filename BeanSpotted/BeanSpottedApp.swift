@@ -13,7 +13,7 @@ struct BeanSpottedApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            ContentView()
         }
         //.modelContainer(for: [CoffeeShop.self, Review.self, User.self])
         .modelContainer(for: [CoffeeShop.self, Review.self, User.self])

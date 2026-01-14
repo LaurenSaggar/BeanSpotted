@@ -1,13 +1,18 @@
 //
-//  FooterView.swift
+//  MainTabsView.swift
 //  BeanSpotted
 //
-//  Created by Lauren Saggar on 1/11/26.
+//  Created by Lauren Saggar on 1/14/26.
 //
+
 import SwiftData
 import SwiftUI
 
-struct FooterView: View {
+enum AppTab: Hashable { case home, saved, profile }
+
+struct MainTabsView: View {
+    
+    @State private var selectedTab: AppTab = .home
     
     // ModelContext tracks when model objects are created/modified/deleted before save to ModelContainer at later point
     @Environment(\.modelContext) var modelContext
@@ -18,21 +23,13 @@ struct FooterView: View {
     let user: User
     
     var body: some View {
-
-            HStack {
-                
-                Spacer()
-                
-                NavigationLink(destination: ContentView(user: user)) {
-                    
+        TabView(selection: $selectedTab) {
+            
+            HomeView(user: user)
+                .tag(AppTab.home)
+                .tabItem {
                     VStack {
-                        
                         Image(systemName: "house.fill")
-                        //                                        .resizable()
-                        //                                        .scaledToFit()
-                        //                                        .containerRelativeFrame(.horizontal) { size, axis in
-                        //                                            size * 0.07
-                        //                                        }
                             .foregroundStyle(.black)
                         
                         Text("Home")
@@ -41,12 +38,16 @@ struct FooterView: View {
                             .foregroundStyle(.black)
                     }
                 }
-                
-                Spacer()
-                Spacer()
-                
-                NavigationLink(destination: SavedView(user: user)) {
-                    
+            //            // 1. Set the background color (ShapeStyle can be Color, Gradient, etc.)
+            //            .toolbarBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255), for: .bottomBar)
+            //            // 2. Force the background to always be visible (optional, but often needed)
+            //            .toolbarBackground(.visible, for: .bottomBar)
+            //            // 3. Adjust the color scheme for text/buttons to match the background
+            //            .toolbarColorScheme(.dark, for: .bottomBar)
+            
+            SavedView(user: user)
+                .tag(AppTab.saved)
+                .tabItem {
                     VStack {
                         Image(systemName: "square.and.arrow.down.fill")
                             .foregroundStyle(.black)
@@ -57,12 +58,10 @@ struct FooterView: View {
                             .foregroundStyle(.black)
                     }
                 }
-                
-                Spacer()
-                Spacer()
-                
-                NavigationLink(destination: ProfileView(user: user)) {
-                    
+            
+            ProfileView(user: user, selectedTab: $selectedTab)
+                .tag(AppTab.profile)
+                .tabItem {
                     VStack {
                         Image(systemName: "person.fill")
                             .foregroundStyle(.black)
@@ -73,10 +72,7 @@ struct FooterView: View {
                             .foregroundStyle(.black)
                     }
                 }
-                
-                Spacer()
-            }
-            .padding(.top)
+        }
     }
 }
 
@@ -85,13 +81,13 @@ struct FooterView: View {
         // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, configurations: config)
-        let exampleUser = User()
-        //let exampleShop = CoffeeShop()
+        let example = User()
         
-        return FooterView(user: exampleUser)
+        return MainTabsView(user: example)
             .modelContainer(container)
         
     } catch {
         return Text("Failed to create preview: \(error.localizedDescription)")
     }
+//    ContentView()
 }

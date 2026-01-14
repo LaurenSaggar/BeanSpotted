@@ -49,6 +49,11 @@ struct SavedDetailView: View {
                         .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                 }
             }
+//            .toolbar {
+//                ToolbarItem(placement: .bottomBar) {
+//                    FooterView(user: user)
+//                }
+//            }
         }
     }
     

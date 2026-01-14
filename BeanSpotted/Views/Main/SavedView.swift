@@ -23,7 +23,7 @@ struct SavedView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                NavigationLink(destination: SavedDetailView(savedType: "Favorites", savedArray: user.favorites, image: Image(systemName: "heart.fill"), user: user)) {
+                NavigationLink(destination: SavedDetailView(savedType: "Favorites", savedArray: user.favorites, image: Image(systemName: "heart.fill"), user: user).toolbar(.visible, for: .bottomBar)) {
                     HStack {
                         Image(systemName: "heart.fill")
                             .foregroundStyle(.black)
@@ -92,13 +92,17 @@ struct SavedView: View {
                     .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                     .cornerRadius(24)
                 }
-                
             }
             .padding()
+            .navigationTitle("Saved Shops")
             
             Spacer()
         }
-        .navigationTitle("Saved Shops")
+//        .toolbar {
+//            ToolbarItem(placement: .bottomBar) {
+//                FooterView(user: user)
+//            }
+//        }
     }
 }
 

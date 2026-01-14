@@ -12,12 +12,16 @@ struct LoginView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @Query var users: [User]
+    
+    @Binding var isLoggedIn: Bool
+    @Binding var user: User?
+    
     @State private var username: String = ""
     @State private var password: String = ""
-    @State private var loginValid = false
+    //@State private var loginValid = false
     @State private var errorMessage = ""
     @State private var userIndex = 0
-    
+ 
     var body: some View {
         NavigationStack {
             Spacer()
@@ -46,9 +50,9 @@ struct LoginView: View {
                             .cornerRadius(24)
                             .padding(.horizontal)
                     }
-                    .navigationDestination(isPresented: $loginValid) {
-                        ContentView(user: users[userIndex])
-                    }
+//                    .navigationDestination(isPresented: $loginValid) {
+//                        ContentView(user: users[userIndex])
+//                    }
                     
                     if !errorMessage.isEmpty {
                         Text("\(errorMessage)")
@@ -67,7 +71,9 @@ struct LoginView: View {
         if let index = users.firstIndex(where: { $0.username == username }) {
             if users[index].password == password {
                 userIndex = index
-                loginValid = true
+                //loginValid = true
+                user = users[userIndex]
+                isLoggedIn = true
             } else {
                 errorMessage = "That username + password does not exist."
             }
@@ -78,5 +84,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView()
+    LoginView(isLoggedIn: .constant(true), user: .constant(User()))
 }
