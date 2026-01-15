@@ -96,6 +96,10 @@ struct CoffeeShopView: View {
                     showingAddReviewScreen.toggle()
                 } label: {
                     Image(systemName: "plus.app.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                        .clipShape(Circle())
                         .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                 }
             }

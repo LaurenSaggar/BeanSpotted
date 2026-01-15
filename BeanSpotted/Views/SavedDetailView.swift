@@ -10,14 +10,19 @@ import SwiftUI
 
 struct SavedDetailView: View {
     
+    @Environment(\.dismiss) var dismiss
+    
     var savedType: String
-    var savedArray: [CoffeeShop]
-    var image: Image
     let user: User
+    @State private var savedArray: [CoffeeShop]
+    @State private var image: Image
+    @State private var color: Color
     
     var body: some View {
         NavigationStack {
+            
             List() {
+                
                 if savedArray.count > 0 {
                     ForEach(savedArray, id: \.id) { shop in
                         NavigationLink(destination: DetailView(coffeeShop: shop, user: user)) {
@@ -42,19 +47,53 @@ struct SavedDetailView: View {
                     Text("No \(savedType) Yet")
                 }
             }
-            .navigationTitle("\(savedType)")
+            .navigationBarBackButtonHidden(true)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    image
-                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack {
+                        Button { dismiss() } label: {
+                            Image(systemName: "chevron.left")
+                                .font(.headline)
+                        }
+                        
+                        
+                        Text(savedType)
+                            .font(.largeTitle)
+                            .bold()
+                        
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 28, height: 28)
+                            .foregroundStyle(color)
+                    }
+                    .padding(.top, 16)
                 }
             }
-//            .toolbar {
-//                ToolbarItem(placement: .bottomBar) {
-//                    FooterView(user: user)
-//                }
-//            }
         }
+    }
+    
+    init(savedType: String, user: User) {
+        
+        self.user = user
+        
+        if savedType == "Favorites" {
+            self.savedType = "Favorites"
+            self.savedArray = user.favorites
+            self.image = Image(systemName: "heart.fill")
+            self.color = Color(.sRGB, red: 250/255, green: 145/255, blue: 100/255)
+        } else if (savedType == "Have Been") {
+            self.savedType = "Have Been"
+            self.savedArray = user.haveBeen
+            self.image = Image(systemName: "arrowshape.left.fill")
+            self.color = Color(.sRGB, red: 0/255, green: 150/255, blue: 300/255)
+        } else {
+            self.savedType = "Want To Go"
+            self.savedArray = user.wantToGo
+            self.image = Image(systemName: "flag.fill")
+            self.color = Color(.sRGB, red: 100/255, green: 190/255, blue: 100/255)
+        }
+        
     }
     
     // Helper function to format date as time only
@@ -72,11 +111,11 @@ struct SavedDetailView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, configurations: config)
         let exampleUser = User()
-        let array = exampleUser.favorites
+        //let array = exampleUser.favorites
         let type = "Favorites"
-        let image = Image(systemName: "heart.fill")
+        //let image = Image(systemName: "heart.fill")
         
-        return SavedDetailView(savedType: type, savedArray: array, image: image, user: exampleUser)
+        return SavedDetailView(savedType: type, user: exampleUser)
             .modelContainer(container)
         
     } catch {

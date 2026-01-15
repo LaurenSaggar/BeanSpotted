@@ -257,6 +257,7 @@ struct AddReviewView: View {
             }
             .navigationTitle("Add Review")
             .navigationBarTitleDisplayMode(.inline)
+            .tint(.none)
         }
     }
     

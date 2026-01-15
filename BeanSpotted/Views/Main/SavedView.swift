@@ -23,7 +23,7 @@ struct SavedView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                NavigationLink(destination: SavedDetailView(savedType: "Favorites", savedArray: user.favorites, image: Image(systemName: "heart.fill"), user: user).toolbar(.visible, for: .bottomBar)) {
+                NavigationLink(destination: SavedDetailView(savedType: "Favorites", user: user).toolbar(.visible, for: .bottomBar)) {
                     HStack {
                         Image(systemName: "heart.fill")
                             .foregroundStyle(.black)
@@ -43,11 +43,11 @@ struct SavedView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
-                    .background(Color(.sRGB, red: 220/255, green: 145/255, blue: 100/255))
+                    .background(Color(.sRGB, red: 250/255, green: 145/255, blue: 100/255))
                     .cornerRadius(24)
                 }
                 
-                NavigationLink(destination: SavedDetailView(savedType: "Have Been", savedArray: user.haveBeen, image: Image(systemName: "arrowshape.left.fill"), user: user)) {
+                NavigationLink(destination: SavedDetailView(savedType: "Have Been", user: user)) {
                     HStack {
                         Image(systemName: "arrowshape.left.fill")
                             .foregroundStyle(.black)
@@ -66,11 +66,11 @@ struct SavedView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
-                    .background(Color(.sRGB, red: 44/255, green: 100/255, blue: 220/255))
+                    .background(Color(.sRGB, red: 0/255, green: 150/255, blue: 300/255))
                     .cornerRadius(24)
                 }
                 
-                NavigationLink(destination: SavedDetailView(savedType: "Want To Go", savedArray: user.wantToGo, image: Image(systemName: "flag.fill"), user: user)) {
+                NavigationLink(destination: SavedDetailView(savedType: "Want To Go", user: user)) {
                     HStack {
                         Image(systemName: "flag.fill")
                             .foregroundStyle(.black)
@@ -89,7 +89,7 @@ struct SavedView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
-                    .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                    .background(Color(.sRGB, red: 100/255, green: 190/255, blue: 100/255))
                     .cornerRadius(24)
                 }
             }

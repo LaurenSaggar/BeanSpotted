@@ -38,6 +38,7 @@ struct MainTabsView: View {
                             .foregroundStyle(.black)
                     }
                 }
+                .tint(.white) // selected tab icon color
 //                .toolbarBackground(.visible, for: .tabBar)
 //                .toolbarBackground(Color.black, for: .tabBar)
             //            // 1. Set the background color (ShapeStyle can be Color, Gradient, etc.)
@@ -80,6 +81,7 @@ struct MainTabsView: View {
 //                .toolbarBackground(Color.black, for: .tabBar)
         }
         .tint(.white) // selected tab icon color
+//        .tint(.white) // selected tab icon color
     }
 }
 
