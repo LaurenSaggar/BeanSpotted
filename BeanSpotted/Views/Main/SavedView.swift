@@ -98,11 +98,6 @@ struct SavedView: View {
             
             Spacer()
         }
-//        .toolbar {
-//            ToolbarItem(placement: .bottomBar) {
-//                FooterView(user: user)
-//            }
-//        }
     }
 }
 

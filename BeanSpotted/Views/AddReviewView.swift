@@ -15,7 +15,6 @@ struct AddReviewView: View {
     @Query var users: [User]
     let user: User
     let coffeeShop: CoffeeShop?
-    //@Query var reviews: [Review]
     
     // Coffee shop variables
     @State private var name: String
@@ -38,7 +37,6 @@ struct AddReviewView: View {
     @State private var cleanliness: Double = 0.0
     @State private var staffFriendliness: Double = 0.0
     @State private var comment = ""
-//    @State private var coffeeShop: CoffeeShop? = nil
     
     var body: some View {
         NavigationStack {
@@ -204,10 +202,6 @@ struct AddReviewView: View {
 //                            // Add new review to existing coffee shop if shop already exists
                             if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
                                 let shop = coffeeShops[shopIndex]
-//                                shop.openingTime = openingTime
-//                                shop.closingTime = closingTime
-//                                shop.decafAvailable = decafAvailable
-//                                shop.local = local
                                 
                                 shop.reviews.append(newReview)
                                 let ratings = shop.reviews.map( {$0.overallRating} )
@@ -317,24 +311,6 @@ struct AddReviewView: View {
 }
 
 
-//@MainActor func previewFunc2() -> some View {
-//    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-//    let container = try! ModelContainer(for: CoffeeShop.self, Review.self, User.self, configurations: config)
-//
-//    for i in 1..<10 {
-//        let coffeeShop = CoffeeShop(name: "Exaample \(i)", address: "12345", openingTime: Date.now, closingTime: Date.now, decafAvailable: true, local: true)
-//        container.mainContext.insert(coffeeShop)
-//        let review = Review(coffee: 4, nonCoffeeDrinks: 4, safety: 4, wifiQuality: 4, seating: 4, quiet: 4, parking: 4, food: 4, value: 4, cleanliness: 4, staffFriendliness: 4, comment: "Incredible!", coffeeShop: nil, user: nil)
-//        container.mainContext.insert(review)
-//        let user = User(firstName: "Lauren", lastName: "Saggar", username: "laurensaggar", password: "12345", bio: nil, createTime: Date.now, modifyTime: Date.now)
-//        container.mainContext.insert(user)
-//    }
-//    
-//    return AddReviewView()
-//        .modelContainer(container)
-//}
-
-
 #Preview {
     
     do {
@@ -342,7 +318,6 @@ struct AddReviewView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, configurations: config)
         let exampleUser = User()
-        //let exampleShop = CoffeeShop()
         
         return AddReviewView(user: exampleUser)
             .modelContainer(container)
@@ -350,8 +325,5 @@ struct AddReviewView: View {
     } catch {
         return Text("Failed to create preview: \(error.localizedDescription)")
     }
-    
-//        .modelContainer(for: [CoffeeShop.self, Review.self, User.self])
-    //AddReviewView(coffeeShops: .constant([CoffeeShop()]))
 }
 

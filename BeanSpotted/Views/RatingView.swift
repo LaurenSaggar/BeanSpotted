@@ -57,5 +57,4 @@ struct RatingView: View {
 
 #Preview {
     RatingView(rating: .constant(4.2))
-    // RatingView(rating: .constant(4), offImage: Image(systemName: "circle"))
 }

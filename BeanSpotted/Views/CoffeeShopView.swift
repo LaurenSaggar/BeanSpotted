@@ -50,8 +50,7 @@ struct CoffeeShopView: View {
                         }
                         
                         Spacer()
-                        
-                        // *******
+
                         // Display star rating on right of each row
                         RatingDisplayView(rating: shop.avgRating)
                     }
@@ -69,28 +68,8 @@ struct CoffeeShopView: View {
                 ContentUnavailableView("No results", systemImage: "person.fill.questionmark")
             }
         }
-        // Navigation to user profile
-//        .toolbar {
-//            ToolbarItem(placement: .topBarTrailing) {
-//                NavigationLink(destination: ProfileView(user: user)) {
-//                    Image(systemName: "person.fill")
-//                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-//                }
-//            }
-//        }
-        // Navigation to saved coffee shop view
-//        .toolbar {
-//            ToolbarItem(placement: .topBarTrailing) {
-//                if !users.isEmpty {
-//                    NavigationLink(destination: SavedView(user: user)) {
-//                        Image(systemName: "square.and.arrow.down.fill")
-//                            .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-//                    }
-//                }
-//            }
-//        }
-        //Navigation to add new review
         .toolbar {
+            //Navigation to add new review
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     showingAddReviewScreen.toggle()
@@ -111,8 +90,8 @@ struct CoffeeShopView: View {
     
     // Initialize coffee shop view to change the query sort order based on what's passed in from content view
     init(sort: SortDescriptor<CoffeeShop>, filter: [String], user: User) {
+        
         // Need to change the query object itself rather than the array inside of it, so access the underscored property
-            
         if filter.isEmpty {
             _coffeeShops = Query(sort: [sort])
             

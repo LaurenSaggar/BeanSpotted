@@ -24,14 +24,12 @@ struct ProfileView: View {
     @State private var password: String
     @State private var bio: String
     @State private var errorMessage = ""
-    //@State private var profileUpdated = false
     
     var body: some View {
         NavigationStack {
             Form {
                 Section("User Information") {
                     
-                    //                    TextField("\(users.isEmpty ? "First Name" : users[0].firstName)", text: $firstName)
                     TextField("\(user.firstName)", text: $firstName)
                     TextField("\(user.lastName)", text: $lastName)
                     TextField("\(user.username)", text: $username)
@@ -57,7 +55,6 @@ struct ProfileView: View {
                 }
             }
             .navigationTitle("\(user.firstName)'s Profile")
-            //.navigationBarTitleDisplayMode(.inline)
             .padding(.bottom)
             .frame(maxHeight: 300)
             
@@ -91,15 +88,6 @@ struct ProfileView: View {
                     .cornerRadius(24)
                     .padding(.horizontal, 45)
             }
-//            .navigationDestination(isPresented: $profileUpdated) {
-//                selectedTab = .home
-//            }
-            
-//            .toolbar {
-//                ToolbarItem(placement: .bottomBar) {
-//                    FooterView(user: user)
-//                }
-//            }
             
             if !errorMessage.isEmpty {
                 Text("\(errorMessage)")

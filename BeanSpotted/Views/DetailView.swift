@@ -19,20 +19,17 @@ struct DetailView: View {
     let user: User
     @State private var showingAddReviewScreen = false
     
-    // Favorite bool and images
-    //@State private var favOn = false
+    // Favorite images
     var favOffImage = Image(systemName: "heart")
     var favOnImage = Image(systemName: "heart.fill")
     var favoriteColor = Color(.sRGB, red: 250/255, green: 145/255, blue: 100/255)
     
-    // Have Been bool and images
-    //@State private var beenOn = false
+    // Have Been images
     var beenOffImage = Image(systemName: "arrowshape.left")
     var beenOnImage = Image(systemName: "arrowshape.left.fill")
     var haveBeenColor = Color(.sRGB, red: 0/255, green: 150/255, blue: 300/255)
     
-    // Want To Go bool and images
-    //@State private var toGoOn = false
+    // Want To Go images
     var toGoOffImage = Image(systemName: "flag")
     var toGoOnImage = Image(systemName: "flag.fill")
     
@@ -46,11 +43,6 @@ struct DetailView: View {
         List {
             
             Section("Shop Info") {
-//                    HStack(alignment: .top) {
-//                        Text("Name:")
-//                            .bold()
-//                        Text(coffeeShop.name)
-//                    }
                 
                 HStack(alignment: .top) {
                     Text("Address:")
@@ -73,7 +65,6 @@ struct DetailView: View {
                     } else {
                         Text("No")
                             .foregroundStyle(.red)
-                            //.foregroundStyle(Color(.sRGB, red: 211/255, green: 4/255, blue: 4/255))
                     }
                 }
                 
@@ -86,7 +77,6 @@ struct DetailView: View {
                     } else {
                         Text("No")
                             .foregroundStyle(.red)
-                            //.foregroundStyle(Color(.sRGB, red: 211/255, green: 4/255, blue: 4/255))
                     }
                 }
             }
@@ -98,7 +88,6 @@ struct DetailView: View {
                         .bold()
                         .foregroundStyle(.white)
                     Spacer()
-                    // ********
                     RatingDisplayView(rating: coffeeShop.avgRating)
                 }
                 .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
@@ -181,10 +170,6 @@ struct DetailView: View {
                                 .bold()
                             Spacer()
                             
-                            //distance = Date.now().distance(to: review.createTime)
-                            //let seconds = Date.now().timeIntervalSince(review.createTime)
-                            //Date.now().timeIntervalSince(review.createTime) < 86400
-                            
                             let startOfDay = Calendar.current.startOfDay(for: review.createTime)
                             
                             if Date.now.timeIntervalSince(startOfDay) < 86400 {
@@ -199,8 +184,6 @@ struct DetailView: View {
                             } else {
                                 Text("\(formattedDate(review.createTime))")
                             }
-//                                Text("\(review.createTime.formatted())")
-                            //Text("\(review.createTime.formatted(date: .short, time: .none)), \(formattedTime(review.createTime))")
                         }
                         
                         HStack {

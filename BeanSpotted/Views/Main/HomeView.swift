@@ -37,8 +37,6 @@ struct HomeView: View {
                                     }
                                     Spacer()
                                     Text("\(filter)")
-                                    //                                    Image(systemName: "checkmark")
-                                    //                                        .opacity(selectedFilters.contains(filter) ? 1.0 : 0.0)
                                 }
                             }
                         }
@@ -66,20 +64,9 @@ struct HomeView: View {
                     }
                 }
             }
-            //.toolbarBackground(.visible, for: .automatic)
-//            .toolbarBackground(.visible, for: .topBar)
             .preferredColorScheme(.dark)
             
         }
-            
-//            //FooterView(user: user, path: $path)
-//            // 1. Set the background color (ShapeStyle can be Color, Gradient, etc.)
-//            .toolbarBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255), for: .bottomBar)
-//            // 2. Force the background to always be visible (optional, but often needed)
-//            .toolbarBackground(.visible, for: .bottomBar)
-//            // 3. Adjust the color scheme for text/buttons to match the background
-//            .toolbarColorScheme(.dark, for: .bottomBar)
-            
     }
 }
 
@@ -89,9 +76,7 @@ struct HomeView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, configurations: config)
         let exampleUser = User()
-        //let exampleShop = CoffeeShop()
         
-        //return FooterView(user: exampleUser, path: .constant(NavigationPath()))
         return HomeView(user: exampleUser)
             .modelContainer(container)
         

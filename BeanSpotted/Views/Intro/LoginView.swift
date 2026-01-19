@@ -18,7 +18,6 @@ struct LoginView: View {
     
     @State private var username: String = ""
     @State private var password: String = ""
-    //@State private var loginValid = false
     @State private var errorMessage = ""
     @State private var userIndex = 0
  
@@ -50,9 +49,6 @@ struct LoginView: View {
                             .cornerRadius(24)
                             .padding(.horizontal)
                     }
-//                    .navigationDestination(isPresented: $loginValid) {
-//                        ContentView(user: users[userIndex])
-//                    }
                     
                     if !errorMessage.isEmpty {
                         Text("\(errorMessage)")
@@ -71,7 +67,6 @@ struct LoginView: View {
         if let index = users.firstIndex(where: { $0.username == username }) {
             if users[index].password == password {
                 userIndex = index
-                //loginValid = true
                 user = users[userIndex]
                 isLoggedIn = true
             } else {

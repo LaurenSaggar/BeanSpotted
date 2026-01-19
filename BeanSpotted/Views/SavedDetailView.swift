@@ -37,7 +37,6 @@ struct SavedDetailView: View {
                                 
                                 Spacer()
                                 
-                                // *******
                                 // Display star rating on right of each row
                                 RatingDisplayView(rating: shop.avgRating)
                             }
@@ -111,9 +110,7 @@ struct SavedDetailView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, configurations: config)
         let exampleUser = User()
-        //let array = exampleUser.favorites
         let type = "Favorites"
-        //let image = Image(systemName: "heart.fill")
         
         return SavedDetailView(savedType: type, user: exampleUser)
             .modelContainer(container)

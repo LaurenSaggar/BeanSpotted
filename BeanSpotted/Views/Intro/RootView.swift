@@ -30,8 +30,6 @@ struct RootView: View {
                     .aspectRatio(contentMode: .fit)  // Maintains the original aspect ratio
                     .cornerRadius(20)
                     .padding(.bottom)
-                    //.padding()
-                    //.frame(width: 200, height: 200) // Sets a specific size for the image view
                 
                 VStack {
                     Button {
@@ -67,7 +65,6 @@ struct RootView: View {
                 Spacer()
             }
             .padding(35)
-            //.padding()
         }
         .preferredColorScheme(.dark)
     }
