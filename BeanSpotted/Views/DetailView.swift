@@ -314,7 +314,7 @@ struct DetailView: View {
             }
         }
         .navigationTitle(coffeeShop.name)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     // Helper function to format date as time only

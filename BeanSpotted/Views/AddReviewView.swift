@@ -6,15 +6,20 @@
 //
 import SwiftData
 import SwiftUI
+import MapKit
+import CoreLocation
+
 
 struct AddReviewView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
+    
     @Query var coffeeShops: [CoffeeShop]
     @Query var reviews: [Review]
     @Query var users: [User]
+    
     let user: User
-    let coffeeShop: CoffeeShop?
+    let coffeeShop: CoffeeShop
     
     // Coffee shop variables
     @State private var name: String
@@ -38,15 +43,25 @@ struct AddReviewView: View {
     @State private var staffFriendliness: Double = 0.0
     @State private var comment = ""
     
+    @State private var searchText = ""
+    private var filtered: [CoffeeShop] {
+        let cleanedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        // Return all coffee shops without filter if nothing in search
+        guard !cleanedSearch.isEmpty else { return coffeeShops }
+        return coffeeShops.filter {
+            $0.name.lowercased().contains(cleanedSearch) || $0.address.lowercased().contains(cleanedSearch)
+        }
+    }
+    
     var body: some View {
         NavigationStack {
-            Form {
+            
+            VStack {
                 
-                Section("Coffee Shop Info") {
+                Form {
                     
-                    // If coffee shop exists, read and display shop info; else set coffee shop info
-                    if let coffeeShop = coffeeShop {
-                        
+                    Section("Coffee Shop Info") {
+                            
                         HStack(alignment: .top) {
                             Text("Name:")
                                 .bold()
@@ -88,208 +103,141 @@ struct AddReviewView: View {
                                     .foregroundStyle(.red)
                             }
                         }
-                    
-                    // Set coffee shop info
-                    } else {
-                        // Set name of coffee shop
-                        TextField("Name of coffee shop", text: $name)
-                        
-                        // Set address of coffee shop
-                        TextField("Address of coffee shop", text: $address)
-                        
-                        // DatePicker for opening time
-                        DatePicker("Opening Time", selection: $openingTime, displayedComponents: .hourAndMinute)
-                            .onAppear {}
-                        
-                        // DatePicker for closing time
-                        DatePicker("Closing Time", selection: $closingTime, displayedComponents: .hourAndMinute)
-                            .onAppear {}
-                        
-                        // Toggle for decaf available
-                        Toggle("Is decaf available?", isOn: $decafAvailable)
-                        
-                        // Toggle for local
-                        Toggle("Is the coffee shop local?", isOn: $local)
-                        
-                    }
-                }
-                
-                // Shop review inputs
-                Section("Write a review") {
-                    HStack {
-                        Text("Coffee")
-                        Spacer()
-                        RatingView(rating: $coffee)
                     }
                     
-                    HStack {
-                        Text("Non-Coffee Drinks")
-                        Spacer()
-                        RatingView(rating: $nonCoffeeDrinks)
-                    }
-                    
-                    HStack {
-                        Text("Safety")
-                        Spacer()
-                        RatingView(rating: $safety)
-                    }
-                    
-                    HStack {
-                        Text("Wifi Quality")
-                        Spacer()
-                        RatingView(rating: $wifiQuality)
-                    }
-                    
-                    HStack {
-                        Text("Seating")
-                        Spacer()
-                        RatingView(rating: $seating)
-                    }
-                    
-                    HStack {
-                        Text("Quiet")
-                        Spacer()
-                        RatingView(rating: $quiet)
-                    }
-                    
-                    HStack {
-                        Text("Parking")
-                        Spacer()
-                        RatingView(rating: $parking)
-                    }
-                    
-                    HStack {
-                        Text("Food")
-                        Spacer()
-                        RatingView(rating: $food)
-                    }
-                    
-                    HStack {
-                        Text("Value")
-                        Spacer()
-                        RatingView(rating: $value)
-                    }
-                    
-                    HStack {
-                        Text("Cleanliness")
-                        Spacer()
-                        RatingView(rating: $cleanliness)
-                    }
-                    
-                    HStack {
-                        Text("Staff Friendliness")
-                        Spacer()
-                        RatingView(rating: $staffFriendliness)
-                    }
-                    
-                    ZStack(alignment: .leading) {
-                        TextEditor(text: $comment)
-                        if comment.isEmpty {
-                            Text("Add additional comments here...\n\n")
-                                .foregroundStyle(.gray)
+                    // Shop review inputs
+                    Section("Write a review") {
+                        HStack {
+                            Text("Coffee")
+                            Spacer()
+                            RatingView(rating: $coffee)
                         }
-                    }
-                       
-                }
-                
-                Section {
-                    Button("Save") {
-                        // Check for valid review before saving review and potentially new coffee shop
-                        if validReview() {
-                            
-                            let newReview = Review(coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment, coffeeShop: nil, user: user)
-//
-//                            // Add new review to existing coffee shop if shop already exists
-                            if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
-                                let shop = coffeeShops[shopIndex]
-                                
-                                shop.reviews.append(newReview)
-                                let ratings = shop.reviews.map( {$0.overallRating} )
-                                shop.avgRating = ratings.reduce(0, +) / Double(shop.reviews.count)
-                                
-                                do {
-                                    try modelContext.save()
-                                } catch {
-                                    print(error.localizedDescription)
-                                }
-//
-//                            // Add new coffee shop if it doesn't yet exist and add new review to newly created coffee shop
-                            } else {
-                                let newCoffeeShop = CoffeeShop(name: name, address: address, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
-
-                                modelContext.insert(newCoffeeShop)
-
-                                newReview.coffeeShop = newCoffeeShop
-
-                                newCoffeeShop.reviews.append(newReview)
-
-                                let ratings = newCoffeeShop.reviews.map( {$0.overallRating} )
-
-                                newCoffeeShop.avgRating = ratings.reduce(0, +) / Double(newCoffeeShop.reviews.count)
-                                
-                                do {
-                                    try modelContext.save()
-
-                                } catch {
-                                    print(error.localizedDescription)
-                                }
+                        
+                        HStack {
+                            Text("Non-Coffee Drinks")
+                            Spacer()
+                            RatingView(rating: $nonCoffeeDrinks)
+                        }
+                        
+                        HStack {
+                            Text("Safety")
+                            Spacer()
+                            RatingView(rating: $safety)
+                        }
+                        
+                        HStack {
+                            Text("Wifi Quality")
+                            Spacer()
+                            RatingView(rating: $wifiQuality)
+                        }
+                        
+                        HStack {
+                            Text("Seating")
+                            Spacer()
+                            RatingView(rating: $seating)
+                        }
+                        
+                        HStack {
+                            Text("Quiet")
+                            Spacer()
+                            RatingView(rating: $quiet)
+                        }
+                        
+                        HStack {
+                            Text("Parking")
+                            Spacer()
+                            RatingView(rating: $parking)
+                        }
+                        
+                        HStack {
+                            Text("Food")
+                            Spacer()
+                            RatingView(rating: $food)
+                        }
+                        
+                        HStack {
+                            Text("Value")
+                            Spacer()
+                            RatingView(rating: $value)
+                        }
+                        
+                        HStack {
+                            Text("Cleanliness")
+                            Spacer()
+                            RatingView(rating: $cleanliness)
+                        }
+                        
+                        HStack {
+                            Text("Staff Friendliness")
+                            Spacer()
+                            RatingView(rating: $staffFriendliness)
+                        }
+                        
+                        ZStack(alignment: .leading) {
+                            TextEditor(text: $comment)
+                            if comment.isEmpty {
+                                Text("Add additional comments here...\n\n")
+                                    .foregroundStyle(.gray)
                             }
-                            
-                            dismiss()
-                            
-                        } else {
-                            ()
                         }
+                        
                     }
-                    .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                    .foregroundStyle(.black)
-                    .bold()
-                    .frame(maxWidth: .infinity)   // expands hit area
-                    .multilineTextAlignment(.center)
+                    
+                    Section {
+                        Button("Save") {
+                            // Check for valid review before saving review and potentially new coffee shop
+                            if validReview() {
+                                
+                                let newReview = Review(coffee: coffee, nonCoffeeDrinks: nonCoffeeDrinks, safety: safety, wifiQuality: wifiQuality, seating: seating, quiet: quiet, parking: parking, food: food, value: value, cleanliness: cleanliness, staffFriendliness: staffFriendliness, comment: comment, coffeeShop: coffeeShop, user: user)
+
+                                if let shopIndex = coffeeShops.firstIndex(where: { $0.name == name && $0.address == address } ) {
+                                    let shop = coffeeShops[shopIndex]
+                                    
+                                    shop.reviews.append(newReview)
+                                    let ratings = shop.reviews.map( {$0.overallRating} )
+                                    shop.avgRating = ratings.reduce(0, +) / Double(shop.reviews.count)
+                                    
+                                    do {
+                                        try modelContext.save()
+                                    } catch {
+                                        print(error.localizedDescription)
+                                    }
+                                }
+                                
+                                dismiss()
+                                
+                            } else {
+                                ()
+                            }
+                        }
+                        .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                        .foregroundStyle(.black)
+                        .bold()
+                        .frame(maxWidth: .infinity)   // expands hit area
+                        .multilineTextAlignment(.center)
+                    }
+                    
                 }
-                
+                .navigationTitle("Add Review")
+                .navigationBarTitleDisplayMode(.inline)
+                .tint(.none)
             }
-            .navigationTitle("Add Review")
-            .navigationBarTitleDisplayMode(.inline)
-            .tint(.none)
         }
     }
     
     // Optional coffee shop in initializer if adding review directly from coffee shop detail page view
-    init(user: User, coffeeShop: CoffeeShop? = nil) {
+    init(user: User, coffeeShop: CoffeeShop) {
         self.user = user
         self.coffeeShop = coffeeShop
         
         // Initialize coffee shop properties if coffeeShop in initializer
-        if let coffeeShop = coffeeShop {
-            self.name = coffeeShop.name
-            self.address = coffeeShop.address
-            self.openingTime = coffeeShop.openingTime
-            self.closingTime = coffeeShop.closingTime
-            self.decafAvailable = coffeeShop.decafAvailable
-            self.local = coffeeShop.local
+        self.name = coffeeShop.name
+        self.address = coffeeShop.address
+        self.openingTime = coffeeShop.openingTime
+        self.closingTime = coffeeShop.closingTime
+        self.decafAvailable = coffeeShop.decafAvailable
+        self.local = coffeeShop.local
             
-        } else {
-            self.name = ""
-            self.address = ""
-            var openingTimeComponents = DateComponents()
-                openingTimeComponents.year = Calendar.current.component(.year, from: Date())
-                openingTimeComponents.month = Calendar.current.component(.year, from: Date())
-                openingTimeComponents.day = Calendar.current.component(.year, from: Date())
-                openingTimeComponents.hour = 8
-                openingTimeComponents.minute = 0
-            self.openingTime = Calendar.current.date(from: openingTimeComponents) ?? Date.now
-            var closingTimeComponents = DateComponents()
-                closingTimeComponents.year = Calendar.current.component(.year, from: Date())
-                closingTimeComponents.month = Calendar.current.component(.year, from: Date())
-                closingTimeComponents.day = Calendar.current.component(.year, from: Date())
-                closingTimeComponents.hour = 17
-                closingTimeComponents.minute = 0
-            self.closingTime = Calendar.current.date(from: closingTimeComponents) ?? Date.now
-            self.decafAvailable = true
-            self.local = true
-            
-        }
     }
     
     // Ensure shop name, address, and all review attributes except for comment have a value/are selected before saving
@@ -316,10 +264,11 @@ struct AddReviewView: View {
     do {
         // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: User.self, configurations: config)
+        let container = try ModelContainer(for: CoffeeShop.self, configurations: config)
         let exampleUser = User()
+        let exampleShop = CoffeeShop()
         
-        return AddReviewView(user: exampleUser)
+        return AddReviewView(user: exampleUser, coffeeShop: exampleShop)
             .modelContainer(container)
         
     } catch {

@@ -16,6 +16,8 @@ class CoffeeShop {
     @Attribute(.unique) var nameAndAddress: String
     var name: String
     var address: String
+    var city: String
+    var state: String
     var openingTime: Date
     var closingTime: Date
     var decafAvailable: Bool
@@ -30,10 +32,12 @@ class CoffeeShop {
 //    var haveBeenBy: [User] = []
 //    var wantToGoBy: [User] = []
     
-    init(id: UUID = UUID(), name: String = "Mom n' Em", address: String = "4310 Whetsel Ave, Cincinnati, OH 45227", openingTime: Date = Date.now, closingTime: Date = Date.now, decafAvailable: Bool = true, local: Bool = true) {
+    init(id: UUID = UUID(), name: String = "Mom n' Em", address: String = "4310 Whetsel Ave, Cincinnati, OH 45227", city: String = "Cincinnati", state: String = "OH", openingTime: Date = Date.now, closingTime: Date = Date.now, decafAvailable: Bool = true, local: Bool = true) {
         self.id = id
         self.name = name
         self.address = address
+        self.city = city
+        self.state = state
         self.nameAndAddress = name + address
         self.openingTime = openingTime
         self.closingTime = closingTime

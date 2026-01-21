@@ -27,7 +27,7 @@ struct CoffeeShopView: View {
         }
     }
     
-    @State private var showingAddReviewScreen = false
+    @State private var showingAddShopScreen = false
     
     var body: some View {
             
@@ -35,18 +35,22 @@ struct CoffeeShopView: View {
             
             ForEach(filtered) { shop in
                 NavigationLink(destination: DetailView(coffeeShop: shop, user: user)) {
+                    
                     HStack {
                         // Vertically display coffee shop name and hours on left of each row
                         VStack(alignment: .leading) {
+                            Spacer()
                             Text(shop.name)
                                 .font(.headline)
-                            Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
+                            Text("\(shop.city), \(shop.state)")
+                            //Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
                             
                             if shop.reviews.count == 1 {
                                 Text("\(shop.reviews.count) Review")
                             } else {
                                 Text("\(shop.reviews.count) Reviews")
                             }
+                            Spacer()
                         }
                         
                         Spacer()
@@ -72,7 +76,7 @@ struct CoffeeShopView: View {
             //Navigation to add new review
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    showingAddReviewScreen.toggle()
+                    showingAddShopScreen.toggle()
                 } label: {
                     Image(systemName: "plus.app.fill")
                         .resizable()
@@ -83,8 +87,8 @@ struct CoffeeShopView: View {
                 }
             }
         }
-        .sheet(isPresented: $showingAddReviewScreen) {
-            AddReviewView(user: user)
+        .sheet(isPresented: $showingAddShopScreen) {
+            AddShopView(user: user)
         }
     }
     
