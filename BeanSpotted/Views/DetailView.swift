@@ -45,6 +45,12 @@ struct DetailView: View {
             Section("Shop Info") {
                 
                 HStack(alignment: .top) {
+                    Text("Name:")
+                        .bold()
+                    Text(coffeeShop.name)
+                }
+                
+                HStack(alignment: .top) {
                     Text("Address:")
                         .bold()
                     Text(coffeeShop.address)
@@ -186,6 +192,8 @@ struct DetailView: View {
                             }
                         }
                         
+                        Spacer()
+                        
                         HStack {
                             RatingDisplayView(rating: review.overallRating)
                             Spacer()
@@ -313,8 +321,8 @@ struct DetailView: View {
                 }
             }
         }
-        .navigationTitle(coffeeShop.name)
-        .navigationBarTitleDisplayMode(.inline)
+//        .navigationTitle(coffeeShop.name)
+//        .navigationBarTitleDisplayMode(.inline)
     }
     
     // Helper function to format date as time only

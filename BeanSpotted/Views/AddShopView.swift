@@ -71,16 +71,7 @@ struct AddShopView: View {
     @State private var local: Bool
     @State private var errorMessage: String = ""
     @State private var showShopDetails: Bool = false
-    
     @State private var searchText = ""
-    private var filtered: [CoffeeShop] {
-        let cleanedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        // Return all coffee shops without filter if nothing in search
-        guard !cleanedSearch.isEmpty else { return coffeeShops }
-        return coffeeShops.filter {
-            $0.name.lowercased().contains(cleanedSearch) || $0.address.lowercased().contains(cleanedSearch)
-        }
-    }
     
     var body: some View {
         NavigationStack {
@@ -93,19 +84,21 @@ struct AddShopView: View {
                             .tag(place)
                     }
                 }
-                .frame(height: 300)
                 .task {
                     locationManager.requestLocation()
                 }
                 .onChange(of: locationManager.location) { _, loc in
                     guard let loc else { return }
-                    currentRegion = MKCoordinateRegion(
+                    let userRegion = MKCoordinateRegion(
                         center: loc.coordinate,
                         latitudinalMeters: 5_000,
                         longitudinalMeters: 5_000
                     )
-                    position = .region(currentRegion)
-                    boundingRegion = currentRegion
+                    
+                    currentRegion = userRegion
+                    position = .region(userRegion)
+                    boundingRegion = userRegion
+                    print(locationManager.location?.coordinate.latitude, locationManager.location?.coordinate.longitude)
                 }
                 .searchable(text: $searchText, prompt: "Search coffee shops")
                 .onSubmit(of: .search) {

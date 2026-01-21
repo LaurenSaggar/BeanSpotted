@@ -56,7 +56,6 @@ class CoffeeShop {
             //return self.avgRating
             return ratings.reduce(0, +) / Double(reviews.count)
         } else {
-            print("No reviews for this coffee shop name + address")
             return 0
         }
     }

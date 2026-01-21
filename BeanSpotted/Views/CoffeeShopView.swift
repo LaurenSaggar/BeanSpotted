@@ -64,7 +64,7 @@ struct CoffeeShopView: View {
         }
         .navigationTitle("Bean Spots")
         .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: "Search coffee shop (name or address)")
+        .searchable(text: $searchText, prompt: "Search coffee shop")
         .autocorrectionDisabled(true)
         .textInputAutocapitalization(.never)
         .overlay {
