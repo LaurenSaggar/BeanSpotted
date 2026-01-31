@@ -13,6 +13,7 @@ class Review {
     // Make id unique and immutable (just have to ensure class methods don't change id); UUID provides simpler primary key indexing
     @Attribute(.unique) private(set) var id = UUID()
     var overallRating: Double = 0
+    // Add drip coffee and change coffee to coffeeDrinks
     var coffee: Double
     var nonCoffeeDrinks: Double
     var safety: Double

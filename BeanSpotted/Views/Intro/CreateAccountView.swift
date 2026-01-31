@@ -55,22 +55,22 @@ struct CreateAccountView: View {
                 Button {
                     checkValidAccount()
                         
-                    } label: {
-                        Text("Create Account")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(.white)
-                            .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                            .cornerRadius(24)
-                            .padding(.horizontal)
-                    }
-                    .navigationDestination(isPresented: $accountValid) {
-                        LoginView(isLoggedIn: $isLoggedIn, user: $user)
-                    }
-                    
-                    if !errorMessage.isEmpty {
-                        Text("\(errorMessage)")
-                    }
+                } label: {
+                    Text("Create Account")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .foregroundColor(.white)
+                        .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                        .cornerRadius(24)
+                        .padding(.horizontal)
+                }
+                .navigationDestination(isPresented: $accountValid) {
+                    LoginView(isLoggedIn: $isLoggedIn, user: $user)
+                }
+                
+                if !errorMessage.isEmpty {
+                    Text("\(errorMessage)")
+                }
             }
             .padding()
             Spacer()

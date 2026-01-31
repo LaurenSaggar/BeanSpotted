@@ -76,7 +76,7 @@ struct AddShopView: View {
     var body: some View {
         NavigationStack {
             
-            VStack(alignment: .leading) {
+            VStack {
                 
                 Map(position: $position, selection: $selectedPlace) {
                     ForEach(places, id: \.self) { place in
@@ -96,17 +96,19 @@ struct AddShopView: View {
                     )
                     
                     currentRegion = userRegion
+                    //boundingRegion = userRegion
                     position = .region(userRegion)
-                    boundingRegion = userRegion
-                    print(locationManager.location?.coordinate.latitude, locationManager.location?.coordinate.longitude)
                 }
                 .searchable(text: $searchText, prompt: "Search coffee shops")
                 .onSubmit(of: .search) {
                     let regionSnapshot = currentRegion
-                    Task { await searchCoffee(in: regionSnapshot) }
-                    position = .region(boundingRegion)
+                    Task {
+                        await searchCoffee(in: regionSnapshot)
+                        position = .region(boundingRegion)
+                    }
                 }
                 .onMapCameraChange(frequency: .onEnd) { context in
+                    currentRegion = context.region
                     Task { await searchCoffee(in: context.region) }
                 }
                 .onChange(of: selectedPlace) { _, newPlace in
@@ -121,6 +123,7 @@ struct AddShopView: View {
                         longitudinalMeters: 200
                     ))
                     showShopDetails = true
+                    errorMessage = ""
                 }
                 
                     
@@ -156,9 +159,10 @@ struct AddShopView: View {
                             // Toggle for local
                             Toggle("Is the coffee shop local?", isOn: $local)
                         }
-                        
-                        Button("Save") {
-                                
+                    }
+                    
+                    Button {
+                        if !coffeeShopExists() {
                             let newCoffeeShop = CoffeeShop(name: name, address: address, city: city, state: state, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
                             
                             modelContext.insert(newCoffeeShop)
@@ -169,22 +173,27 @@ struct AddShopView: View {
                             } catch {
                                 print(error.localizedDescription)
                             }
-                            
                             dismiss()
                         }
-                        .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                        .foregroundStyle(.black)
-                        .bold()
-                        .frame(maxWidth: .infinity)   // expands hit area
-                        .multilineTextAlignment(.center)
-                        
+                    } label: {
+                        Text("Save")
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(.white)
+                            .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                            .cornerRadius(24)
+                            .padding(.horizontal, 45)
                     }
-                    .navigationTitle("Add Review")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .tint(.none)
+                    
+                    if !errorMessage.isEmpty {
+                        Text("\(errorMessage)")
+                    }
+                    Spacer()
                 }
-                Spacer()
             }
+            .navigationTitle("Add Review")
+            .navigationBarTitleDisplayMode(.inline)
+            .tint(.none)
         }
     }
     
@@ -216,21 +225,17 @@ struct AddShopView: View {
         self.local = true
     }
     
-    // Ensure shop name, address, and all review attributes except for comment have a value/are selected before saving
-//    func validShop() -> Bool {
-//        
-//        if (name.isEmpty || address.isEmpty) {
-//            errorMessage = "Name or address cannot be empty"
-//            return false
-//            
-//        } else if coffeeShops.firstIndex(where: { $0.name == name && $0.address == address }) != nil {
-//            errorMessage = "Shop already exists"
-//            return false
-//            
-//        } else if  {
-//            return true
-//        }
-//    }
+    // Checks if coffee shop already exists
+    func coffeeShopExists() -> Bool {
+        
+        if coffeeShops.firstIndex(where: { $0.name == name && $0.address == address }) != nil {
+            errorMessage = "That coffee shop already exists."
+            return true
+            
+        } else {
+            return false
+        }
+    }
     
     // Helper function to format date as time only
     func formattedTime(_ date: Date) -> String {
@@ -252,6 +257,7 @@ struct AddShopView: View {
             let response = try await MKLocalSearch(request: request).start()
             mapItems = response.mapItems
             boundingRegion = response.boundingRegion
+            //position = .region(boundingRegion)
             places = mapItems.map {
                 Place(id: UUID(), name: $0.name ?? "Coffee", latitude: $0.placemark.coordinate.latitude, longitude: $0.placemark.coordinate.longitude, streetNumber: $0.placemark.subThoroughfare ?? "Unknown", streetName: $0.placemark.thoroughfare ?? "Unknown", city: $0.placemark.locality ?? "Unknown", state: $0.placemark.administrativeArea ?? "Unknown", postalCode: $0.placemark.postalCode ?? "Unknown")
             }
