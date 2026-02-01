@@ -7,21 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		43B57E602CBDFD27001C81BE /* BeanSpottedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B57E5F2CBDFD27001C81BE /* BeanSpottedApp.swift */; };
 		43B57E642CBDFD2A001C81BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43B57E632CBDFD2A001C81BE /* Assets.xcassets */; };
 		43B57E672CBDFD2A001C81BE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43B57E662CBDFD2A001C81BE /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		43B57E5C2CBDFD27001C81BE /* BeanSpotted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeanSpotted.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		43B57E5F2CBDFD27001C81BE /* BeanSpottedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeanSpottedApp.swift; sourceTree = "<group>"; };
 		43B57E632CBDFD2A001C81BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43B57E662CBDFD2A001C81BE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		4367FA822CCDABCA00E395C4 /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
-		4367FA832CCDABEA00E395C4 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
+		4367FA822CCDABCA00E395C4 /* Model */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Model; sourceTree = "<group>"; };
+		436BDCEC2F2F95B500C20B4F /* App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = App; sourceTree = "<group>"; };
+		436BDCED2F2F95BE00C20B4F /* Components */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Components; sourceTree = "<group>"; };
+		436BDCEE2F2F95EE00C20B4F /* Core */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Core; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,9 +54,10 @@
 		43B57E5E2CBDFD27001C81BE /* BeanSpotted */ = {
 			isa = PBXGroup;
 			children = (
-				43B57E5F2CBDFD27001C81BE /* BeanSpottedApp.swift */,
-				4367FA832CCDABEA00E395C4 /* Views */,
-				4367FA822CCDABCA00E395C4 /* Models */,
+				436BDCEC2F2F95B500C20B4F /* App */,
+				436BDCED2F2F95BE00C20B4F /* Components */,
+				436BDCEE2F2F95EE00C20B4F /* Core */,
+				4367FA822CCDABCA00E395C4 /* Model */,
 				43B57E632CBDFD2A001C81BE /* Assets.xcassets */,
 				43B57E652CBDFD2A001C81BE /* Preview Content */,
 			);
@@ -87,8 +88,10 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				4367FA822CCDABCA00E395C4 /* Models */,
-				4367FA832CCDABEA00E395C4 /* Views */,
+				4367FA822CCDABCA00E395C4 /* Model */,
+				436BDCEC2F2F95B500C20B4F /* App */,
+				436BDCED2F2F95BE00C20B4F /* Components */,
+				436BDCEE2F2F95EE00C20B4F /* Core */,
 			);
 			name = BeanSpotted;
 			productName = BeanSpotted;
@@ -145,7 +148,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43B57E602CBDFD27001C81BE /* BeanSpottedApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -101,6 +101,7 @@ struct AddShopView: View {
                 }
                 .searchable(text: $searchText, prompt: "Search coffee shops")
                 .onSubmit(of: .search) {
+                    showShopDetails = false
                     let regionSnapshot = currentRegion
                     Task {
                         await searchCoffee(in: regionSnapshot)
