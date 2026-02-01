@@ -1,21 +1,23 @@
 //
-//  HomeView.swift
+//  AuthenticationStartView.swift
 //  BeanSpotted
 //
-//  Created by Lauren Saggar on 1/7/26.
+//  Created by Lauren Saggar on 2/1/26.
 //
 
 import SwiftUI
 
-struct RootView: View {
-    
+enum AuthRoute: Hashable { case login, signup }
+
+struct AuthenticationStartView: View {
     @Binding var isLoggedIn: Bool
     @Binding var user: User?
     @State private var showLoginScreen = false
     @State private var showCreateAccountScreen = false
+    @State private var path: [AuthRoute] = []
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
                 
             VStack {
                 
@@ -33,21 +35,20 @@ struct RootView: View {
                 
                 VStack {
                     Button {
-                        showLoginScreen = true
+                        //showLoginScreen = true
+                        path = [.login]
                     } label: {
-                        Text("Login")
+                        Text("Log in")
                             .padding()
                             .frame(maxWidth: .infinity)
                             .foregroundColor(.white)
                             .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
                             .cornerRadius(24)
                     }
-                    .navigationDestination(isPresented: $showLoginScreen) {
-                        LoginView(isLoggedIn: $isLoggedIn, user: $user)
-                    }
                     
                     Button {
-                        showCreateAccountScreen = true
+                        //showCreateAccountScreen = true
+                        path = [.signup]
                     } label: {
                         Text("Create Account")
                             .padding()
@@ -56,10 +57,25 @@ struct RootView: View {
                             .background(.white)
                             .cornerRadius(24)
                     }
-                    .navigationDestination(isPresented: $showCreateAccountScreen) {
-                        CreateAccountView(isLoggedIn: $isLoggedIn, user: $user)
+                }
+                .navigationDestination(for: AuthRoute.self) { route in
+                    switch route {
+                        case .login:
+                            LoginView(path: $path, isLoggedIn: $isLoggedIn, user: $user)
+                                .navigationBarBackButtonHidden()
+                        case .signup:
+                            CreateAccountView(path: $path, isLoggedIn: $isLoggedIn, user: $user)
+                                .navigationBarBackButtonHidden()
                     }
                 }
+//                .navigationDestination(isPresented: $showLoginScreen) {
+//                    LoginView(isLoggedIn: $isLoggedIn, user: $user)
+//                        .navigationBarBackButtonHidden()
+//                }
+//                .navigationDestination(isPresented: $showCreateAccountScreen) {
+//                    CreateAccountView(isLoggedIn: $isLoggedIn, user: $user)
+//                        .navigationBarBackButtonHidden()
+//                }
                 .padding(.vertical)
                 
                 Spacer()
@@ -71,5 +87,6 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView(isLoggedIn: .constant(true), user: .constant(User()))
+    AuthenticationStartView(isLoggedIn: .constant(true), user: .constant(User()))
 }
+

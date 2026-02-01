@@ -14,6 +14,15 @@ class User {
     @Attribute(.unique) private(set) var id = UUID()
     var firstName: String
     var lastName: String
+    var initials: String {
+        let formatter = PersonNameComponentsFormatter()
+        if let components = formatter.personNameComponents(from: firstName + " " + lastName) {
+            formatter.style = .abbreviated
+            return formatter.string(from: components)
+        }
+        return ""
+    }
+    var email: String
     var username: String
     var password: String
     var bio: String?
@@ -24,10 +33,11 @@ class User {
     var wantToGo: [CoffeeShop] = []
     var reviews: [Review] = []
     
-    init(id: UUID = UUID(), firstName: String = "Lauren", lastName: String = "Saggar", username: String = "laurensaggar", password: String = "12345", bio: String? = nil, createTime: Date = Date.now, modifyTime: Date = Date.now) {
+    init(id: UUID = UUID(), firstName: String = "Lauren", lastName: String = "Saggar", email: String = "saggar.lauren@gmail.com", username: String = "laurensaggar", password: String = "12345", bio: String? = nil, createTime: Date = Date.now, modifyTime: Date = Date.now) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
+        self.email = email
         self.username = username
         self.password = password
         self.bio = bio

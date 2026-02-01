@@ -17,7 +17,7 @@ struct ContentView: View {
         if isLoggedIn {
             MainTabsView(user: user ?? User())
         } else {
-            RootView(isLoggedIn: $isLoggedIn, user: $user)
+            AuthenticationStartView(isLoggedIn: $isLoggedIn, user: $user)
         }
     }
 }

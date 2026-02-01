@@ -20,6 +20,7 @@ struct ProfileView: View {
     // User variables
     @State private var firstName: String
     @State private var lastName: String
+    @State private var email: String
     @State private var username: String
     @State private var password: String
     @State private var bio: String
@@ -32,6 +33,7 @@ struct ProfileView: View {
                     
                     TextField("\(user.firstName)", text: $firstName)
                     TextField("\(user.lastName)", text: $lastName)
+                    TextField("\(user.email)", text: $email)
                     TextField("\(user.username)", text: $username)
                     TextField("\(user.password)", text: $password)
                     
@@ -64,6 +66,7 @@ struct ProfileView: View {
                     
                     user.firstName = firstName
                     user.lastName = lastName
+                    user.email = email
                     user.username = username
                     user.password = password
                     user.bio = bio
@@ -101,6 +104,7 @@ struct ProfileView: View {
         self.user = user
         self.firstName = user.firstName
         self.lastName = user.lastName
+        self.email = user.email
         self.username = user.username
         self.password = user.password
         self.bio = user.bio ?? ""
@@ -110,12 +114,14 @@ struct ProfileView: View {
     // Ensures profile attributes are valid before saving
     func validProfile() -> Bool {
         
-        if (firstName.isEmpty || lastName.isEmpty || username.isEmpty || password.isEmpty) {
+        if (firstName.isEmpty || lastName.isEmpty || email.isEmpty || username.isEmpty || password.isEmpty) {
             errorMessage = "All fields (but your bio) must be filled out."
             return false
-        }
-        
-        if (users.contains(where: { $0.username == username }) && username != user.username) {
+        } else if (users.contains(where: { $0.email == email }) && email != user.email) {
+            errorMessage = "Email already exists. Please choose a different email."
+            return false
+           
+        } else if (users.contains(where: { $0.username == username }) && username != user.username) {
             errorMessage = "Username already exists. Please choose a different username."
             return false
            
