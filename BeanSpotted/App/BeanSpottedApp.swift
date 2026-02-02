@@ -7,15 +7,22 @@
 
 import SwiftData
 import SwiftUI
+import Firebase
 
 @main
 struct BeanSpottedApp: App {
+    @StateObject var viewModel = AuthViewModel()
+    
+    init() {
+        FirebaseApp.configure()
+    }
     
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
+        .environmentObject(viewModel)
         //.modelContainer(for: [CoffeeShop.self, Review.self, User.self])
-        .modelContainer(for: [CoffeeShop.self, Review.self, User.self])
+//        .modelContainer(for: [CoffeeShop.self, Review.self, User.self])
     }
 }

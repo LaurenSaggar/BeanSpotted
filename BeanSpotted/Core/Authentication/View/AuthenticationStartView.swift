@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-enum AuthRoute: Hashable { case login, signup }
+enum AuthRoute: Hashable {
+    case login
+    case signup
+}
 
 struct AuthenticationStartView: View {
-    @Binding var isLoggedIn: Bool
-    @Binding var user: User?
-    @State private var showLoginScreen = false
-    @State private var showCreateAccountScreen = false
+
     @State private var path: [AuthRoute] = []
     
     var body: some View {
@@ -35,8 +35,8 @@ struct AuthenticationStartView: View {
                 
                 VStack {
                     Button {
-                        //showLoginScreen = true
                         path = [.login]
+                        
                     } label: {
                         Text("Log in")
                             .padding()
@@ -47,8 +47,8 @@ struct AuthenticationStartView: View {
                     }
                     
                     Button {
-                        //showCreateAccountScreen = true
                         path = [.signup]
+                        
                     } label: {
                         Text("Create Account")
                             .padding()
@@ -61,21 +61,13 @@ struct AuthenticationStartView: View {
                 .navigationDestination(for: AuthRoute.self) { route in
                     switch route {
                         case .login:
-                            LoginView(path: $path, isLoggedIn: $isLoggedIn, user: $user)
+                            LoginView(path: $path)
                                 .navigationBarBackButtonHidden()
                         case .signup:
-                            CreateAccountView(path: $path, isLoggedIn: $isLoggedIn, user: $user)
+                            CreateAccountView(path: $path)
                                 .navigationBarBackButtonHidden()
                     }
                 }
-//                .navigationDestination(isPresented: $showLoginScreen) {
-//                    LoginView(isLoggedIn: $isLoggedIn, user: $user)
-//                        .navigationBarBackButtonHidden()
-//                }
-//                .navigationDestination(isPresented: $showCreateAccountScreen) {
-//                    CreateAccountView(isLoggedIn: $isLoggedIn, user: $user)
-//                        .navigationBarBackButtonHidden()
-//                }
                 .padding(.vertical)
                 
                 Spacer()
@@ -87,6 +79,6 @@ struct AuthenticationStartView: View {
 }
 
 #Preview {
-    AuthenticationStartView(isLoggedIn: .constant(true), user: .constant(User()))
+    AuthenticationStartView()
 }
 

@@ -9,21 +9,16 @@ import SwiftUI
 
 struct LoginView: View {
     
-    //@EnvironmentObject var viewModel: AuthViewModel
-    @Environment(\.modelContext) var modelContext
-    @Environment(\.dismiss) var dismiss
-    @Query var users: [User]
+    @EnvironmentObject var viewModel: AuthViewModel
     
     @Binding var path: [AuthRoute]
-    @Binding var isLoggedIn: Bool
-    @Binding var user: User?
     
     @State private var showCreateAccountScreen = false
     @State private var email = ""
     @State private var password = ""
     @State private var errorMessage = ""
     @State private var userIndex = 0
- 
+    
     var body: some View {
         VStack {
             // Image
@@ -52,10 +47,9 @@ struct LoginView: View {
             
             // Sign in button
             Button {
-                checkValidLogin()
-                //                        Task {
-                //                            try await viewModel.signIn(withEmail: email, password: password)
-                //                        }
+                Task {
+                    try await viewModel.signIn(withEmail: email, password: password)
+                }
                 
             } label: {
                 HStack {
@@ -67,8 +61,8 @@ struct LoginView: View {
                 .frame(width: UIScreen.main.bounds.width - 50, height: 48)
             }
             .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-            //                    .disabled(!formIsValid)
-            //                    .opacity(formIsValid ? 1.0 : 0.5)
+            .disabled(!formIsValid)
+            .opacity(formIsValid ? 1.0 : 0.5)
             .cornerRadius(24)
             .padding(.top, 24)
             
@@ -95,37 +89,20 @@ struct LoginView: View {
         }
         .preferredColorScheme(.dark)
     }
-    
-    // Check if login is valid, set state variables, and set appropriate error message if login not valid
-    func checkValidLogin() {
-        if let index = users.firstIndex(where: { $0.email == email }) {
-            if users[index].password == password {
-                userIndex = index
-                user = users[userIndex]
-                isLoggedIn = true
-            } else {
-                errorMessage = "That email + password does not exist."
-                print("1")
-            }
-        } else {
-            errorMessage = "That username + password does not exist."
-            print("2")
-            print(users)
-        }
-    }
 }
+    
 
 // MARK: - AuthenticationFormProtocol
 
-//extension LoginView: AuthenticationFormProtocol {
-//    var formIsValid: Bool {
-//        return !email.isEmpty
-//        && email.contains("@")
-//        && !password.isEmpty
-//        && password.count > 5
-//    }
-//}
+extension LoginView: AuthenticationFormProtocol {
+    var formIsValid: Bool {
+        return !email.isEmpty
+        && email.contains("@")
+        && !password.isEmpty
+        && password.count > 5
+    }
+}
 
 #Preview {
-    LoginView(path: .constant([.signup]), isLoggedIn: .constant(true), user: .constant(User()))
+    LoginView(path: .constant([.login]))
 }

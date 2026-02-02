@@ -6,12 +6,9 @@
 //
 
 import Foundation
-import SwiftData
 
-@Model
-class User {
-    // Make id unique and immutable (just have to ensure class methods don't change id); UUID provides simpler primary key indexing
-    @Attribute(.unique) private(set) var id = UUID()
+struct User: Identifiable, Codable {
+    var id: String
     var firstName: String
     var lastName: String
     var initials: String {
@@ -24,25 +21,16 @@ class User {
     }
     var email: String
     var username: String
-    var password: String
-    var bio: String?
+    var bio: String
     private(set) var createTime = Date.now
     var modifyTime = Date.now
-    var favorites: [CoffeeShop] = []
-    var haveBeen: [CoffeeShop] = []
-    var wantToGo: [CoffeeShop] = []
-    var reviews: [Review] = []
-    
-    init(id: UUID = UUID(), firstName: String = "Lauren", lastName: String = "Saggar", email: String = "saggar.lauren@gmail.com", username: String = "laurensaggar", password: String = "12345", bio: String? = nil, createTime: Date = Date.now, modifyTime: Date = Date.now) {
-        self.id = id
-        self.firstName = firstName
-        self.lastName = lastName
-        self.email = email
-        self.username = username
-        self.password = password
-        self.bio = bio
-        self.createTime = createTime
-        self.modifyTime = modifyTime
-    }
+//    var favorites: [CoffeeShop] = []
+//    var haveBeen: [CoffeeShop] = []
+//    var wantToGo: [CoffeeShop] = []
+//    var reviews: [Review] = []
+}
+
+extension User {
+    static var MOCK_USER = User(id: NSUUID().uuidString, firstName: "Alicia", lastName: "Keys", email: "aliciakeys@gmail.com", username: "aliciakeys", bio: "", createTime: Date.now, modifyTime: Date.now)
 }
 

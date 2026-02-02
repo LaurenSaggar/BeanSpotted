@@ -10,19 +10,19 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var isLoggedIn = false
-    @State private var user: User?
+    @EnvironmentObject var viewModel: AuthViewModel
     
     var body: some View {
-        if isLoggedIn {
-            MainTabsView(user: user ?? User())
+        if viewModel.userSession != nil {
+            MainTabsView()
+                .preferredColorScheme(.dark)
         } else {
-            AuthenticationStartView(isLoggedIn: $isLoggedIn, user: $user)
+            AuthenticationStartView()
+                .preferredColorScheme(.dark)
         }
     }
 }
 
 #Preview {
     ContentView()
-//    ContentView()
 }

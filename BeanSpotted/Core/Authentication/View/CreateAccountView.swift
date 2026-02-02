@@ -8,14 +8,9 @@ import SwiftData
 import SwiftUI
 
 struct CreateAccountView: View {
-//    @EnvironmentObject var viewModel: AuthViewModel
-    @Environment(\.modelContext) var modelContext
-    @Environment(\.dismiss) var dismiss
-    @Query var users: [User]
+    @EnvironmentObject var viewModel: AuthViewModel
     
     @Binding var path: [AuthRoute]
-    @Binding var isLoggedIn: Bool
-    @Binding var user: User?
     
     @State private var showLoginScreen = false
     @State private var firstName: String = ""
@@ -25,9 +20,6 @@ struct CreateAccountView: View {
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     @State private var bio: String = ""
-    @State private var accountValid: Bool = false
-    @State private var errorMessage: String = ""
-    
     
     var body: some View {
         VStack {
@@ -88,11 +80,13 @@ struct CreateAccountView: View {
             .padding(.horizontal)
             
             Button {
-                //                Task {
-                //                    try await viewModel.createUser(withEmail: email,
-                //                                                   password: password,
-                //                                                   fullName: fullName)
-                //                }
+                Task {
+                    try await viewModel.createUser(firstName: firstName,
+                                                   lastName: lastName,
+                                                   withEmail: email,
+                                                   username: username,
+                                                   password: password)
+                }
                 
             } label: {
                 HStack {
@@ -104,8 +98,8 @@ struct CreateAccountView: View {
                 .frame(width: UIScreen.main.bounds.width - 50, height: 48)
             }
             .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-            //                    .disabled(!formIsValid)
-            //                    .opacity(formIsValid ? 1.0 : 0.5)
+            .disabled(!formIsValid)
+            .opacity(formIsValid ? 1.0 : 0.5)
             .cornerRadius(24)
             .padding(.top, 24)
             
@@ -126,35 +120,25 @@ struct CreateAccountView: View {
         }
         .preferredColorScheme(.dark)
     }
-    
-    // Ensures profile attributes are valid before saving
-    func checkValidAccount() {
-        if firstName.isEmpty || lastName.isEmpty || email.isEmpty || username.isEmpty || password.isEmpty {
-            errorMessage = "The above fields cannot be empty. Please ensure all fields are entered."
-            
-        } else if users.contains(where: { $0.email == email }) {
-            errorMessage = "Email already exists. Please login or choose a different email."
-           
-        } else if users.contains(where: { $0.username == username }) {
-            errorMessage = "Username already exists. Please choose a different username."
-           
-        } else {
-            
-            let user = User(firstName: firstName, lastName: lastName, email: email, username: username, password: password, bio: bio)
-            modelContext.insert(user)
+}
 
-            do {
-                try modelContext.save()
-                accountValid = true
-                print("User saved successfully!")
 
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
+// MARK: - AuthenticationFormProtocol
+
+extension CreateAccountView: AuthenticationFormProtocol {
+    var formIsValid: Bool {
+        return !firstName.isEmpty
+        && !lastName.isEmpty
+        && !email.isEmpty
+        && !username.isEmpty
+        && !password.isEmpty
+        && email.contains("@")
+        && password.count > 5
+        && confirmPassword == password
     }
 }
 
+
 #Preview {
-    CreateAccountView(path: .constant([.login]), isLoggedIn: .constant(true), user: .constant(User()))
+    CreateAccountView(path: Binding.constant([.signup]))
 }

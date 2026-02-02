@@ -30,7 +30,7 @@ class Review {
     var modifyTime = Date.now
 //    @Relationship(inverse: \CoffeeShop.reviews)
     var coffeeShop: CoffeeShop?
-    @Relationship(inverse: \User.reviews)
+    //@Relationship(inverse: \User.reviews)
     var user: User?
     
     //user: User? = nil,
