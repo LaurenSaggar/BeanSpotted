@@ -14,6 +14,9 @@ struct ProfileView: View {
     
     @Binding var selectedTab: AppTab
     
+    @State private var password = ""
+    @State private var showDeleteConfirmationScreen = false
+    
     // User variables
 //    @State private var firstName: String
 //    @State private var lastName: String
@@ -43,7 +46,7 @@ struct ProfileView: View {
                                     .fontWeight(.semibold)
                                     .padding(.top, 4)
                                 
-                                Text(user.email)
+                                Text(user.username)
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                 
@@ -57,10 +60,10 @@ struct ProfileView: View {
                     Section("Info") {
                         HStack {
                             SettingsRowView(imageName: "person",
-                                            title: "Username:",
+                                            title: "Email:",
                                             tintColor: Color(.systemGray))
                             
-                            Text(user.username)
+                            Text(user.email)
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                         }
@@ -88,7 +91,7 @@ struct ProfileView: View {
                         }
                         
                         Button {
-                            print("Delete account...")
+                            showDeleteConfirmationScreen.toggle()
                         } label: {
                             SettingsRowView(imageName: "arrow.left.circle.fill",
                                             title: "Delete Account",
@@ -97,6 +100,7 @@ struct ProfileView: View {
                     }
                 }
             }
+            
 //            Form {
 //                Section("User Information") {
 //                    
@@ -166,6 +170,24 @@ struct ProfileView: View {
 //            }
 //            
 //            Spacer()
+        }
+        .sheet(isPresented: $showDeleteConfirmationScreen) {
+            VStack {
+                InputView(text: $password, title: "Password", placeholder: "Enter your password here", isSecureField: true)
+                
+                Button("Confirm Delete Account") {
+                    Task {
+                        try await viewModel.deleteAccount(password: password)
+                    }
+                }
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+                .frame(width: UIScreen.main.bounds.width - 70, height: 48)
+                .background(.red)
+                .cornerRadius(24)
+                .padding(.top, 24)
+            }
+            .padding()
         }
     }
     

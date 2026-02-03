@@ -71,7 +71,6 @@ struct LoginView: View {
                 Text("\(errorMessage)")
             }
         }
-        .padding()
         
         Spacer()
         

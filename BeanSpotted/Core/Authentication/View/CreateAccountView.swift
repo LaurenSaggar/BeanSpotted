@@ -78,6 +78,7 @@ struct CreateAccountView: View {
                 }
             }
             .padding(.horizontal)
+            .padding(.top, 12)
             
             Button {
                 Task {

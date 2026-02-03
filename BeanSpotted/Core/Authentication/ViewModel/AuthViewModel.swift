@@ -46,11 +46,22 @@ class AuthViewModel: ObservableObject {
             let encodedUser = try Firestore.Encoder().encode(user)  // Encode user in JSON for upload to firebase
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
             await fetchUser()
-            print(currentUser ?? "Failed to fetch user")
             
         } catch {
             print("DEBUG: Failed to create user with error \(error.localizedDescription)")
         }
+    }
+    
+    func updateEmail() {
+        
+    }
+    
+    func updatePassword() {
+        
+    }
+    
+    func updateUserFields() {
+        
     }
     
     func signOut() {
@@ -63,14 +74,35 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func deleteAccount() {
+    func deleteAccount(password: String) async throws {
+        guard let user = Auth.auth().currentUser else { return }
+        guard let email = user.email else { return }
+
+        let cred = EmailAuthProvider.credential(withEmail: email, password: password)
         
+        do {
+            try await user.reauthenticate(with: cred)
+            do {
+                try await Firestore.firestore().collection("users").document(user.uid).delete()
+                do {
+                    try await user.delete()
+                    self.userSession = nil  // wipes out user session and takes us back to login screen
+                    self.currentUser = nil  // wipes out current user data model
+                } catch {
+                    print("DEBUG: Authentication delete error: \(error.localizedDescription)")
+                }
+            } catch {
+                print("DEBUG: Firestore delete error: \(error.localizedDescription)")
+            }
+        } catch {
+            print("DEBUG: Reauthentication error: \(error.localizedDescription)")
+        }
     }
     
     func fetchUser() async {
         guard let uid = Auth.auth().currentUser?.uid else {return}  // get authenticated user
         guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else {return}  // get firebase store user
-        self.currentUser = try? snapshot.data(as: User.self)  // set firebase user to current user for app activity
+        self.currentUser = try? snapshot.data(as: User.self)  // set firebase user to current app user for app activity
     }
 }
 
