@@ -6,50 +6,31 @@
 //
 
 import Foundation
-import SwiftData
 
-@Model
-class Review {
-    // Make id unique and immutable (just have to ensure class methods don't change id); UUID provides simpler primary key indexing
-    @Attribute(.unique) private(set) var id = UUID()
-    var overallRating: Double = 0
-    // Add drip coffee and change coffee to coffeeDrinks
-    var coffee: Double
-    var nonCoffeeDrinks: Double
-    var safety: Double
-    var wifiQuality: Double
-    var seating: Double
-    var quiet: Double
-    var parking: Double
-    var food: Double
-    var value: Double
-    var cleanliness: Double
-    var staffFriendliness: Double
+struct Review: Identifiable, Codable {
+    var id: String
+    var overallRating: Int
+    var coffeeRating: Int
+    var espressoRating: Int
+    var nonCoffeeDrinkRating: Int
+    var safetyRating: Int
+    var wifiRating: Int
+    var seatingRating: Int
+    var quietRating: Int
+    var parkingRating: Int
+    var foodRating: Int
+    var valueRating: Int
+    var cleanlinessRating: Int
+    var staffRating: Int
     var comment: String
     private(set) var createTime = Date.now
     var modifyTime = Date.now
-//    @Relationship(inverse: \CoffeeShop.reviews)
-    var coffeeShop: CoffeeShop?
-    //@Relationship(inverse: \User.reviews)
-    var user: User?
-    
-    //user: User? = nil,
-    init(id: UUID = UUID(), coffee: Double = 4, nonCoffeeDrinks: Double = 4, safety: Double = 4, wifiQuality: Double = 4, seating: Double = 4, quiet: Double = 4, parking: Double = 4, food: Double = 4, value: Double = 4, cleanliness: Double = 4, staffFriendliness: Double = 4, comment: String = "Incredible!", coffeeShop: CoffeeShop? = nil, user: User? = nil) {
-        self.id = id
-        self.overallRating = (coffee + nonCoffeeDrinks + safety + wifiQuality + seating + quiet + parking + food + value + cleanliness + staffFriendliness) / 11.0
-        self.coffee = coffee
-        self.nonCoffeeDrinks = nonCoffeeDrinks
-        self.safety = safety
-        self.wifiQuality = wifiQuality
-        self.seating = seating
-        self.quiet = quiet
-        self.parking = parking
-        self.food = food
-        self.value = value
-        self.cleanliness = cleanliness
-        self.staffFriendliness = staffFriendliness
-        self.comment = comment
-        self.coffeeShop = coffeeShop
-        self.user = user
-    }
+    var shopId: String
+    var shopName: String
+    var userId: String
+    var username: String
+}
+
+extension Review {
+    static var MOCK_REVIEW = Review(id: NSUUID().uuidString, overallRating: 4, coffeeRating: 4, espressoRating: 4, nonCoffeeDrinkRating: 4, safetyRating: 4, wifiRating: 4, seatingRating: 4, quietRating: 4, parkingRating: 4, foodRating: 4, valueRating: 4, cleanlinessRating: 4, staffRating: 4, comment: "Amazing espresso!", createTime: Date.now, modifyTime: Date.now, shopId: NSUUID().uuidString, shopName: "", userId: NSUUID().uuidString, username: "")
 }

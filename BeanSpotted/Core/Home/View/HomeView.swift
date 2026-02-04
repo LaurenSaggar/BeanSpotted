@@ -14,11 +14,10 @@
 //    
 //    let filters = ["Decaf Available", "Local Only"]
 //    @State private var selectedFilters = [String]()
-//    var user: User
 //    
 //    var body: some View {
 //        NavigationStack {
-//            CoffeeShopView(sort: sortOrder, filter: selectedFilters, user: user).toolbar(.visible, for: .navigationBar)
+//            CoffeeShopView(sort: sortOrder, filter: selectedFilters).toolbar(.visible, for: .navigationBar)
 //            .toolbar {
 //                ToolbarItem(placement: .topBarLeading) {
 //                    Menu {
@@ -64,23 +63,21 @@
 //                    }
 //                }
 //            }
-//            .preferredColorScheme(.dark)
-//            
 //        }
 //    }
 //}
 //
 //#Preview {
-//    do {
-//        // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
-//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-//        let container = try ModelContainer(for: User.self, configurations: config)
-//        let exampleUser = User()
-//        
-//        return HomeView(user: exampleUser)
-//            .modelContainer(container)
-//        
-//    } catch {
-//        return Text("Failed to create preview: \(error.localizedDescription)")
-//    }
+////    do {
+////        // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
+////        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+////        let container = try ModelContainer(for: User.self, configurations: config)
+////        let exampleUser = User()
+////        
+//        HomeView()
+////            .modelContainer(container)
+////        
+////    } catch {
+////        return Text("Failed to create preview: \(error.localizedDescription)")
+////    }
 //}

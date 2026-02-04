@@ -6,16 +6,14 @@
 //
 
 import Foundation
-import SwiftData
 
-@Model
-class CoffeeShop {
-    // #Unique<CoffeeShop>([\.id], [\.name, \.address]) -- only supported by iOS 18
-    // Make id unique and immutable (just have to ensure class methods don't change id); UUID provides simpler primary key indexing
-    @Attribute(.unique) private(set) var id = UUID()
-    @Attribute(.unique) var nameAndAddress: String
+struct CoffeeShop: Identifiable, Codable {
+    var id: String
     var name: String
     var address: String
+    var nameandaddress: String {
+        return name + " " + address
+    }
     var city: String
     var state: String
     var openingTime: Date
@@ -24,193 +22,107 @@ class CoffeeShop {
     var local: Bool
     private(set) var createTime = Date.now
     var modifyTime = Date.now
-    var avgRating: Double = 0
     
-    @Relationship(deleteRule: .cascade, inverse: \Review.coffeeShop)
-    var reviews: [Review] = []
-//    var favoritedBy: [User] = []
-//    var haveBeenBy: [User] = []
-//    var wantToGoBy: [User] = []
+    // Rating sum variables
+    var overallRatingSum: Int
+    var coffeeRatingSum: Int
+    var espressoRatingSum: Int
+    var nonCoffeeDrinkRatingSum: Int
+    var safetyRatingSum: Int
+    var wifiRatingSum: Int
+    var seatingRatingSum: Int
+    var quietRatingSum: Int
+    var parkingRatingSum: Int
+    var foodRatingSum: Int
+    var valueRatingSum: Int
+    var cleanlinessRatingSum: Int
+    var staffRatingSum: Int
     
-    init(id: UUID = UUID(), name: String = "Mom n' Em", address: String = "4310 Whetsel Ave, Cincinnati, OH 45227", city: String = "Cincinnati", state: String = "OH", openingTime: Date = Date.now, closingTime: Date = Date.now, decafAvailable: Bool = true, local: Bool = true) {
-        self.id = id
-        self.name = name
-        self.address = address
-        self.city = city
-        self.state = state
-        self.nameAndAddress = name + address
-        self.openingTime = openingTime
-        self.closingTime = closingTime
-        self.decafAvailable = decafAvailable
-        self.local = local
+    // Rating count variables
+    var overallRatingCount: Int
+    var coffeeRatingCount: Int
+    var espressoRatingCount: Int
+    var nonCoffeeDrinkRatingCount: Int
+    var safetyRatingCount: Int
+    var wifiRatingCount: Int
+    var seatingRatingCount: Int
+    var quietRatingCount: Int
+    var parkingRatingCount: Int
+    var foodRatingCount: Int
+    var valueRatingCount: Int
+    var cleanlinessRatingCount: Int
+    var staffRatingCount: Int
+    
+    // Average rating variables
+    var avgOverallRating: Double {
+        guard overallRatingCount > 0 else { return 0 }
+        return Double(overallRatingSum) / Double(overallRatingCount)
     }
     
-    // Returns average overall rating of all coffee shop reviews
-    func averageOverallRating() -> Double {
-        
-        // Map reviews array to overall review ratings array
-        let ratings = reviews.map( {$0.overallRating} )
-        
-        if reviews.count > 0 {
-            //self.avgRating = ratings.reduce(0, +) / reviews.count
-            //return self.avgRating
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            return 0
-        }
+    var avgCoffeeRating: Double {
+        guard coffeeRatingCount > 0 else { return 0 }
+        return Double(coffeeRatingSum) / Double(coffeeRatingCount)
     }
     
-    // Returns average coffee rating of all coffee shop reviews
-    func averageCoffeeRating() -> Double {
-        
-        // Map reviews array to coffee ratings array
-        let ratings = reviews.map( {$0.coffee} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgEspressoRating: Double {
+        guard espressoRatingCount > 0 else { return 0 }
+        return Double(espressoRatingSum) / Double(espressoRatingCount)
     }
     
-    // Returns average non-coffee drink rating of all coffee shop reviews
-    func averageNonCoffeeDrinkRating() -> Double {
-        
-        // Map reviews array to non-coffee drink ratings array
-        let ratings = reviews.map( {$0.nonCoffeeDrinks} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgNonCoffeeDrinkRating: Double {
+        guard nonCoffeeDrinkRatingCount > 0 else { return 0 }
+        return Double(nonCoffeeDrinkRatingSum) / Double(nonCoffeeDrinkRatingCount)
     }
     
-    // Returns average safety rating of all coffee shop reviews
-    func averageSafetyRating() -> Double {
-        
-        // Map reviews array to safety ratings array
-        let ratings = reviews.map( {$0.safety} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgSafetyRating: Double {
+        guard safetyRatingCount > 0 else { return 0 }
+        return Double(safetyRatingSum) / Double(safetyRatingCount)
     }
     
-    // Returns average wifi quality rating of all coffee shop reviews
-    func averageWifiQualityRating() -> Double {
-        
-        // Map reviews array to wifi quality ratings array
-        let ratings = reviews.map( {$0.wifiQuality} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgWifiRating: Double {
+        guard wifiRatingCount > 0 else { return 0 }
+        return Double(wifiRatingSum) / Double(wifiRatingCount)
     }
     
-    // Returns average seating rating of all coffee shop reviews
-    func averageSeatingRating() -> Double {
-        
-        // Map reviews array to seating ratings array
-        let ratings = reviews.map( {$0.seating} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgSeatingRating: Double {
+        guard seatingRatingCount > 0 else { return 0 }
+        return Double(seatingRatingSum) / Double(seatingRatingCount)
     }
     
-    // Returns average quiet rating of all coffee shop reviews
-    func averageQuietRating() -> Double {
-        
-        // Map reviews array to quiet ratings array
-        let ratings = reviews.map( {$0.quiet} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgQuietRating: Double {
+        guard quietRatingCount > 0 else { return 0 }
+        return Double(quietRatingSum) / Double(quietRatingCount)
     }
     
-    // Returns average parking rating of all coffee shop reviews
-    func averageParkingRating() -> Double {
-        
-        // Map reviews array to parking ratings array
-        let ratings = reviews.map( {$0.parking} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgParkingRating: Double {
+        guard parkingRatingCount > 0 else { return 0 }
+        return Double(parkingRatingSum) / Double(parkingRatingCount)
     }
     
-    // Returns average food rating of all coffee shop reviews
-    func averageFoodRating() -> Double {
-        
-        // Map reviews array to food ratings array
-        let ratings = reviews.map( {$0.food} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgFoodRating: Double {
+        guard foodRatingCount > 0 else { return 0 }
+        return Double(foodRatingSum) / Double(foodRatingCount)
     }
     
-    // Returns average value rating of all coffee shop reviews
-    func averageValueRating() -> Double {
-        
-        // Map reviews array to value ratings array
-        let ratings = reviews.map( {$0.value} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgValueRating: Double {
+        guard valueRatingCount > 0 else { return 0 }
+        return Double(valueRatingSum) / Double(valueRatingCount)
     }
     
-    // Returns average cleanliness rating of all coffee shop reviews
-    func averageCleanlinessRating() -> Double {
-        
-        // Map reviews array to cleanliness ratings array
-        let ratings = reviews.map( {$0.cleanliness} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgCleanlinessRating: Double {
+        guard cleanlinessRatingCount > 0 else { return 0 }
+        return Double(cleanlinessRatingSum) / Double(cleanlinessRatingCount)
     }
     
-    // Returns average staff friendliness rating of all coffee shop reviews
-    func averageStaffFriendlinessRating() -> Double {
-        
-        // Map reviews array to staff friendliness ratings array
-        let ratings = reviews.map( {$0.staffFriendliness} )
-        
-        if reviews.count > 0 {
-            return ratings.reduce(0, +) / Double(reviews.count)
-        } else {
-            print("No reviews for this coffee shop name + address")
-            return 0
-        }
+    var avgStaffRating: Double {
+        guard staffRatingCount > 0 else { return 0 }
+        return Double(staffRatingSum) / Double(staffRatingCount)
     }
+    
+    //@Relationship(deleteRule: .cascade, inverse: \Review.coffeeShop)
+    //var reviews: [Review] = []
+}
+
+extension CoffeeShop {
+    static var MOCK_SHOP = CoffeeShop(id: NSUUID().uuidString, name: "Mom n' Em", address: "4310 Whetsel Ave, Cincinnati, OH 45227", city: "Cincinnati", state: "OH", openingTime: Date.now, closingTime: Date.now, decafAvailable: true, local: true, createTime: Date.now, modifyTime: Date.now, overallRatingSum: 0, coffeeRatingSum: 0, espressoRatingSum: 0, nonCoffeeDrinkRatingSum: 0, safetyRatingSum: 0, wifiRatingSum: 0, seatingRatingSum: 0, quietRatingSum: 0, parkingRatingSum: 0, foodRatingSum: 0, valueRatingSum: 0, cleanlinessRatingSum: 0, staffRatingSum: 0, overallRatingCount: 0, coffeeRatingCount: 0, espressoRatingCount: 0, nonCoffeeDrinkRatingCount: 0, safetyRatingCount: 0, wifiRatingCount: 0, seatingRatingCount: 0, quietRatingCount: 0, parkingRatingCount: 0, foodRatingCount: 0, valueRatingCount: 0, cleanlinessRatingCount: 0, staffRatingCount: 0)
 }

@@ -25,7 +25,7 @@ struct MainTabsView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             
-//            HomeView(user: user)
+//            HomeView()
 //                .tag(AppTab.home)
 //                .tabItem {
 //                    VStack {
