@@ -12,7 +12,7 @@ enum AppTab: Hashable { case home, saved, profile }
 
 struct MainTabsView: View {
     
-    @State private var selectedTab: AppTab = .profile
+    @State private var selectedTab: AppTab = .home
     
     // ModelContext tracks when model objects are created/modified/deleted before save to ModelContainer at later point
 //    @Environment(\.modelContext) var modelContext
@@ -25,19 +25,19 @@ struct MainTabsView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             
-//            HomeView()
-//                .tag(AppTab.home)
-//                .tabItem {
-//                    VStack {
-//                        Image(systemName: "house.fill")
-//                            .foregroundStyle(.black)
-//                        
-//                        Text("Home")
-//                            .font(.caption)
-//                            .fontWeight(.semibold)
-//                            .foregroundStyle(.black)
-//                    }
-//                }
+            HomeView()
+                .tag(AppTab.home)
+                .tabItem {
+                    VStack {
+                        Image(systemName: "house.fill")
+                            .foregroundStyle(.black)
+                        
+                        Text("Home")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.black)
+                    }
+                }
 //            
 //            SavedView(user: user)
 //                .tag(AppTab.saved)

@@ -5,17 +5,19 @@
 //  Created by Lauren Saggar on 10/26/24.
 //
 
-//import SwiftData
-//import SwiftUI
-//
-//struct DetailView: View {
+import SwiftData
+import SwiftUI
+
+struct DetailView: View {
+    
+    
 //    @Environment(\.modelContext) var modelContext
 //    @Environment(\.dismiss) var dismiss
 //    
 //    @Query var coffeeShops: [CoffeeShop]
 //    @Query var users: [User]
 //    
-//    let coffeeShop: CoffeeShop
+    let coffeeShop: CoffeeShop
 //    let user: User
 //    @State private var showingAddReviewScreen = false
 //    
@@ -38,7 +40,7 @@
 //    var onColor = Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255)
 //    var wantToGoColor = Color(.sRGB, red: 100/255, green: 190/255, blue: 100/255)
 //    
-//    var body: some View {
+    var body: some View {
 //            
 //        List {
 //            
@@ -323,7 +325,7 @@
 //        }
 ////        .navigationTitle(coffeeShop.name)
 ////        .navigationBarTitleDisplayMode(.inline)
-//    }
+    }
 //    
 //    // Helper function to format date as time only
 //    func formattedTime(_ date: Date) -> String {
@@ -340,20 +342,21 @@
 //        formatter.timeStyle = .none
 //        return formatter.string(from: date)
 //    }
-//}
-//
-//#Preview {
+}
+
+#Preview {
 //    do {
 //        // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
 //        let config = ModelConfiguration(isStoredInMemoryOnly: true)
 //        let container = try ModelContainer(for: CoffeeShop.self, configurations: config)
 //        let exampleShop = CoffeeShop()
 //        let exampleUser = User()
-//        
+//
+//    DetailView(coffeeShop: CoffeeShop(from: <#any Decoder#>))
 //        return DetailView(coffeeShop: exampleShop, user: exampleUser)
 //            .modelContainer(container)
 //        
 //    } catch {
 //        return Text("Failed to create preview: \(error.localizedDescription)")
 //    }
-//}
+}
