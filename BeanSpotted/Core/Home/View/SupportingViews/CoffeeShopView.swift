@@ -4,164 +4,165 @@
 //
 //  Created by Lauren Saggar on 10/28/24.
 
-import SwiftData
-import SwiftUI
-
-struct CoffeeShopView: View {
-    
-    @StateObject var shopViewModel = CoffeeShopViewModel()
-    // ModelContext tracks when model objects are created/modified/deleted before save to ModelContainer at later point
-//    @Environment(\.modelContext) var modelContext
-    
-    // @Query queries model objects from SwiftUI view & stays up to date/reinvokes every time your data changes
-//    @Query var coffeeShops: [CoffeeShop]
-//    @Query var users: [User]
-//    let user: User
-    
-    @State private var searchText = ""
-    
-    private var filtered: [CoffeeShop] {
-        let cleanedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        
-        // Return all coffee shops without filter if nothing in search
-        guard !cleanedSearch.isEmpty else { return shopViewModel.shops }
-        return shopViewModel.shops.filter {
-            $0.name.lowercased().contains(cleanedSearch) || $0.address.lowercased().contains(cleanedSearch)
-        }
-    }
-    
-    @State private var showingAddShopScreen = false
-    
-    var body: some View {
-            
-        List {
-            
-            ForEach(filtered) { shop in
-                NavigationLink(destination: DetailView(coffeeShop: shop)) {
+//import SwiftData
+//import SwiftUI
 //
-                    HStack {
-                        // Vertically display coffee shop name and hours on left of each row
-                        VStack(alignment: .leading) {
-                            Spacer()
-                            Text(shop.name)
-                                .font(.headline)
-                            Text("\(shop.city), \(shop.state)")
-//                            //Text("\(formattedTime(shop.openingTime)) - \(formattedTime(shop.closingTime))")
-//                            
-//                            if shop.reviews.count == 1 {
-//                                Text("\(shop.reviews.count) Review")
-//                            } else {
-//                                Text("\(shop.reviews.count) Reviews")
-//                            }
-                            Spacer()
-                        }
-                        
-                        Spacer()
-
-                        // Display star rating on right of each row
-////                        RatingDisplayView(rating: shop.avgRating)
-                    }
-                }
-            }
-//            .onDelete(perform: deleteShops)
-        }
-        .navigationTitle("Bean Spots")
-        .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: "Search coffee shop")
-        .autocorrectionDisabled(true)
-        .textInputAutocapitalization(.never)
+//struct CoffeeShopView: View {
+//    
+//    @ObservedObject var shopViewModel: CoffeeShopViewModel
+//    // ModelContext tracks when model objects are created/modified/deleted before save to ModelContainer at later point
+////    @Environment(\.modelContext) var modelContext
+//    
+//    // @Query queries model objects from SwiftUI view & stays up to date/reinvokes every time your data changes
+////    @Query var coffeeShops: [CoffeeShop]
+////    @Query var users: [User]
+////    let user: User
+//    
+//    @State private var searchText = ""
+//    
+//    private var filtered: [CoffeeShop] {
+//        let cleanedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+//        
+//        // Return all coffee shops without filter if nothing in search
+//        guard !cleanedSearch.isEmpty else { return shopViewModel.shops }
+//        return shopViewModel.shops.filter {
+//            $0.name.lowercased().contains(cleanedSearch) || $0.address.lowercased().contains(cleanedSearch)
+//        }
+//    }
+//    
+//    @State private var showingAddShopScreen = false
+//    
+//    var body: some View {
+//            
+//        List {
+//            
+//            ForEach(filtered) { shop in
+//                NavigationLink(destination: DetailView(coffeeShop: shop)) {
+////
+//                    HStack {
+//                        // Vertically display coffee shop name, city, and state on left of each row
+//                        VStack(alignment: .leading) {
+//                            Spacer()
+//                            Text(shop.name)
+//                                .font(.headline)
+//                            Text("\(shop.city), \(shop.state)")
+////                            
+////                            if shop.reviews.count == 1 {
+////                                Text("\(shop.reviews.count) Review")
+////                            } else {
+////                                Text("\(shop.reviews.count) Reviews")
+////                            }
+//                            Spacer()
+//                        }
+//                        
+//                        Spacer()
+//
+//                        // Display star rating on right of each row
+//                        RatingDisplayView(rating: shop.avgRating)
+//                    }
+//                }
+//            }
+////            .onDelete(perform: deleteShops)
+//        }
+//        .navigationTitle("Bean Spots")
+//        .navigationBarTitleDisplayMode(.large)
+//        .searchable(text: $searchText, prompt: "Search coffee shop")
+//        .autocorrectionDisabled(true)
+//        .textInputAutocapitalization(.never)
 //        .overlay {
 //            if filtered.isEmpty {
 //                ContentUnavailableView("No results", systemImage: "person.fill.questionmark")
 //            }
 //        }
-        .toolbar {
-            //Navigation to add new shop
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showingAddShopScreen.toggle()
-                } label: {
-                    Image(systemName: "plus.app.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                        .clipShape(Circle())
-                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                }
-            }
-        }
-        .sheet(isPresented: $showingAddShopScreen) {
-            AddShopView(shopViewModel: shopViewModel)
-        }
-    }
-    
-    // Initialize coffee shop view to change the query sort order based on what's passed in from content view
-//    init(sort: SortDescriptor<CoffeeShop>, filter: [String]) {
+//        .toolbar {
+//            //Navigation to add new shop
+//            ToolbarItem(placement: .topBarTrailing) {
+//                Button {
+//                    showingAddShopScreen.toggle()
+//                } label: {
+//                    Image(systemName: "plus.app.fill")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 30, height: 30)
+//                        .clipShape(Circle())
+//                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+//                }
+//            }
+//        }
+//        .sheet(isPresented: $showingAddShopScreen) {
+//            AddShopView(shopViewModel: shopViewModel)
+//        }
+//    }
+//    
+//    // Initialize coffee shop view to change the query sort order based on what's passed in from content view
+//    init(sort: SortDescriptor<CoffeeShop>, filter: [String], shopViewModel: CoffeeShopViewModel) {
+//        
+//        self.shopViewModel = shopViewModel
 //        
 //        // Need to change the query object itself rather than the array inside of it, so access the underscored property
 //        if filter.isEmpty {
-//            _coffeeShops = Query(sort: [sort])
+//            _shopViewModel = Query(sort: [sort])
 //            
 //        }
 //        
 //        if filter.contains("Decaf Available") {
-//            _coffeeShops = Query(filter: #Predicate<CoffeeShop> {
+//            _shopViewModel = Query(filter: #Predicate<CoffeeShop> {
 //                $0.decafAvailable
 //            }, sort: [sort])
 //        }
 //            
 //        if filter.contains("Local Only") {
-//            _coffeeShops = Query(filter: #Predicate<CoffeeShop> {
+//            _shopViewModel = Query(filter: #Predicate<CoffeeShop> {
 //                $0.local
 //            }, sort: [sort])
 //        }
 //        
 //        if filter.contains("Decaf Available") && filter.contains("Local Only") {
-//            _coffeeShops = Query(filter: #Predicate<CoffeeShop> {
+//            _shopViewModel = Query(filter: #Predicate<CoffeeShop> {
 //                $0.decafAvailable && $0.local
 //            }, sort: [sort])
 //        }
 //    }
-    
-    // Helper function to format date as time only
-//    func formattedTime(_ date: Date) -> String {
-//        let formatter = DateFormatter()
-//        formatter.dateStyle = .none
-//        formatter.timeStyle = .short
-//        return formatter.string(from: date)
-//    }
-    
-    // Delete coffee shops at offsets in model array
-//    func deleteShops(at offsets: IndexSet) {
-//        for offset in offsets {
-//            let shop = coffeeShops[offset]
-//            modelContext.delete(shop)
-//            
-//            do {
-//                try modelContext.save()
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//        }
-//    }
-}
-
-#Preview {
 //    
-//    do {
-//        let sortOrder = SortDescriptor(\CoffeeShop.name)
-//        let filters = ["None"]
-//        
-//        // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
-//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-//        let container = try ModelContainer(for: User.self, configurations: config)
-//        let example = User()
+//    // Helper function to format date as time only
+////    func formattedTime(_ date: Date) -> String {
+////        let formatter = DateFormatter()
+////        formatter.dateStyle = .none
+////        formatter.timeStyle = .short
+////        return formatter.string(from: date)
+////    }
+//    
+//    // Delete coffee shops at offsets in model array
+////    func deleteShops(at offsets: IndexSet) {
+////        for offset in offsets {
+////            let shop = coffeeShops[offset]
+////            modelContext.delete(shop)
+////            
+////            do {
+////                try modelContext.save()
+////            } catch {
+////                print(error.localizedDescription)
+////            }
+////        }
+////    }
+//}
 //
-        CoffeeShopView()
-        //CoffeeShopView(sort: sortOrder, filter: filters)
-//            .modelContainer(container)
-//        
-//    } catch {
-//        return Text("Failed to create preview: \(error.localizedDescription)")
-//    }
-}
+//#Preview {
+////    
+////    do {
+////        let sortOrder = SortDescriptor(\CoffeeShop.name)
+////        let filters = ["None"]
+////        
+////        // In memory ensures entire database doesn't get loaded; must have config and container before making any model object
+////        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+////        let container = try ModelContainer(for: User.self, configurations: config)
+////        let example = User()
+////
+//        //CoffeeShopView()
+//        //CoffeeShopView(sort: sortOrder, filter: filters)
+////            .modelContainer(container)
+////        
+////    } catch {
+////        return Text("Failed to create preview: \(error.localizedDescription)")
+////    }
+//}

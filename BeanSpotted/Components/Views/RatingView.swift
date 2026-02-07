@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RatingView: View {
     // Binding to rating allows us to share this variable declared in another view (and change that variable here as needed)
-    @Binding var rating: Double
+    @Binding var rating: Int
     
     // Could choose to add text before the rating visual
     var label = ""
@@ -34,7 +34,7 @@ struct RatingView: View {
             ForEach(1..<maximumRating + 1, id: \.self) { number in
                 // Creates 5 star buttons
                 Button {
-                    rating = Double(number)
+                    rating = number
                 // Reinvoked each time button is pressed
                 } label: {
                     image(for: number)
@@ -56,5 +56,5 @@ struct RatingView: View {
 }
 
 #Preview {
-    RatingView(rating: .constant(4.2))
+    RatingView(rating: .constant(4))
 }

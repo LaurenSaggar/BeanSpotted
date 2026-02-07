@@ -182,7 +182,7 @@ struct AddShopView: View {
                     Spacer()
                 }
             }
-            .navigationTitle("Add Review")
+            .navigationTitle("Add Coffee Shop")
             .navigationBarTitleDisplayMode(.inline)
             .tint(.none)
         }

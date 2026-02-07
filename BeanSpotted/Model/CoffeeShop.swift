@@ -39,6 +39,7 @@ struct CoffeeShop: Identifiable, Codable {
     var staffRatingSum: Int
     
     // Rating count variables
+    var reviewCount: Int = 0
     var overallRatingCount: Int
     var coffeeRatingCount: Int
     var espressoRatingCount: Int

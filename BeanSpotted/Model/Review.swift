@@ -9,7 +9,7 @@ import Foundation
 
 struct Review: Identifiable, Codable {
     var id: String
-    var overallRating: Int
+    
     var coffeeRating: Int
     var espressoRating: Int
     var nonCoffeeDrinkRating: Int
@@ -22,6 +22,15 @@ struct Review: Identifiable, Codable {
     var valueRating: Int
     var cleanlinessRating: Int
     var staffRating: Int
+    
+    var overallRating: Double {
+        let ratingSum = coffeeRating + espressoRating + nonCoffeeDrinkRating + safetyRating + wifiRating + seatingRating + quietRating + parkingRating + foodRating + valueRating + cleanlinessRating + staffRating
+        let ratingArray = [coffeeRating, espressoRating, nonCoffeeDrinkRating, safetyRating, wifiRating, seatingRating, quietRating, parkingRating, foodRating, valueRating, cleanlinessRating, staffRating]
+        let ratingCount = ratingArray.filter { $0 != 0 }.count
+        guard ratingSum > 0 else { return 0 }
+        return Double(ratingSum) / Double(ratingCount)
+    }
+    
     var comment: String
     private(set) var createTime = Date.now
     var modifyTime = Date.now
@@ -32,5 +41,5 @@ struct Review: Identifiable, Codable {
 }
 
 extension Review {
-    static var MOCK_REVIEW = Review(id: NSUUID().uuidString, overallRating: 4, coffeeRating: 4, espressoRating: 4, nonCoffeeDrinkRating: 4, safetyRating: 4, wifiRating: 4, seatingRating: 4, quietRating: 4, parkingRating: 4, foodRating: 4, valueRating: 4, cleanlinessRating: 4, staffRating: 4, comment: "Amazing espresso!", createTime: Date.now, modifyTime: Date.now, shopId: NSUUID().uuidString, shopName: "", userId: NSUUID().uuidString, username: "")
+    static var MOCK_REVIEW = Review(id: NSUUID().uuidString, coffeeRating: 4, espressoRating: 4, nonCoffeeDrinkRating: 4, safetyRating: 4, wifiRating: 4, seatingRating: 4, quietRating: 4, parkingRating: 4, foodRating: 4, valueRating: 4, cleanlinessRating: 4, staffRating: 4, comment: "Amazing espresso!", createTime: Date.now, modifyTime: Date.now, shopId: NSUUID().uuidString, shopName: "", userId: NSUUID().uuidString, username: "")
 }
