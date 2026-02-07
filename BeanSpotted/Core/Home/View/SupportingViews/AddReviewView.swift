@@ -118,7 +118,7 @@ struct AddReviewView: View {
                         }
                         
                         HStack {
-                            Text("Wifi Quality")
+                            Text("WiFi")
                             Spacer()
                             RatingView(rating: $wifi)
                         }
@@ -160,7 +160,7 @@ struct AddReviewView: View {
                         }
                         
                         HStack {
-                            Text("Staff Friendliness")
+                            Text("Service")
                             Spacer()
                             RatingView(rating: $staff)
                         }

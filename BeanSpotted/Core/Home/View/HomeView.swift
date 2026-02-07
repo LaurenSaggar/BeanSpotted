@@ -26,17 +26,17 @@ struct HomeView: View {
         "Espresso": 0,
         "Non-Coffee Drinks": 0,
         "Safety": 0,
-        "Wifi": 0,
+        "WiFi": 0,
         "Seating": 0,
         "Quiet": 0,
         "Parking": 0,
         "Food": 0,
         "Value": 0,
         "Cleanliness": 0,
-        "Staff": 0
+        "Service": 0
     ]
     
-    let filterNames = ["Overall", "Coffee", "Espresso", "Non-Coffee Drinks", "Safety", "Wifi", "Seating", "Quiet", "Parking", "Food", "Value", "Cleanliness", "Staff"]
+    let filterNames = ["Overall", "Coffee", "Espresso", "Non-Coffee Drinks", "Safety", "WiFi", "Seating", "Quiet", "Parking", "Food", "Value", "Cleanliness", "Service"]
     
     @State private var searchText = ""
     
@@ -62,16 +62,16 @@ struct HomeView: View {
                 if shop.avgOverallRating < Double(filters["Overall"] ?? -1) { return false }
                 if shop.avgCoffeeRating < Double(filters["Coffee"] ?? -1) { return false }
                 if shop.avgEspressoRating < Double(filters["Espresso"] ?? -1) { return false }
-                if shop.avgNonCoffeeDrinkRating < Double(filters["Non-Coffee Drink"] ?? -1) { return false }
+                if shop.avgNonCoffeeDrinkRating < Double(filters["Non-Coffee Drinks"] ?? -1) { return false }
                 if shop.avgStaffRating < Double(filters["Safety"] ?? -1) { return false }
-                if shop.avgWifiRating < Double(filters["Wifi"] ?? -1) { return false }
+                if shop.avgWifiRating < Double(filters["WiFi"] ?? -1) { return false }
                 if shop.avgSeatingRating < Double(filters["Seating"] ?? -1) { return false }
                 if shop.avgQuietRating < Double(filters["Quiet"] ?? -1) { return false }
                 if shop.avgParkingRating < Double(filters["Parking"] ?? -1) { return false }
                 if shop.avgFoodRating < Double(filters["Food"] ?? -1) { return false }
                 if shop.avgValueRating < Double(filters["Value"] ?? -1) { return false }
                 if shop.avgCleanlinessRating < Double(filters["Cleanliness"] ?? -1) { return false }
-                if shop.avgStaffRating < Double(filters["Staff"] ?? -1) { return false }
+                if shop.avgStaffRating < Double(filters["Service"] ?? -1) { return false }
                 
                 return true
             }

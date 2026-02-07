@@ -20,7 +20,7 @@ struct RatingView: View {
     // Positions until rating will always be shown as filled stars
     var onImage = Image(systemName: "star.fill")
     
-    // Positions beyond rating will always be gray
+    // Positions beyond rating will always be yellow
     var offColor = Color.orange
     // Positions until rating will always be yellow
     var onColor = Color.orange
@@ -34,7 +34,11 @@ struct RatingView: View {
             ForEach(1..<maximumRating + 1, id: \.self) { number in
                 // Creates 5 star buttons
                 Button {
-                    rating = number
+                    if rating == number {
+                        rating = 0  // Allow user to unselect rating attribute by clicking on the same star twice
+                    } else {
+                        rating = number  // Set rating to star that user selects
+                    }
                 // Reinvoked each time button is pressed
                 } label: {
                     image(for: number)
