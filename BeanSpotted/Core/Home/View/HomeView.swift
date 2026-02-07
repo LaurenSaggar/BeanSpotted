@@ -101,7 +101,7 @@ struct HomeView: View {
             List {
                 
                 ForEach(filtered) { shop in
-                    NavigationLink(destination: DetailView(coffeeShop: shop)) {
+                    NavigationLink(destination: DetailView(coffeeShop: shop, shopViewModel: shopViewModel)) {
     //
                         HStack {
                             // Vertically display coffee shop name, city, and state on left of each row

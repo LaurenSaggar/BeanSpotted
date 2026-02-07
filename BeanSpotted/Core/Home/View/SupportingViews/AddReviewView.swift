@@ -13,6 +13,7 @@ import CoreLocation
 struct AddReviewView: View {
 
     @ObservedObject var reviewViewModel: ReviewViewModel
+    @ObservedObject var shopViewModel: CoffeeShopViewModel
     @Environment(\.dismiss) var dismiss
     
     // Coffee shop variables
@@ -181,6 +182,8 @@ struct AddReviewView: View {
                                 
                                 Task {
                                     try await reviewViewModel.createReview(coffeeRating: coffee, espressoRating: espresso, nonCoffeeDrinkRating: nonCoffeeDrinks, safetyRating: safety, wifiRating: wifi, seatingRating: seating, quietRating: quiet, parkingRating: parking, foodRating: food, valueRating: value, cleanlinessRating: cleanliness, staffRating: staff, comment: comment, createTime: Date.now, modifyTime: Date.now)
+                                    
+                                    await shopViewModel.fetchAllShops()
                                 }
                                 
                                 dismiss()
@@ -205,9 +208,10 @@ struct AddReviewView: View {
     }
     
     // Optional coffee shop in initializer if adding review directly from coffee shop detail page view
-    init(reviewViewModel: ReviewViewModel) {
+    init(reviewViewModel: ReviewViewModel, shopViewModel: CoffeeShopViewModel) {
         
         self.reviewViewModel = reviewViewModel
+        self.shopViewModel = shopViewModel
         
         // Initialize coffee shop properties if coffeeShop in initializer
         self.name = reviewViewModel.shop.name

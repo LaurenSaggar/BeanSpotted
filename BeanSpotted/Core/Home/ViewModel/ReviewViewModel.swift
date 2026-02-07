@@ -14,7 +14,6 @@ import FirebaseFirestore
 @MainActor
 class ReviewViewModel: ObservableObject {
     @Published var shop: CoffeeShop
-    @Published var shops: [CoffeeShop] = []
     @Published var shopReviews: [Review] = []
     
     init(shop: CoffeeShop) {
@@ -98,7 +97,6 @@ class ReviewViewModel: ObservableObject {
                 try await shopRef.updateData(updates)
                 
                 await fetchAllShopReviews()
-                await fetchAllShops()
                 
             } catch {
                 try? await reviewRef.delete()
@@ -112,16 +110,9 @@ class ReviewViewModel: ObservableObject {
     
 
     func fetchAllShopReviews() async {
-        guard let snapshot = try? await Firestore.firestore().collection("coffeeShops").document(shop.id).collection("reviews").getDocuments() else { return }
+        guard let snapshot = try? await Firestore.firestore().collection("coffeeShops").document(shop.id).collection("reviews").order(by: "createTime", descending: true).getDocuments() else { return }
         self.shopReviews = snapshot.documents.compactMap { doc in
             try? doc.data(as: Review.self)
-        }
-    }
-    
-    func fetchAllShops() async {
-        guard let snapshot = try? await Firestore.firestore().collection("coffeeShops").getDocuments() else { return }
-        self.shops = snapshot.documents.compactMap { doc in
-            try? doc.data(as: CoffeeShop.self)
         }
     }
 }

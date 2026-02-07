@@ -14,10 +14,12 @@ struct DetailView: View {
     
     let coffeeShop: CoffeeShop
     @StateObject private var reviewViewModel: ReviewViewModel
+    @ObservedObject var shopViewModel: CoffeeShopViewModel
     
-    init(coffeeShop: CoffeeShop) {
+    init(coffeeShop: CoffeeShop, shopViewModel: CoffeeShopViewModel) {
         self.coffeeShop = coffeeShop
         _reviewViewModel = StateObject(wrappedValue: ReviewViewModel(shop: coffeeShop))
+        self.shopViewModel = shopViewModel
     }
 
     @State private var showingAddReviewScreen = false
@@ -126,7 +128,7 @@ struct DetailView: View {
                 }
                 
                 HStack {
-                    Text("Wifi Quality")
+                    Text("WiFi")
                     Spacer()
                     RatingDisplayView(rating: coffeeShop.avgWifiRating)
                 }
@@ -168,7 +170,7 @@ struct DetailView: View {
                 }
                 
                 HStack {
-                    Text("Staff Friendliness")
+                    Text("Service")
                     Spacer()
                     RatingDisplayView(rating: coffeeShop.avgStaffRating)
                 }
@@ -176,7 +178,7 @@ struct DetailView: View {
             
             Section("Detailed Reviews") {
                 
-                ForEach(reviewViewModel.shopReviews.reversed()) { review in
+                ForEach(reviewViewModel.shopReviews) { review in
                     VStack {
                         
                         Spacer()
@@ -245,7 +247,7 @@ struct DetailView: View {
             }
         }
         .sheet(isPresented: $showingAddReviewScreen) {
-            AddReviewView(reviewViewModel: reviewViewModel)
+            AddReviewView(reviewViewModel: reviewViewModel, shopViewModel: shopViewModel)
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
