@@ -10,13 +10,13 @@ import SwiftUI
 enum ShopSort: String, CaseIterable {
     case nameAZ = "Name (A-Z)"
     case ratingDesc = "Rating (High-Low)"
+    case reviewCountDesc = "Review Count (High-Low)"
 }
 
 
 struct HomeView: View {
     
     @State private var path = NavigationPath()
-//    @State private var sortOrder = SortDescriptor(\CoffeeShop.avgOverallRating, order: .reverse)
     @StateObject var shopViewModel = CoffeeShopViewModel()
     
     @State private var sort: ShopSort = .nameAZ
@@ -82,8 +82,9 @@ struct HomeView: View {
                 case .ratingDesc:
                     if a.avgOverallRating != b.avgOverallRating { return a.avgOverallRating > b.avgOverallRating }
                     return a.name < b.name
-//                case .reviewsHigh:
-//                    return a.ratingCount > b.ratingCount
+                case .reviewCountDesc:
+                    if a.reviewCount != b.reviewCount { return a.reviewCount > b.reviewCount }
+                    return a.name < b.name
                 }
             }
         
