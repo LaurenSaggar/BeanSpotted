@@ -17,12 +17,32 @@ struct AddReviewView: View {
     @Environment(\.dismiss) var dismiss
     
     // Coffee shop variables
-    @State private var name: String
-    @State private var address: String
-    @State private var openingTime: Date
-    @State private var closingTime: Date
-    @State private var decafAvailable: Bool
-    @State private var local: Bool
+//    @State private var name: String
+//    @State private var address: String
+//    @State private var openingTime: Date
+//    @State private var closingTime: Date
+//    @State private var decafAvailable: Bool
+//    @State private var local: Bool
+    
+    // Optional coffee shop in initializer if adding review directly from coffee shop detail page view
+    init(reviewViewModel: ReviewViewModel, shopViewModel: CoffeeShopViewModel) {
+        
+        self.reviewViewModel = reviewViewModel
+        self.shopViewModel = shopViewModel
+        
+        // Initialize coffee shop properties if coffeeShop in initializer
+//        self.name = shop?.name ?? "Unknown"
+//        self.address = shop?.address ?? "Unknown"
+//        self.openingTime = shop?.openingTime ?? Date.now
+//        self.closingTime = shop?.closingTime ?? Date.now
+//        self.decafAvailable = shop?.decafAvailable ?? false
+//        self.local = shop?.local ?? false
+            
+    }
+    
+    private var shop: CoffeeShop? {
+        shopViewModel.shops.first(where: { $0.id == reviewViewModel.shopId })
+    }
     
     // Editable shop review variables
     @State private var coffee: Int = 0
@@ -42,185 +62,173 @@ struct AddReviewView: View {
     var body: some View {
         NavigationStack {
             
-            VStack {
-                
-                Form {
+            if let coffeeShop = shop {
+                VStack {
                     
-                    Section("Coffee Shop Info") {
+                    Form {
+                        
+                        Section("Coffee Shop Info") {
                             
-                        HStack(alignment: .top) {
-                            Text("Name:")
-                                .bold()
-                            Text("\(name)")
-                        }
-                        
-                        HStack(alignment: .top) {
-                            Text("Address:")
-                                .bold()
-                            Text("\(address)")
-                        }
-                        
-                        HStack(alignment: .top) {
-                            Text("Hours:")
-                                .bold()
-                            Text("\(formattedTime(reviewViewModel.shop.openingTime)) - \(formattedTime(reviewViewModel.shop.closingTime))")
-                        }
-                        
-                        HStack(alignment: .top) {
-                            Text("Decaf Available:")
-                                .bold()
-                            if reviewViewModel.shop.decafAvailable {
-                                Text("Yes")
-                                    .foregroundStyle(.green)
-                            } else {
-                                Text("No")
-                                    .foregroundStyle(.red)
+                            HStack(alignment: .top) {
+                                Text("Name:")
+                                    .bold()
+                                Text("\(coffeeShop.name)")
                             }
-                        }
-                        
-                        HStack(alignment: .top) {
-                            Text("Local:")
-                                .bold()
-                            if reviewViewModel.shop.local {
-                                Text("Yes")
-                                    .foregroundStyle(.green)
-                            } else {
-                                Text("No")
-                                    .foregroundStyle(.red)
+                            
+                            HStack(alignment: .top) {
+                                Text("Address:")
+                                    .bold()
+                                Text("\(coffeeShop.address)")
                             }
-                        }
-                    }
-                    
-                    // Shop review inputs
-                    Section("Write a review") {
-                        HStack {
-                            Text("Coffee")
-                            Spacer()
-                            RatingView(rating: $coffee)
-                        }
-                        
-                        HStack {
-                            Text("Espresso")
-                            Spacer()
-                            RatingView(rating: $espresso)
-                        }
-                        
-                        HStack {
-                            Text("Non-Coffee Drinks")
-                            Spacer()
-                            RatingView(rating: $nonCoffeeDrinks)
-                        }
-                        
-                        HStack {
-                            Text("Safety")
-                            Spacer()
-                            RatingView(rating: $safety)
-                        }
-                        
-                        HStack {
-                            Text("WiFi")
-                            Spacer()
-                            RatingView(rating: $wifi)
-                        }
-                        
-                        HStack {
-                            Text("Seating")
-                            Spacer()
-                            RatingView(rating: $seating)
-                        }
-                        
-                        HStack {
-                            Text("Quiet")
-                            Spacer()
-                            RatingView(rating: $quiet)
-                        }
-                        
-                        HStack {
-                            Text("Parking")
-                            Spacer()
-                            RatingView(rating: $parking)
-                        }
-                        
-                        HStack {
-                            Text("Food")
-                            Spacer()
-                            RatingView(rating: $food)
-                        }
-                        
-                        HStack {
-                            Text("Value")
-                            Spacer()
-                            RatingView(rating: $value)
-                        }
-                        
-                        HStack {
-                            Text("Cleanliness")
-                            Spacer()
-                            RatingView(rating: $cleanliness)
-                        }
-                        
-                        HStack {
-                            Text("Service")
-                            Spacer()
-                            RatingView(rating: $staff)
-                        }
-                        
-                        ZStack(alignment: .leading) {
-                            TextEditor(text: $comment)
-                            if comment.isEmpty {
-                                Text("Add additional comments here...\n\n")
-                                    .foregroundStyle(.gray)
+                            
+                            HStack(alignment: .top) {
+                                Text("Hours:")
+                                    .bold()
+                                Text("\(formattedTime(coffeeShop.openingTime)) - \(formattedTime(coffeeShop.closingTime))")
                             }
-                        }
-                        
-                    }
-                    
-                    Section {
-                        Button("Save") {
-                            // Check for valid review before saving review and potentially new coffee shop
-                            if validReview() {
-                                
-                                Task {
-                                    try await reviewViewModel.createReview(coffeeRating: coffee, espressoRating: espresso, nonCoffeeDrinkRating: nonCoffeeDrinks, safetyRating: safety, wifiRating: wifi, seatingRating: seating, quietRating: quiet, parkingRating: parking, foodRating: food, valueRating: value, cleanlinessRating: cleanliness, staffRating: staff, comment: comment, createTime: Date.now, modifyTime: Date.now)
-                                    
-                                    await shopViewModel.fetchAllShops()
+                            
+                            HStack(alignment: .top) {
+                                Text("Decaf Available:")
+                                    .bold()
+                                if coffeeShop.decafAvailable {
+                                    Text("Yes")
+                                        .foregroundStyle(.green)
+                                } else {
+                                    Text("No")
+                                        .foregroundStyle(.red)
                                 }
-                                
-                                dismiss()
-                                
-                            } else {
-                                ()
+                            }
+                            
+                            HStack(alignment: .top) {
+                                Text("Local:")
+                                    .bold()
+                                if coffeeShop.local {
+                                    Text("Yes")
+                                        .foregroundStyle(.green)
+                                } else {
+                                    Text("No")
+                                        .foregroundStyle(.red)
+                                }
                             }
                         }
-                        .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                        .foregroundStyle(.black)
-                        .bold()
-                        .frame(maxWidth: .infinity)   // expands hit area
-                        .multilineTextAlignment(.center)
+                        
+                        // Shop review inputs
+                        Section("Write a review") {
+                            HStack {
+                                Text("Coffee")
+                                Spacer()
+                                RatingView(rating: $coffee)
+                            }
+                            
+                            HStack {
+                                Text("Espresso")
+                                Spacer()
+                                RatingView(rating: $espresso)
+                            }
+                            
+                            HStack {
+                                Text("Non-Coffee Drinks")
+                                Spacer()
+                                RatingView(rating: $nonCoffeeDrinks)
+                            }
+                            
+                            HStack {
+                                Text("Safety")
+                                Spacer()
+                                RatingView(rating: $safety)
+                            }
+                            
+                            HStack {
+                                Text("WiFi")
+                                Spacer()
+                                RatingView(rating: $wifi)
+                            }
+                            
+                            HStack {
+                                Text("Seating")
+                                Spacer()
+                                RatingView(rating: $seating)
+                            }
+                            
+                            HStack {
+                                Text("Quiet")
+                                Spacer()
+                                RatingView(rating: $quiet)
+                            }
+                            
+                            HStack {
+                                Text("Parking")
+                                Spacer()
+                                RatingView(rating: $parking)
+                            }
+                            
+                            HStack {
+                                Text("Food")
+                                Spacer()
+                                RatingView(rating: $food)
+                            }
+                            
+                            HStack {
+                                Text("Value")
+                                Spacer()
+                                RatingView(rating: $value)
+                            }
+                            
+                            HStack {
+                                Text("Cleanliness")
+                                Spacer()
+                                RatingView(rating: $cleanliness)
+                            }
+                            
+                            HStack {
+                                Text("Service")
+                                Spacer()
+                                RatingView(rating: $staff)
+                            }
+                            
+                            ZStack(alignment: .leading) {
+                                TextEditor(text: $comment)
+                                if comment.isEmpty {
+                                    Text("Add additional comments here...\n\n")
+                                        .foregroundStyle(.gray)
+                                }
+                            }
+                            
+                        }
+                        
+                        Section {
+                            Button("Save") {
+                                // Check for valid review before saving review and potentially new coffee shop
+                                if validReview() {
+                                    
+                                    Task {
+                                        try await reviewViewModel.createReview(coffeeRating: coffee, espressoRating: espresso, nonCoffeeDrinkRating: nonCoffeeDrinks, safetyRating: safety, wifiRating: wifi, seatingRating: seating, quietRating: quiet, parkingRating: parking, foodRating: food, valueRating: value, cleanlinessRating: cleanliness, staffRating: staff, comment: comment, createTime: Date.now, modifyTime: Date.now)
+                                        
+                                        await shopViewModel.fetchAllShops()
+                                    }
+                                    
+                                    dismiss()
+                                    
+                                } else {
+                                    ()
+                                }
+                            }
+                            .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                            .foregroundStyle(.black)
+                            .bold()
+                            .frame(maxWidth: .infinity)   // expands hit area
+                            .multilineTextAlignment(.center)
+                        }
+                        
                     }
-                    
+                    .navigationTitle("Add Review")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .tint(.none)
                 }
-                .navigationTitle("Add Review")
-                .navigationBarTitleDisplayMode(.inline)
-                .tint(.none)
+            } else {
+                Text("Coffee shop loading...")
             }
         }
-    }
-    
-    // Optional coffee shop in initializer if adding review directly from coffee shop detail page view
-    init(reviewViewModel: ReviewViewModel, shopViewModel: CoffeeShopViewModel) {
-        
-        self.reviewViewModel = reviewViewModel
-        self.shopViewModel = shopViewModel
-        
-        // Initialize coffee shop properties if coffeeShop in initializer
-        self.name = reviewViewModel.shop.name
-        self.address = reviewViewModel.shop.address
-        self.openingTime = reviewViewModel.shop.openingTime
-        self.closingTime = reviewViewModel.shop.closingTime
-        self.decafAvailable = reviewViewModel.shop.decafAvailable
-        self.local = reviewViewModel.shop.local
-            
     }
     
     // Ensure shop name, address, and all review attributes except for comment have a value/are selected before saving

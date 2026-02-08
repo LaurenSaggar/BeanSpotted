@@ -12,6 +12,7 @@ import Firebase
 @main
 struct BeanSpottedApp: App {
     @StateObject var viewModel = AuthViewModel()
+    @StateObject private var reviewStore = ReviewStore()
     
     init() {
         FirebaseApp.configure()
@@ -22,6 +23,7 @@ struct BeanSpottedApp: App {
             ContentView()
         }
         .environmentObject(viewModel)
+        .environmentObject(reviewStore)
         //.modelContainer(for: [CoffeeShop.self, Review.self, User.self])
 //        .modelContainer(for: [CoffeeShop.self, Review.self, User.self])
     }

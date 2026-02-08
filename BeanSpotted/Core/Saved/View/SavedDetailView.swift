@@ -17,43 +17,27 @@ struct SavedDetailView: View {
     
     private var image: Image {
         switch savedType {
-        case "Favorites": return Image(systemName: "heart.fill")
-        case "Have Been": return Image(systemName: "arrowshape.left.fill")
-        default: return Image(systemName: "flag.fill")
+            case "Favorites": return Image(systemName: "heart.fill")
+            case "Have Been": return Image(systemName: "arrowshape.left.fill")
+            default: return Image(systemName: "flag.fill")
         }
     }
     
     private var color: Color {
         switch savedType {
-        case "Favorites": return Color(.sRGB, red: 250/255, green: 145/255, blue: 100/255)
-        case "Have Been": return Color(.sRGB, red: 0/255, green: 150/255, blue: 1.0) // <- note below
-        default: return Color(.sRGB, red: 100/255, green: 190/255, blue: 100/255)
+            case "Favorites": return Color(.sRGB, red: 250/255, green: 145/255, blue: 100/255)
+        case "Have Been": return Color(.sRGB, red: 0/255, green: 150/255, blue: 255/255)
+            default: return Color(.sRGB, red: 100/255, green: 190/255, blue: 100/255)
         }
     }
     
     private var savedShops: [CoffeeShop] {
-        //        shopViewModel.shops
-        //            .filter { shop in
-        //                if savedType == "Favorites" {
-        //                    return savedShopViewModel.haveBeen.contains { $0.id == shop.id }
-        //                }
-        //
-        //                if savedType == "Have Been" {
-        //                    return savedShopViewModel.haveBeen.contains { $0.id == shop.id }
-        //                }
-        //
-        //                if savedType == "Want To Go" {
-        //                    return savedShopViewModel.wantToGo.contains { $0.id == shop.id }
-        //                }
-        //
-        //                return false
-        //            }
         
         let ids: Set<String> = {
             switch savedType {
-            case "Favorites": return Set(savedShopViewModel.favorites.compactMap { $0.id })
-            case "Have Been": return Set(savedShopViewModel.haveBeen.compactMap { $0.id })
-            default: return Set(savedShopViewModel.wantToGo.compactMap { $0.id })
+                case "Favorites": return Set(savedShopViewModel.favorites.compactMap { $0.id })
+                case "Have Been": return Set(savedShopViewModel.haveBeen.compactMap { $0.id })
+                default: return Set(savedShopViewModel.wantToGo.compactMap { $0.id })
             }
         }()
         
@@ -88,9 +72,8 @@ struct SavedDetailView: View {
                 List {
                     
                     if !savedShops.isEmpty {
-                        ForEach(savedShops) { shop in
-                            //NavigationLink(destination: DetailView(coffeeShop: shop, shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)) {
-                            NavigationLink(destination: SettingsRowView(imageName: "gear", title: "Version", tintColor: Color(.systemGray))) {
+                        ForEach(savedShops.reversed()) { shop in
+                            NavigationLink(destination: DetailView(shopId: shop.id, shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)) {
                                 HStack {
                                     // Vertically display coffee shop name, city, and state on left of each row
                                     VStack(alignment: .leading) {
@@ -131,33 +114,7 @@ struct SavedDetailView: View {
         }
     }
 }
-    
-//    init(savedType: String, savedShopViewModel: SavedShopViewModel, shopViewModel: CoffeeShopViewModel) {
-//        
-//        self.savedShopViewModel = savedShopViewModel
-//        self.shopViewModel = shopViewModel
-//        self.savedType = savedType
-//        
-//        if savedType == "Favorites" {
-//            let favoriteIDs = savedShopViewModel.favorites.map { $0.id }
-//            self.shops = shopViewModel.shops.filter { favoriteIDs.contains( $0.id ) }
-//            self.image = Image(systemName: "heart.fill")
-//            self.color = Color(.sRGB, red: 250/255, green: 145/255, blue: 100/255)
-//            
-//        } else if (savedType == "Have Been") {
-//            let haveBeenIDs = savedShopViewModel.haveBeen.map { $0.id }
-//            self.shops = shopViewModel.shops.filter { haveBeenIDs.contains( $0.id ) }
-//            self.image = Image(systemName: "arrowshape.left.fill")
-//            self.color = Color(.sRGB, red: 0/255, green: 150/255, blue: 300/255)
-//            
-//        } else {
-//            let wantToGoIDs = savedShopViewModel.wantToGo.map { $0.id }
-//            self.shops = shopViewModel.shops.filter { wantToGoIDs.contains( $0.id ) }
-//            self.image = Image(systemName: "flag.fill")
-//            self.color = Color(.sRGB, red: 100/255, green: 190/255, blue: 100/255)
-//        }
-//        
-//    }
+
     
     // Helper function to format date as time only
 //    func formattedTime(_ date: Date) -> String {

@@ -13,11 +13,11 @@ import FirebaseFirestore
 
 @MainActor
 class ReviewViewModel: ObservableObject {
-    @Published var shop: CoffeeShop
+    @Published var shopId: String
     @Published var shopReviews: [Review] = []
     
-    init(shop: CoffeeShop) {
-        self.shop = shop
+    init(shopId: String) {
+        self.shopId = shopId
         Task {
             await fetchAllShopReviews()
         }
@@ -38,12 +38,14 @@ class ReviewViewModel: ObservableObject {
     func createReview(coffeeRating: Int, espressoRating: Int, nonCoffeeDrinkRating: Int, safetyRating: Int, wifiRating: Int, seatingRating: Int, quietRating: Int, parkingRating: Int, foodRating: Int, valueRating: Int, cleanlinessRating: Int, staffRating: Int, comment: String, createTime: Date, modifyTime: Date) async throws {
         
         // Get current user
-        guard let uid = Auth.auth().currentUser?.uid else {return}  // get authenticated user
-        guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else {return}  // get firebase store user
-        let user = try? snapshot.data(as: User.self)  // Set firebase user to current app user for app activity
+        guard let uid = Auth.auth().currentUser?.uid else { return }  // get authenticated user
+        guard let userSnap = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }  // get firebase store user
+        guard let user = try? userSnap.data(as: User.self) else { return } // Set firebase user to current app user for app activity
+        guard let shopSnap = try? await Firestore.firestore().collection("coffeeShops").document(shopId).getDocument() else { return }
+        guard let shop = try? shopSnap.data(as: CoffeeShop.self) else { return }
         
         // Create new review locally
-        let review = Review(id: NSUUID().uuidString, coffeeRating: coffeeRating, espressoRating: espressoRating, nonCoffeeDrinkRating: nonCoffeeDrinkRating, safetyRating: safetyRating, wifiRating: wifiRating, seatingRating: seatingRating, quietRating: quietRating, parkingRating: parkingRating, foodRating: foodRating, valueRating: valueRating, cleanlinessRating: cleanlinessRating, staffRating: staffRating, comment: comment, shopId: shop.id, shopName: shop.name, userId: uid, username: user?.username ?? "Unknown User")
+        let review = Review(id: NSUUID().uuidString, coffeeRating: coffeeRating, espressoRating: espressoRating, nonCoffeeDrinkRating: nonCoffeeDrinkRating, safetyRating: safetyRating, wifiRating: wifiRating, seatingRating: seatingRating, quietRating: quietRating, parkingRating: parkingRating, foodRating: foodRating, valueRating: valueRating, cleanlinessRating: cleanlinessRating, staffRating: staffRating, comment: comment, shopId: shopId, shopName: shop.name, userId: uid, username: user.username)
         
         do {
             // Send new review to firebase
@@ -110,7 +112,7 @@ class ReviewViewModel: ObservableObject {
     
 
     func fetchAllShopReviews() async {
-        guard let snapshot = try? await Firestore.firestore().collection("coffeeShops").document(shop.id).collection("reviews").order(by: "createTime", descending: true).getDocuments() else { return }
+        guard let snapshot = try? await Firestore.firestore().collection("coffeeShops").document(shopId).collection("reviews").order(by: "createTime", descending: true).getDocuments() else { return }
         self.shopReviews = snapshot.documents.compactMap { doc in
             try? doc.data(as: Review.self)
         }
