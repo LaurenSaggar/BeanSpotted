@@ -64,7 +64,7 @@ class ReviewViewModel: ObservableObject {
                     "coffeeRatingSum": FieldValue.increment(Int64(coffeeRating)),
                     "espressoRatingSum": FieldValue.increment(Int64(espressoRating)),
                     "nonCoffeeDrinkRatingSum": FieldValue.increment(Int64(nonCoffeeDrinkRating)),
-                    "safetyRatingSum": FieldValue.increment(Int64(nonCoffeeDrinkRating)),
+                    "safetyRatingSum": FieldValue.increment(Int64(safetyRating)),
                     "wifiRatingSum": FieldValue.increment(Int64(wifiRating)),
                     "seatingRatingSum": FieldValue.increment(Int64(seatingRating)),
                     "quietRatingSum": FieldValue.increment(Int64(quietRating)),
