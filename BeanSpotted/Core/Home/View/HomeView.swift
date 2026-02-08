@@ -17,7 +17,9 @@ enum ShopSort: String, CaseIterable {
 struct HomeView: View {
     
     @State private var path = NavigationPath()
-    @StateObject var shopViewModel = CoffeeShopViewModel()
+    //@StateObject var shopViewModel = CoffeeShopViewModel()
+    @ObservedObject var shopViewModel: CoffeeShopViewModel
+    @ObservedObject var savedShopViewModel: SavedShopViewModel
     
     @State private var sort: ShopSort = .nameAZ
     @State private var filters: [String: Int] = [
@@ -87,12 +89,6 @@ struct HomeView: View {
                     return a.name < b.name
                 }
             }
-        
-        // Return all coffee shops without filter if nothing in search
-//        guard !cleanedSearch.isEmpty else { return shopViewModel.shops }
-//        return shopViewModel.shops.filter {
-//            $0.name.lowercased().contains(cleanedSearch) || $0.address.lowercased().contains(cleanedSearch)
-//        }
     }
     
     @State private var showingAddShopScreen = false
@@ -102,7 +98,7 @@ struct HomeView: View {
             List {
                 
                 ForEach(filtered) { shop in
-                    NavigationLink(destination: DetailView(coffeeShop: shop, shopViewModel: shopViewModel)) {
+                    NavigationLink(destination: DetailView(coffeeShop: shop, shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)) {
     //
                         HStack {
                             // Vertically display coffee shop name, city, and state on left of each row
@@ -207,7 +203,7 @@ struct HomeView: View {
 //        let container = try ModelContainer(for: User.self, configurations: config)
 //        let exampleUser = User()
 //        
-        HomeView()
+//        HomeView()
 //            .modelContainer(container)
 //        
 //    } catch {

@@ -11,9 +11,9 @@ struct CoffeeShop: Identifiable, Codable {
     var id: String
     var name: String
     var address: String
-    var nameandaddress: String {
-        return name + " " + address
-    }
+//    var nameandaddress: String {
+//        return name + " " + address
+//    }
     var city: String
     var state: String
     var openingTime: Date

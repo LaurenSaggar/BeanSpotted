@@ -15,14 +15,18 @@ struct DetailView: View {
     let coffeeShop: CoffeeShop
     @StateObject private var reviewViewModel: ReviewViewModel
     @ObservedObject var shopViewModel: CoffeeShopViewModel
+    @ObservedObject var savedShopViewModel: SavedShopViewModel
     
-    init(coffeeShop: CoffeeShop, shopViewModel: CoffeeShopViewModel) {
+    init(coffeeShop: CoffeeShop, shopViewModel: CoffeeShopViewModel, savedShopViewModel: SavedShopViewModel) {
         self.coffeeShop = coffeeShop
         _reviewViewModel = StateObject(wrappedValue: ReviewViewModel(shop: coffeeShop))
         self.shopViewModel = shopViewModel
+        self.savedShopViewModel = savedShopViewModel
     }
 
     @State private var showingAddReviewScreen = false
+    @State private var favoriteOnImage = false
+    @State private var haveBOnImage = false
     
     // Favorite images
     var favOffImage = Image(systemName: "heart")
@@ -37,304 +41,308 @@ struct DetailView: View {
     // Want To Go images
     var toGoOffImage = Image(systemName: "flag")
     var toGoOnImage = Image(systemName: "flag.fill")
-    
-    // Off and on saved button colors
-    var offColor = Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255)
-    var onColor = Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255)
     var wantToGoColor = Color(.sRGB, red: 100/255, green: 190/255, blue: 100/255)
     
     var body: some View {
+        
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(coffeeShop.name)
+                    .font(.title)
+                    .bold()
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
             
-        List {
-            
-            Section("Shop Info") {
+            List {
                 
-                HStack(alignment: .top) {
-                    Text("Name:")
-                        .bold()
-                    Text(coffeeShop.name)
-                }
-                
-                HStack(alignment: .top) {
-                    Text("Address:")
-                        .bold()
-                    Text(coffeeShop.address)
-                }
-                
-                HStack(alignment: .top) {
-                    Text("Hours:")
-                        .bold()
-                    Text("\(formattedTime(coffeeShop.openingTime)) - \(formattedTime(coffeeShop.closingTime))")
-                }
-                
-                HStack(alignment: .top) {
-                    Text("Decaf Available:")
-                        .bold()
-                    if coffeeShop.decafAvailable {
-                        Text("Yes")
-                            .foregroundStyle(.green)
-                    } else {
-                        Text("No")
-                            .foregroundStyle(.red)
+                Section("Shop Info") {
+                    
+                    //                HStack(alignment: .top) {
+                    //                    Text("Name:")
+                    //                        .bold()
+                    //                    Text(coffeeShop.name)
+                    //                }
+                    
+                    HStack(alignment: .top) {
+                        Text("Address:")
+                            .bold()
+                        Text(coffeeShop.address)
+                    }
+                    
+                    //                HStack(alignment: .top) {
+                    //                    Text("Hours:")
+                    //                        .bold()
+                    //                    Text("\(formattedTime(coffeeShop.openingTime)) - \(formattedTime(coffeeShop.closingTime))")
+                    //                }
+                    
+                    HStack(alignment: .top) {
+                        Text("Decaf Available:")
+                            .bold()
+                        if coffeeShop.decafAvailable {
+                            Text("Yes")
+                                .foregroundStyle(.green)
+                        } else {
+                            Text("No")
+                                .foregroundStyle(.red)
+                        }
+                    }
+                    
+                    HStack(alignment: .top) {
+                        Text("Local:")
+                            .bold()
+                        if coffeeShop.local {
+                            Text("Yes")
+                                .foregroundStyle(.green)
+                        } else {
+                            Text("No")
+                                .foregroundStyle(.red)
+                        }
                     }
                 }
                 
-                HStack(alignment: .top) {
-                    Text("Local:")
-                        .bold()
-                    if coffeeShop.local {
-                        Text("Yes")
-                            .foregroundStyle(.green)
-                    } else {
-                        Text("No")
-                            .foregroundStyle(.red)
-                    }
-                }
-            }
-            
-            Section("Review Summary") {
-                HStack {
-                    Text("Overall")
-                        .font(.title3)
-                        .bold()
-                        .foregroundStyle(.white)
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgOverallRating)
-                }
-                .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                
-                HStack {
-                    Text("Coffee")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgCoffeeRating)
-                }
-                
-                HStack {
-                    Text("Espresso")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgEspressoRating)
-                }
-                
-                HStack {
-                    Text("Non-Coffee Drinks")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgNonCoffeeDrinkRating)
-                }
-                
-                HStack {
-                    Text("Safety")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgSafetyRating)
-                }
-                
-                HStack {
-                    Text("WiFi")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgWifiRating)
-                }
-                
-                HStack {
-                    Text("Seating")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgSeatingRating)
-                }
-                
-                HStack {
-                    Text("Quiet")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgQuietRating)
-                }
-                
-                HStack {
-                    Text("Parking")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgParkingRating)
-                }
-                
-                HStack {
-                    Text("Food")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgFoodRating)
-                }
-                
-                HStack {
-                    Text("Value")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgValueRating)
-                }
-                
-                HStack {
-                    Text("Cleanliness")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgCleanlinessRating)
-                }
-                
-                HStack {
-                    Text("Service")
-                    Spacer()
-                    RatingDisplayView(rating: coffeeShop.avgStaffRating)
-                }
-            }
-            
-            Section("Detailed Reviews") {
-                
-                ForEach(reviewViewModel.shopReviews) { review in
-                    VStack {
-                        
+                Section("Review Summary") {
+                    HStack {
+                        Text("Overall")
+                            .font(.title3)
+                            .bold()
+                            .foregroundStyle(.white)
                         Spacer()
-                        
-                        HStack {
-                            Text(review.username)
-                                .bold()
+                        RatingDisplayView(rating: coffeeShop.avgOverallRating)
+                    }
+                    .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                    
+                    HStack {
+                        Text("Coffee")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgCoffeeRating)
+                    }
+                    
+                    HStack {
+                        Text("Espresso")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgEspressoRating)
+                    }
+                    
+                    HStack {
+                        Text("Non-Coffee Drinks")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgNonCoffeeDrinkRating)
+                    }
+                    
+                    HStack {
+                        Text("Safety")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgSafetyRating)
+                    }
+                    
+                    HStack {
+                        Text("WiFi")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgWifiRating)
+                    }
+                    
+                    HStack {
+                        Text("Seating")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgSeatingRating)
+                    }
+                    
+                    HStack {
+                        Text("Quiet")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgQuietRating)
+                    }
+                    
+                    HStack {
+                        Text("Parking")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgParkingRating)
+                    }
+                    
+                    HStack {
+                        Text("Food")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgFoodRating)
+                    }
+                    
+                    HStack {
+                        Text("Value")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgValueRating)
+                    }
+                    
+                    HStack {
+                        Text("Cleanliness")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgCleanlinessRating)
+                    }
+                    
+                    HStack {
+                        Text("Service")
+                        Spacer()
+                        RatingDisplayView(rating: coffeeShop.avgStaffRating)
+                    }
+                }
+                
+                Section("Detailed Reviews") {
+                    
+                    ForEach(reviewViewModel.shopReviews) { review in
+                        VStack {
+                            
                             Spacer()
                             
-                            let startOfDay = Calendar.current.startOfDay(for: review.createTime)
+                            HStack {
+                                Text(review.username)
+                                    .bold()
+                                Spacer()
+                                
+                                let startOfDay = Calendar.current.startOfDay(for: review.createTime)
+                                
+                                if Date.now.timeIntervalSince(startOfDay) < 86400 {
+                                    Text("Today at \(formattedTime(review.createTime))")
+                                    
+                                } else if Date.now.timeIntervalSince(startOfDay) < 172800 {
+                                    Text("Yesterday")
+                                    
+                                } else if Date.now.timeIntervalSince(startOfDay) < 604800 {
+                                    Text("Last Week")
+                                    
+                                } else {
+                                    Text("\(formattedDate(review.createTime))")
+                                }
+                            }
                             
-                            if Date.now.timeIntervalSince(startOfDay) < 86400 {
-                                Text("Today at \(formattedTime(review.createTime))")
-                                
-                            } else if Date.now.timeIntervalSince(startOfDay) < 172800 {
-                                Text("Yesterday")
-                                
-                            } else if Date.now.timeIntervalSince(startOfDay) < 604800 {
-                                Text("Last Week")
-                                
-                            } else {
-                                Text("\(formattedDate(review.createTime))")
+                            Spacer()
+                            
+                            HStack {
+                                RatingDisplayView(rating: Double(review.overallRating))
+                                Spacer()
+                            }
+                            
+                            Spacer()
+                            
+                            HStack {
+                                Text(review.comment)
+                                Spacer()
+                            }
+                            
+                            Spacer()
+                        }
+                    }
+                }
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button { dismiss() } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.headline)
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingAddReviewScreen.toggle()
+                    } label: {
+                        Image(systemName: "plus.app.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
+                            .clipShape(Circle())
+                            .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                    }
+                }
+            }
+            .sheet(isPresented: $showingAddReviewScreen) {
+                AddReviewView(reviewViewModel: reviewViewModel, shopViewModel: shopViewModel)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    
+                    Button {
+                        if !savedShopViewModel.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
+                            Task {
+                                try await savedShopViewModel.addToWantToGo(shop: coffeeShop)
+                            }
+                            
+                        } else {
+                            Task {
+                                try await savedShopViewModel.removeFromWantToGo(shop: coffeeShop)
                             }
                         }
                         
-                        Spacer()
-                        
-                        HStack {
-                            RatingDisplayView(rating: Double(review.overallRating))
-                            Spacer()
+                        // Reinvoked each time button is pressed
+                    } label: {
+                        if savedShopViewModel.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
+                            toGoOnImage
+                                .foregroundStyle(wantToGoColor)
+                        } else {
+                            toGoOffImage
+                                .foregroundStyle(wantToGoColor)
+                        }
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    
+                    Button {
+                        if !savedShopViewModel.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
+                            Task {
+                                try await savedShopViewModel.addToHaveBeen(shop: coffeeShop)
+                            }
+                            
+                        } else {
+                            Task {
+                                try await savedShopViewModel.removeFromHaveBeen(shop: coffeeShop)
+                            }
                         }
                         
-                        Spacer()
-                        
-                        HStack {
-                            Text(review.comment)
-                            Spacer()
+                        // Reinvoked each time button is pressed
+                    } label: {
+                        if savedShopViewModel.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
+                            beenOnImage
+                                .foregroundStyle(haveBeenColor)
+                        } else {
+                            beenOffImage
+                                .foregroundStyle(haveBeenColor)
+                        }
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    
+                    Button {
+                        if !savedShopViewModel.favorites.contains(where: { $0.id == coffeeShop.id }) {
+                            Task {
+                                try await savedShopViewModel.addToFavorites(shop: coffeeShop)
+                            }
+                            
+                        } else {
+                            Task {
+                                try await savedShopViewModel.removeFromFavorites(shop: coffeeShop)
+                            }
                         }
                         
-                        Spacer()
+                        // Reinvoked each time button is pressed
+                    } label: {
+                        if savedShopViewModel.favorites.contains(where: { $0.id == coffeeShop.id }) {
+                            favOnImage
+                                .foregroundStyle(favoriteColor)
+                        } else {
+                            favOffImage
+                                .foregroundStyle(favoriteColor)
+                        }
                     }
                 }
             }
         }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button { dismiss() } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.headline)
-                }
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showingAddReviewScreen.toggle()
-                } label: {
-                    Image(systemName: "plus.app.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                        .clipShape(Circle())
-                        .foregroundStyle(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-                }
-            }
-        }
-        .sheet(isPresented: $showingAddReviewScreen) {
-            AddReviewView(reviewViewModel: reviewViewModel, shopViewModel: shopViewModel)
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                
-//                Button {
-//                    if !user.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
-//                        user.wantToGo.append(coffeeShop)
-//                        
-//                    } else if user.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
-//                        user.wantToGo.removeAll { $0 == coffeeShop }
-//                    }
-//                    
-//                    do {
-//                        try modelContext.save()
-//                    } catch {
-//                        print(error.localizedDescription)
-//                    }
-//                    // Reinvoked each time button is pressed
-//                } label: {
-//                    if user.wantToGo.contains(where: { $0.id == coffeeShop.id }) {
-//                        toGoOnImage
-//                            .foregroundStyle(wantToGoColor)
-//                    } else {
-//                        toGoOffImage
-//                            .foregroundStyle(wantToGoColor)
-//                    }
-//                }
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                
-//                Button {
-//                    if !user.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
-//                        user.haveBeen.append(coffeeShop)
-//                        
-//                    } else if user.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
-//                        user.haveBeen.removeAll { $0 == coffeeShop }
-//                    }
-//                    
-//                    do {
-//                        try modelContext.save()
-//                    } catch {
-//                        print(error.localizedDescription)
-//                    }
-//                    // Reinvoked each time button is pressed
-//                } label: {
-//                    if user.haveBeen.contains(where: { $0.id == coffeeShop.id }) {
-//                        beenOnImage
-//                            .foregroundStyle(haveBeenColor)
-//                    } else {
-//                        beenOffImage
-//                            .foregroundStyle(haveBeenColor)
-//                    }
-//                }
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                
-//                Button {
-//                    if !user.favorites.contains(where: { $0.id == coffeeShop.id }) {
-//                        user.favorites.append(coffeeShop)
-//                        
-//                    } else if user.favorites.contains(where: { $0.id == coffeeShop.id }) {
-//                        user.favorites.removeAll { $0 == coffeeShop }
-//                    }
-//                    
-//                    do {
-//                        try modelContext.save()
-//                    } catch {
-//                        print(error.localizedDescription)
-//                    }
-//                    // Reinvoked each time button is pressed
-//                } label: {
-//                    if user.favorites.contains(where: { $0.id == coffeeShop.id }) {
-//                        favOnImage
-//                            .foregroundStyle(favoriteColor)
-//                    } else {
-//                        favOffImage
-//                            .foregroundStyle(favoriteColor)
-//                    }
-//                }
-            }
-        }
-        .navigationTitle(coffeeShop.name)
-        .navigationBarTitleDisplayMode(.inline)
+        //.navigationTitle(coffeeShop.name)
+        //.navigationBarTitleDisplayMode(.inline)
     }
     
     // Helper function to format date as time only

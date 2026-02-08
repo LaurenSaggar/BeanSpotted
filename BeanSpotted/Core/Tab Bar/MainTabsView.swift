@@ -13,6 +13,8 @@ enum AppTab: Hashable { case home, saved, profile }
 struct MainTabsView: View {
     
     @State private var selectedTab: AppTab = .home
+    @StateObject var shopViewModel = CoffeeShopViewModel()
+    @StateObject var savedShopViewModel = SavedShopViewModel()
     
     // ModelContext tracks when model objects are created/modified/deleted before save to ModelContainer at later point
 //    @Environment(\.modelContext) var modelContext
@@ -25,7 +27,7 @@ struct MainTabsView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             
-            HomeView()
+            HomeView(shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)
                 .tag(AppTab.home)
                 .tabItem {
                     VStack {
@@ -38,20 +40,20 @@ struct MainTabsView: View {
                             .foregroundStyle(.black)
                     }
                 }
-//            
-//            SavedView(user: user)
-//                .tag(AppTab.saved)
-//                .tabItem {
-//                    VStack {
-//                        Image(systemName: "square.and.arrow.down.fill")
-//                            .foregroundStyle(.black)
-//                        
-//                        Text("Saved")
-//                            .font(.caption)
-//                            .fontWeight(.semibold)
-//                            .foregroundStyle(.black)
-//                    }
-//                }
+            
+            SavedView(shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)
+                .tag(AppTab.saved)
+                .tabItem {
+                    VStack {
+                        Image(systemName: "square.and.arrow.down.fill")
+                            .foregroundStyle(.black)
+                        
+                        Text("Saved")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.black)
+                    }
+                }
             
             ProfileView(selectedTab: $selectedTab)
                 .tag(AppTab.profile)
