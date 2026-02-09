@@ -9,13 +9,16 @@ import SwiftUI
 import SwiftData
 
 struct ProfileView: View {
+    
     @EnvironmentObject var viewModel: AuthViewModel
     @Environment(\.dismiss) var dismiss
     
     @Binding var selectedTab: AppTab
-    
+
     @State private var password = ""
     @State private var showDeleteConfirmationScreen = false
+    @State private var editProfileScreen = false
+    @State private var bio = ""
     
     // User variables
 //    @State private var firstName: String
@@ -23,12 +26,13 @@ struct ProfileView: View {
 //    @State private var email: String
 //    @State private var username: String
 //    @State private var password: String
-//    @State private var bio: String
 //    @State private var errorMessage = ""
     
     var body: some View {
+        
         NavigationStack {
             if let user = viewModel.currentUser {
+                
                 List {
                     Section {
                         HStack {
@@ -42,12 +46,12 @@ struct ProfileView: View {
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(user.firstName + " " + user.lastName)
-                                    .font(.subheadline)
+                                    .font(.title3)
                                     .fontWeight(.semibold)
                                     .padding(.top, 4)
                                 
                                 Text(user.username)
-                                    .font(.footnote)
+                                    .font(.subheadline)
                                     .foregroundColor(.gray)
                                 
 //                                Text(user.username)
@@ -66,6 +70,25 @@ struct ProfileView: View {
                             Text(user.email)
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
+                        }
+                        
+                        HStack {
+                            SettingsRowView(imageName: "person.text.rectangle",
+                                            title: "Bio:",
+                                            tintColor: Color(.systemGray))
+                            
+                            ZStack(alignment: .leading) {
+                                
+                                TextEditor(text: $bio)
+                                    .foregroundColor(.white)
+                                
+                                if bio.isEmpty {
+                                    Text("Add bio here...")
+                                        .foregroundColor(.gray)
+                                    
+                                }
+                            }
+                            .font(.subheadline)
                         }
                     }
                     
@@ -98,6 +121,28 @@ struct ProfileView: View {
                                             tintColor: .red)
                         }
                     }
+                    
+                    Section {
+                        Button("Save") {
+                            
+                            Task {
+                                try await viewModel.updateUserFields(bio: bio)
+                                bio = ""
+                                selectedTab = .home
+                            }
+                            
+                        }
+                        .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)   // expands hit area
+                        .multilineTextAlignment(.center)
+                        .bold()
+                        .disabled(!formIsValid)
+                        .opacity(formIsValid ? 1.0 : 0.5)
+                    }
+                }
+                .task {
+                    bio = user.bio
                 }
             }
             
@@ -220,6 +265,14 @@ struct ProfileView: View {
 //            return true
 //        }
 //    }
+}
+
+// MARK: - AuthenticationFormProtocol
+
+extension ProfileView: AuthenticationFormProtocol {
+    var formIsValid: Bool {
+        return bio != viewModel.currentUser?.bio
+    }
 }
 
 

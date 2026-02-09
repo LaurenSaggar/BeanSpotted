@@ -60,8 +60,21 @@ class AuthViewModel: ObservableObject {
         
     }
     
-    func updateUserFields() {
+    func updateUserFields(bio: String) async throws {
         
+        guard let uid = Auth.auth().currentUser?.uid else {return}  // get authenticated user
+        
+        do {
+            try await Firestore.firestore().collection("users").document(uid)
+                .updateData([
+                    "bio": bio,
+                    "modifyTime": FieldValue.serverTimestamp()
+                ])
+            await fetchUser()
+            
+        } catch {
+            print("DEBUG: Failed to update user bio with error: \(error.localizedDescription)")
+        }
     }
     
     func signOut() {
