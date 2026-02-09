@@ -12,6 +12,7 @@ struct DetailView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var reviewStore: ReviewStore
+//    @StateObject var reviewViewModel: ReviewViewModel
     
     let shopId: String
     //@StateObject private var reviewViewModel: ReviewViewModel
@@ -23,11 +24,17 @@ struct DetailView: View {
         //_reviewViewModel = StateObject(wrappedValue: ReviewViewModel(shopId: shopId))
         self.shopViewModel = shopViewModel
         self.savedShopViewModel = savedShopViewModel
+//        self.reviewViewModel = StateObject(wrappedValue: reviewStore.reviewViewModel(for: shopId))
     }
     
     private var shop: CoffeeShop? {
         shopViewModel.shops.first(where: { $0.id == shopId })
     }
+    
+    // Take ReviewViewModel from cache if it exists or create a new ReviewViewModel
+//    @StateObject private var reviewViewModel: ReviewViewModel {
+//        reviewStore.reviewViewModel(for: shopId)
+//    }
 
     @State private var showingAddReviewScreen = false
     @State private var favoriteOnImage = false
@@ -198,46 +205,48 @@ struct DetailView: View {
                     Section("Detailed Reviews") {
                         
                         ForEach(reviewViewModel.shopReviews) { review in
-                            VStack {
-                                
-                                Spacer()
-                                
-                                HStack {
-                                    Text(review.username)
-                                        .bold()
+                            NavigationLink(destination: ReviewSummaryView(shopId: coffeeShop.id, reviewId: review.id)) {
+                                VStack {
+                                    
                                     Spacer()
                                     
-                                    let startOfDay = Calendar.current.startOfDay(for: review.createTime)
-                                    
-                                    if Date.now.timeIntervalSince(startOfDay) < 86400 {
-                                        Text("Today at \(formattedTime(review.createTime))")
+                                    HStack {
+                                        Text(review.username)
+                                            .bold()
+                                        Spacer()
                                         
-                                    } else if Date.now.timeIntervalSince(startOfDay) < 172800 {
-                                        Text("Yesterday")
+                                        let startOfDay = Calendar.current.startOfDay(for: review.createTime)
                                         
-                                    } else if Date.now.timeIntervalSince(startOfDay) < 604800 {
-                                        Text("Last Week")
-                                        
-                                    } else {
-                                        Text("\(formattedDate(review.createTime))")
+                                        if Date.now.timeIntervalSince(startOfDay) < 86400 {
+                                            Text("Today at \(formattedTime(review.createTime))")
+                                            
+                                        } else if Date.now.timeIntervalSince(startOfDay) < 172800 {
+                                            Text("Yesterday")
+                                            
+                                        } else if Date.now.timeIntervalSince(startOfDay) < 604800 {
+                                            Text("Last Week")
+                                            
+                                        } else {
+                                            Text("\(formattedDate(review.createTime))")
+                                        }
                                     }
-                                }
-                                
-                                Spacer()
-                                
-                                HStack {
-                                    RatingDisplayView(rating: Double(review.overallRating))
+                                    
+                                    Spacer()
+                                    
+                                    HStack {
+                                        RatingDisplayView(rating: Double(review.overallRating))
+                                        Spacer()
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    HStack {
+                                        Text(review.comment)
+                                        Spacer()
+                                    }
+                                    
                                     Spacer()
                                 }
-                                
-                                Spacer()
-                                
-                                HStack {
-                                    Text(review.comment)
-                                    Spacer()
-                                }
-                                
-                                Spacer()
                             }
                         }
                     }
