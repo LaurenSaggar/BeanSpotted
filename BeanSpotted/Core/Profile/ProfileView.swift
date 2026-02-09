@@ -127,7 +127,6 @@ struct ProfileView: View {
                             
                             Task {
                                 try await viewModel.updateUserFields(bio: bio)
-                                bio = ""
                                 selectedTab = .home
                             }
                             
