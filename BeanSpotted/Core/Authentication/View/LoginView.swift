@@ -3,8 +3,7 @@
 //  BeanSpotted
 //
 //  Created by Lauren Saggar on 1/6/26.
-//
-import SwiftData
+
 import SwiftUI
 
 struct LoginView: View {

@@ -18,6 +18,7 @@ class ReviewViewModel: ObservableObject {
     
     init(shopId: String) {
         self.shopId = shopId
+        
         Task {
             await fetchAllShopReviews()
         }

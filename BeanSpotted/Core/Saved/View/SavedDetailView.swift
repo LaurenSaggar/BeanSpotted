@@ -73,7 +73,7 @@ struct SavedDetailView: View {
                     
                     if !savedShops.isEmpty {
                         ForEach(savedShops.reversed()) { shop in
-                            NavigationLink(destination: DetailView(shopId: shop.id, shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)) {
+                            NavigationLink(destination: DetailViewWrapper(shopId: shop.id, shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)) {
                                 HStack {
                                     // Vertically display coffee shop name, city, and state on left of each row
                                     VStack(alignment: .leading) {

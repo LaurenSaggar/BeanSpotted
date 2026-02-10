@@ -3,38 +3,29 @@
 //  BeanSpotted
 //
 //  Created by Lauren Saggar on 10/26/24.
-//
 
-import SwiftData
 import SwiftUI
 
 struct DetailView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var reviewStore: ReviewStore
-//    @StateObject var reviewViewModel: ReviewViewModel
     
     let shopId: String
-    //@StateObject private var reviewViewModel: ReviewViewModel
     @ObservedObject var shopViewModel: CoffeeShopViewModel
     @ObservedObject var savedShopViewModel: SavedShopViewModel
+    @ObservedObject var reviewViewModel: ReviewViewModel
     
-    init(shopId: String, shopViewModel: CoffeeShopViewModel, savedShopViewModel: SavedShopViewModel) {
+    init(shopId: String, shopViewModel: CoffeeShopViewModel, savedShopViewModel: SavedShopViewModel, reviewViewModel: ReviewViewModel) {
         self.shopId = shopId
-        //_reviewViewModel = StateObject(wrappedValue: ReviewViewModel(shopId: shopId))
         self.shopViewModel = shopViewModel
         self.savedShopViewModel = savedShopViewModel
-//        self.reviewViewModel = StateObject(wrappedValue: reviewStore.reviewViewModel(for: shopId))
+        self.reviewViewModel = reviewViewModel
     }
     
     private var shop: CoffeeShop? {
         shopViewModel.shops.first(where: { $0.id == shopId })
     }
-    
-    // Take ReviewViewModel from cache if it exists or create a new ReviewViewModel
-//    @StateObject private var reviewViewModel: ReviewViewModel {
-//        reviewStore.reviewViewModel(for: shopId)
-//    }
 
     @State private var showingAddReviewScreen = false
     @State private var favoriteOnImage = false
@@ -58,7 +49,7 @@ struct DetailView: View {
     var body: some View {
         
         // Take ReviewViewModel from cache if it exists or create a new ReviewViewModel
-        let reviewViewModel = reviewStore.reviewViewModel(for: shopId)
+        //let reviewViewModel = reviewStore.reviewViewModel(for: shopId)
         
         if let coffeeShop = shop {
             VStack(alignment: .leading, spacing: 8) {

@@ -3,7 +3,6 @@
 //  BeanSpotted
 //
 //  Created by Lauren Saggar on 10/24/24.
-//
 
 import SwiftUI
 

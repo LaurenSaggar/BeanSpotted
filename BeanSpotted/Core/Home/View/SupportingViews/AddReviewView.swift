@@ -4,7 +4,6 @@
 //
 //  Created by Lauren Saggar on 10/22/24.
 
-import SwiftData
 import SwiftUI
 import MapKit
 import CoreLocation

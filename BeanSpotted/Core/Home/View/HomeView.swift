@@ -4,7 +4,6 @@
 //
 //  Created by Lauren Saggar on 1/11/26.
 
-import SwiftData
 import SwiftUI
 
 enum ShopSort: String, CaseIterable {
@@ -98,7 +97,7 @@ struct HomeView: View {
             List {
                 
                 ForEach(filtered) { shop in
-                    NavigationLink(destination: DetailView(shopId: shop.id, shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)) {
+                    NavigationLink(destination: DetailViewWrapper(shopId: shop.id, shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)) {
     //
                         HStack {
                             // Vertically display coffee shop name, city, and state on left of each row

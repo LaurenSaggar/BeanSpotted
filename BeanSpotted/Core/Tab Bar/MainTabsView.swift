@@ -5,7 +5,6 @@
 //  Created by Lauren Saggar on 1/14/26.
 //
 
-import SwiftData
 import SwiftUI
 
 enum AppTab: Hashable { case home, saved, profile }
