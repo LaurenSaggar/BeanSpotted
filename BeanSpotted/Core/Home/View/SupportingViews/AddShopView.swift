@@ -123,6 +123,7 @@ struct AddShopView: View {
                 
                     
                 if showShopDetails {
+                    
                     Form {
                         
                         // Set coffee shop info
@@ -149,12 +150,13 @@ struct AddShopView: View {
 //                                .onAppear {}
                             
                             // Toggle for decaf available
-                            Toggle("Is decaf available?", isOn: $decafAvailable)
+//                            Toggle("Is decaf available?", isOn: $decafAvailable)
                             
                             // Toggle for local
-                            Toggle("Is the coffee shop local?", isOn: $local)
+//                            Toggle("Is the coffee shop local?", isOn: $local)
                         }
                     }
+                    .frame(height: 180)
                     
                     Button {
 //                        if !coffeeShopExists() {

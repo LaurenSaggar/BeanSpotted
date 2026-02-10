@@ -82,35 +82,35 @@ struct AddReviewView: View {
                                 Text("\(coffeeShop.address)")
                             }
                             
-                            HStack(alignment: .top) {
-                                Text("Hours:")
-                                    .bold()
-                                Text("\(formattedTime(coffeeShop.openingTime)) - \(formattedTime(coffeeShop.closingTime))")
-                            }
+//                            HStack(alignment: .top) {
+//                                Text("Hours:")
+//                                    .bold()
+//                                Text("\(formattedTime(coffeeShop.openingTime)) - \(formattedTime(coffeeShop.closingTime))")
+//                            }
                             
-                            HStack(alignment: .top) {
-                                Text("Decaf Available:")
-                                    .bold()
-                                if coffeeShop.decafAvailable {
-                                    Text("Yes")
-                                        .foregroundStyle(.green)
-                                } else {
-                                    Text("No")
-                                        .foregroundStyle(.red)
-                                }
-                            }
-                            
-                            HStack(alignment: .top) {
-                                Text("Local:")
-                                    .bold()
-                                if coffeeShop.local {
-                                    Text("Yes")
-                                        .foregroundStyle(.green)
-                                } else {
-                                    Text("No")
-                                        .foregroundStyle(.red)
-                                }
-                            }
+//                            HStack(alignment: .top) {
+//                                Text("Decaf Available:")
+//                                    .bold()
+//                                if coffeeShop.decafAvailable {
+//                                    Text("Yes")
+//                                        .foregroundStyle(.green)
+//                                } else {
+//                                    Text("No")
+//                                        .foregroundStyle(.red)
+//                                }
+//                            }
+//                            
+//                            HStack(alignment: .top) {
+//                                Text("Local:")
+//                                    .bold()
+//                                if coffeeShop.local {
+//                                    Text("Yes")
+//                                        .foregroundStyle(.green)
+//                                } else {
+//                                    Text("No")
+//                                        .foregroundStyle(.red)
+//                                }
+//                            }
                         }
                         
                         // Shop review inputs

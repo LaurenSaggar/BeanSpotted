@@ -84,29 +84,29 @@ struct DetailView: View {
                         //                    Text("\(formattedTime(coffeeShop.openingTime)) - \(formattedTime(coffeeShop.closingTime))")
                         //                }
                         
-                        HStack(alignment: .top) {
-                            Text("Decaf Available:")
-                                .bold()
-                            if coffeeShop.decafAvailable {
-                                Text("Yes")
-                                    .foregroundStyle(.green)
-                            } else {
-                                Text("No")
-                                    .foregroundStyle(.red)
-                            }
-                        }
-                        
-                        HStack(alignment: .top) {
-                            Text("Local:")
-                                .bold()
-                            if coffeeShop.local {
-                                Text("Yes")
-                                    .foregroundStyle(.green)
-                            } else {
-                                Text("No")
-                                    .foregroundStyle(.red)
-                            }
-                        }
+//                        HStack(alignment: .top) {
+//                            Text("Decaf Available:")
+//                                .bold()
+//                            if coffeeShop.decafAvailable {
+//                                Text("Yes")
+//                                    .foregroundStyle(.green)
+//                            } else {
+//                                Text("No")
+//                                    .foregroundStyle(.red)
+//                            }
+//                        }
+//                        
+//                        HStack(alignment: .top) {
+//                            Text("Local:")
+//                                .bold()
+//                            if coffeeShop.local {
+//                                Text("Yes")
+//                                    .foregroundStyle(.green)
+//                            } else {
+//                                Text("No")
+//                                    .foregroundStyle(.red)
+//                            }
+//                        }
                     }
                     
                     Section("Review Summary") {
