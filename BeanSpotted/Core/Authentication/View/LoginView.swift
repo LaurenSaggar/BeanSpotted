@@ -46,8 +46,9 @@ struct LoginView: View {
             
             // Sign in button
             Button {
+                
                 Task {
-                    try await viewModel.signIn(withEmail: email, password: password)
+                    errorMessage = try await viewModel.signIn(withEmail: email, password: password)
                 }
                 
             } label: {

@@ -28,13 +28,16 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func signIn(withEmail email: String, password: String) async throws {
+    func signIn(withEmail email: String, password: String) async throws -> String {
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             self.userSession = result.user
-            await fetchUser()  // use await here to ensure userSession is started before fetchUser() is called
+            await fetchUser()
+            return ""
+            // use await here to ensure userSession is started before fetchUser() is called
         } catch {
             print("DEBUG: Failed to log in with error \(error.localizedDescription)")
+            return "Invalid email or password. Please try again."
         }
     }
     
@@ -87,9 +90,9 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func deleteAccount(password: String) async throws {
-        guard let user = Auth.auth().currentUser else { return }
-        guard let email = user.email else { return }
+    func deleteAccount(password: String) async throws -> String {
+        guard let user = Auth.auth().currentUser else { return "" }
+        guard let email = user.email else { return "" }
 
         let cred = EmailAuthProvider.credential(withEmail: email, password: password)
         
@@ -101,15 +104,21 @@ class AuthViewModel: ObservableObject {
                     try await user.delete()
                     self.userSession = nil  // wipes out user session and takes us back to login screen
                     self.currentUser = nil  // wipes out current user data model
+                    
                 } catch {
                     print("DEBUG: Authentication delete error: \(error.localizedDescription)")
+                    return ""
                 }
             } catch {
                 print("DEBUG: Firestore delete error: \(error.localizedDescription)")
+                return ""
             }
         } catch {
             print("DEBUG: Reauthentication error: \(error.localizedDescription)")
+            return "That password is incorrect. Please try again."
         }
+        
+        return ""
     }
     
     func fetchUser() async {

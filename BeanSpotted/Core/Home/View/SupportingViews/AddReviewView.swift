@@ -15,6 +15,8 @@ struct AddReviewView: View {
     @ObservedObject var shopViewModel: CoffeeShopViewModel
     @Environment(\.dismiss) var dismiss
     
+    @State private var errorMessage = ""
+    
     // Coffee shop variables
 //    @State private var name: String
 //    @State private var address: String
@@ -208,8 +210,6 @@ struct AddReviewView: View {
                                     
                                     dismiss()
                                     
-                                } else {
-                                    ()
                                 }
                             }
                             .listRowBackground(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
@@ -223,7 +223,12 @@ struct AddReviewView: View {
                     .navigationTitle("Add Review")
                     .navigationBarTitleDisplayMode(.inline)
                     .tint(.none)
+                    
+                    if !errorMessage.isEmpty {
+                        Text(errorMessage)
+                    }
                 }
+                
             } else {
                 Text("Coffee shop loading...")
             }
@@ -233,6 +238,7 @@ struct AddReviewView: View {
     // Ensure shop name, address, and all review attributes except for comment have a value/are selected before saving
     func validReview() -> Bool {
         if (coffee == 0 && espresso == 0 && nonCoffeeDrinks == 0 && safety == 0 && wifi == 0 && seating == 0 && quiet == 0 && parking == 0 && food == 0 && value == 0 && cleanliness == 0 && staff == 0 && comment == "") {
+            errorMessage = "At least one review attribute must be entered."
             return false
         }
         

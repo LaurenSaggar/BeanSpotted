@@ -159,12 +159,16 @@ struct AddShopView: View {
                     Button {
 //                        if !coffeeShopExists() {
                         Task {
-                            try await shopViewModel.createShop(name: name, address: address, city: city, state: state, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
+                            if !shopViewModel.shops.contains(where: { $0.name == name && $0.address == address}) {
+                                try await shopViewModel.createShop(name: name, address: address, city: city, state: state, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
+                                
+                                dismiss()
+                                
+                            } else {
+                                errorMessage = "Coffee shop already exists"
+                            }
                         }
-//                            let newCoffeeShop = CoffeeShop(name: name, address: address, city: city, state: state, openingTime: openingTime, closingTime: closingTime, decafAvailable: decafAvailable, local: local)
-                            
-                            dismiss()
-//                        }
+                        
                     } label: {
                         Text("Save")
                             .padding()

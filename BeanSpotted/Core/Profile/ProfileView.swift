@@ -17,6 +17,7 @@ struct ProfileView: View {
     @State private var password = ""
     @State private var showDeleteConfirmationScreen = false
     @State private var editProfileScreen = false
+    @State private var errorMessage = ""
     @State private var bio = ""
     
     // User variables
@@ -220,7 +221,7 @@ struct ProfileView: View {
                 
                 Button("Confirm Delete Account") {
                     Task {
-                        try await viewModel.deleteAccount(password: password)
+                        errorMessage = try await viewModel.deleteAccount(password: password)
                     }
                 }
                 .fontWeight(.semibold)
@@ -229,6 +230,10 @@ struct ProfileView: View {
                 .background(.red)
                 .cornerRadius(24)
                 .padding(.top, 24)
+                
+                if !errorMessage.isEmpty {
+                    Text("\(errorMessage)")
+                }
             }
             .padding()
         }
