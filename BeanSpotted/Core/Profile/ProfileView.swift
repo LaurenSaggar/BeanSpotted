@@ -19,6 +19,7 @@ struct ProfileView: View {
     @State private var editProfileScreen = false
     @State private var errorMessage = ""
     @State private var bio = ""
+    @FocusState private var bioFocused: Bool
     
     // User variables
 //    @State private var firstName: String
@@ -80,16 +81,22 @@ struct ProfileView: View {
                             ZStack(alignment: .leading) {
                                 
                                 TextEditor(text: $bio)
+                                    .focused($bioFocused)
                                     .foregroundColor(.white)
                                 
                                 if bio.isEmpty {
                                     Text("Add bio here...")
                                         .foregroundColor(.gray)
+                                        .allowsHitTesting(false)
                                     
                                 }
                             }
                             .font(.subheadline)
                         }
+                        .simultaneousGesture(
+                            TapGesture().onEnded { bioFocused = false },
+                            including: .gesture
+                        )
                     }
                     
                     Section("General") {
@@ -124,6 +131,7 @@ struct ProfileView: View {
                     
                     Section {
                         Button("Save") {
+                            bioFocused = false
                             
                             Task {
                                 try await viewModel.updateUserFields(bio: bio)
@@ -140,9 +148,18 @@ struct ProfileView: View {
                         .opacity(formIsValid ? 1.0 : 0.5)
                     }
                 }
+                .scrollDismissesKeyboard(.interactively)
+//                .onTapGesture {
+//                    bioFocused = false
+//                }
+                //.scrollDismissesKeyboard(.interactively)
                 .task {
                     bio = user.bio
                 }
+//                .simultaneousGesture(
+//                    TapGesture().onEnded { bioFocused = false },
+//                    including: .gesture
+//                )
             }
             
 //            Form {
