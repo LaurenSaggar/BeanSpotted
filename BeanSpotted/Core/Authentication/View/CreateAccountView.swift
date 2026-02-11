@@ -28,7 +28,7 @@ struct CreateAccountView: View {
                 .scaledToFill()
                 .cornerRadius(20)
                 .frame(width: 100, height: 120)
-                .padding(.vertical, 32)
+                .padding(.vertical, 12)
             
             // Form fields
             VStack(spacing: 24) {
@@ -77,7 +77,7 @@ struct CreateAccountView: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.top, 12)
+            .padding(.top, 8)
             
             Button {
                 Task {
@@ -117,6 +117,8 @@ struct CreateAccountView: View {
                 .foregroundColor(.white)
                 .font(.system(size: 14))
             }
+            
+            Spacer()
         }
         .preferredColorScheme(.dark)
     }

@@ -26,7 +26,7 @@ struct LoginView: View {
                 .scaledToFill()
                 .cornerRadius(20)
                 .frame(width: 100, height: 120)
-                .padding(.vertical, 32)
+                .padding(.vertical, 12)
             
             // Form fields
             VStack(spacing: 24) {
@@ -41,7 +41,7 @@ struct LoginView: View {
                           isSecureField: true)
             }
             .padding(.horizontal)
-            .padding(.top, 12)
+            .padding(.top, 8)
             
             
             // Sign in button

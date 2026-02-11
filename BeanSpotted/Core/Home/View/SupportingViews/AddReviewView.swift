@@ -16,6 +16,7 @@ struct AddReviewView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var errorMessage = ""
+    @FocusState private var commentFocused: Bool
     
     // Coffee shop variables
 //    @State private var name: String
@@ -189,11 +190,16 @@ struct AddReviewView: View {
                             
                             ZStack(alignment: .leading) {
                                 TextEditor(text: $comment)
+                                    .focused($commentFocused)
                                 if comment.isEmpty {
                                     Text("Add additional comments here...\n\n")
                                         .foregroundStyle(.gray)
                                 }
                             }
+                            .simultaneousGesture(
+                                TapGesture().onEnded { commentFocused = false },
+                                including: .gesture
+                            )
                             
                         }
                         
@@ -201,6 +207,7 @@ struct AddReviewView: View {
                             Button("Save") {
                                 // Check for valid review before saving review and potentially new coffee shop
                                 if validReview() {
+                                    commentFocused = false
                                     
                                     Task {
                                         try await reviewViewModel.createReview(coffeeRating: coffee, espressoRating: espresso, nonCoffeeDrinkRating: nonCoffeeDrinks, safetyRating: safety, wifiRating: wifi, seatingRating: seating, quietRating: quiet, parkingRating: parking, foodRating: food, valueRating: value, cleanlinessRating: cleanliness, staffRating: staff, comment: comment, createTime: Date.now, modifyTime: Date.now)
@@ -228,6 +235,7 @@ struct AddReviewView: View {
                         Text(errorMessage)
                     }
                 }
+                .scrollDismissesKeyboard(.interactively)
                 
             } else {
                 Text("Coffee shop loading...")
