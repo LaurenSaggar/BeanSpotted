@@ -5,11 +5,13 @@
 //  Created by Lauren Saggar on 1/11/26.
 
 import SwiftUI
+import CoreLocation
 
 enum ShopSort: String, CaseIterable {
     case nameAZ = "Name (A-Z)"
     case ratingDesc = "Rating (High-Low)"
     case reviewCountDesc = "Review Count (High-Low)"
+    case distanceDesc = "Distance (Near-Far)"
 }
 
 
@@ -19,6 +21,8 @@ struct HomeView: View {
     //@StateObject var shopViewModel = CoffeeShopViewModel()
     @ObservedObject var shopViewModel: CoffeeShopViewModel
     @ObservedObject var savedShopViewModel: SavedShopViewModel
+    @StateObject private var locationManager = LocationManager()
+    @State private var distanceFromShopId: [String: Double] = [:]
     
     @State private var sort: ShopSort = .nameAZ
     @State private var filters: [String: Int] = [
@@ -50,6 +54,29 @@ struct HomeView: View {
     private var filtered: [CoffeeShop] {
         shopViewModel.shops
             .filter { shop in
+                
+                Task {
+                   // Only compute once per shop
+                    guard distanceFromShopId[shop.id] == nil else { return }
+                    guard let userLoc = locationManager.location else { return }
+
+                   do {
+                       let shopCoord = try await geocodeAddress(shop.id)
+                       let shopLoc = CLLocation(latitude: shopCoord.latitude, longitude: shopCoord.longitude)
+                       let meters = userLoc.distance(from: shopLoc)
+                       let miles = meters / 1609.344
+
+                       //let formattedDistance = formattedDistance(meters: distance)
+                       distanceFromShopId[shop.id] = miles
+
+//                       let reviewsText = shop.reviewCount == 1 ? "(1 Review)" : "(\(shop.reviewCount) Reviews)"
+//                       distanceTextByShopId[shop.id] = "\(formattedDistance) \(reviewsText)"
+                   } catch {
+                       print("GEOCODE FAILED for:", shop.address)
+                           print("ERROR:", error)
+                   }
+                }
+                
                 let cleanedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
                 
                 // Filter by search criteria
@@ -86,9 +113,40 @@ struct HomeView: View {
                 case .reviewCountDesc:
                     if a.reviewCount != b.reviewCount { return a.reviewCount > b.reviewCount }
                     return a.name < b.name
+                case .distanceDesc:
+                    if distanceFromShopId[a.id] != distanceFromShopId[b.id] { return distanceFromShopId[a.id] ?? 0 < distanceFromShopId[b.id] ?? 0}
+                    return a.name < b.name
                 }
             }
     }
+    
+    func geocodeAddress(_ address: String) async throws -> CLLocationCoordinate2D {
+        let geocoder = CLGeocoder()
+        let placemarks = try await geocoder.geocodeAddressString(address)
+
+        guard let coordinate = placemarks.first?.location?.coordinate else {
+            throw NSError(domain: "Geocode", code: 0, userInfo: [NSLocalizedDescriptionKey: "No coordinate found"])
+        }
+        return coordinate
+    }
+
+    func distanceInMeters(user: CLLocationCoordinate2D, shop: CLLocationCoordinate2D) -> CLLocationDistance {
+        let userLoc = CLLocation(latitude: user.latitude, longitude: user.longitude)
+        let shopLoc = CLLocation(latitude: shop.latitude, longitude: shop.longitude)
+        return userLoc.distance(from: shopLoc) // meters
+    }
+    
+//    func formattedDistance(meters: CLLocationDistance) -> Double {
+//        let formatter = MeasurementFormatter()
+//        formatter.unitOptions = .providedUnit
+//        formatter.numberFormatter.maximumFractionDigits = 1
+//
+//        let measurement = Measurement(value: meters, unit: UnitLength.meters)
+//
+//        // choose miles or km depending on locale, or force one:
+//        return Double(measurement.converted(to: .miles)
+//        //return formatter.string(from: output)
+//    }
     
     @State private var showingAddShopScreen = false
     
@@ -97,8 +155,14 @@ struct HomeView: View {
             List {
                 
                 ForEach(filtered) { shop in
-                    NavigationLink(destination: DetailViewWrapper(shopId: shop.id, shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)) {
-    //
+                    
+                    let shopId = shop.id
+                        
+                    NavigationLink {
+                        DetailViewWrapper(shopId: shopId, shopViewModel: shopViewModel, savedShopViewModel: savedShopViewModel)
+    
+                    } label: {
+                        //
                         HStack {
                             // Vertically display coffee shop name, city, and state on left of each row
                             VStack(alignment: .leading) {
@@ -106,27 +170,65 @@ struct HomeView: View {
                                 Text(shop.name)
                                     .font(.headline)
                                 Text("\(shop.city), \(shop.state)")
-    
-                                if shop.reviewCount == 1 {
-                                    Text("\(shop.reviewCount) Review")
+                                
+                                let reviewsText = shop.reviewCount == 1 ? "(1 Review)" : "(\(shop.reviewCount) Reviews)"
+                                
+                                if let miles = distanceFromShopId[shopId] {
+                                    Text("\(String(format: "%.1f", miles)) mi, \(reviewsText)")
                                 } else {
-                                    Text("\(shop.reviewCount) Reviews")
+                                    Text("\(reviewsText)")
                                 }
+                                    //.foregroundStyle(.secondary)
+                                //Text(distanceTextByShopId(shopId))
+                                
+//                                    if shop.reviewCount == 1 {
+//                                        Text("\(shop.reviewCount) Review, \(String(describing: formattedDistance)) mi")
+//                                    } else {
+//                                        Text("\(shop.reviewCount) Reviews, \(String(describing: formattedDistance)) mi")
+//                                    }
+                                
                                 Spacer()
                             }
                             
                             Spacer()
-
+                            
                             // Display star rating on right of each row
                             RatingDisplayView(rating: shop.avgOverallRating)
                         }
                     }
+                    .task {
+//                        Task {
+//                           // Only compute once per shop
+//                            //guard distanceFromShopId[shop.id] == nil else { return }
+//                            guard let userLoc = locationManager.location else { return }
+//                            guard distanceFromShopId[shop.id] == nil else { return }
+//
+//                           do {
+//                               let shopCoord = try await geocodeAddress(shop.id)
+//                               let shopLoc = CLLocation(latitude: shopCoord.latitude, longitude: shopCoord.longitude)
+//                               let meters = userLoc.distance(from: shopLoc)
+//                               let miles = meters / 1609.344
+//
+//                               //let formattedDistance = formattedDistance(meters: distance)
+//                               distanceFromShopId[shop.id] = miles
+//
+//        //                       let reviewsText = shop.reviewCount == 1 ? "(1 Review)" : "(\(shop.reviewCount) Reviews)"
+//        //                       distanceTextByShopId[shop.id] = "\(formattedDistance) \(reviewsText)"
+//                           } catch {
+//                               print("GEOCODE FAILED for:", shop.address)
+//                                   print("ERROR:", error)
+//                           }
+//                        }
+                    }
                 }
     //            .onDelete(perform: deleteShops)
             }
+            .task {
+                locationManager.requestLocation()
+            }
             .navigationTitle("Bean Spots")
             .navigationBarTitleDisplayMode(.large)
-            .searchable(text: $searchText, prompt: "Search coffee shop")
+            .searchable(text: $searchText, prompt: "Search by name, location, or address")
             .autocorrectionDisabled(true)
             .textInputAutocapitalization(.never)
             .overlay {

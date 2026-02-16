@@ -22,7 +22,7 @@ struct AuthenticationStartView: View {
                 
                 Spacer()
                 
-                Text("Bean Spots")
+                Text("Bean Spotted")
                     .bold()
                     .font(.system(size: 40, weight: .bold, design: .default))
                 

@@ -21,106 +21,109 @@ struct CreateAccountView: View {
     @State private var bio: String = ""
     
     var body: some View {
-        VStack {
-            // Image
-            Image("Coffee_Bean_Logo")
-                .resizable()
-                .scaledToFill()
-                .cornerRadius(20)
-                .frame(width: 100, height: 120)
-                .padding(.vertical, 12)
-            
-            // Form fields
-            VStack(spacing: 24) {
-                InputView(text: $firstName,
-                          title: "First Name",
-                          placeholder: "Enter your first name")
+        ScrollView {
+            VStack {
+                // Image
+                Image("Coffee_Bean_Logo")
+                    .resizable()
+                    .scaledToFill()
+                    .cornerRadius(20)
+                    .frame(width: 100, height: 120)
+                    .padding(.vertical, 12)
                 
-                InputView(text: $lastName,
-                          title: "Last Name",
-                          placeholder: "Enter your last name")
-                
-                InputView(text: $email,
-                          title: "Email",
-                          placeholder: "mr.bean@gmail.com")
-                .autocapitalization(.none)
-                
-                InputView(text: $username,
-                          title: "Username",
-                          placeholder: "Enter your username")
-                .autocapitalization(.none)
-                
-                InputView(text: $password,
-                          title: "Password",
-                          placeholder: "Enter your password",
-                          isSecureField: true)
-                
-                ZStack(alignment: .trailing) {
-                    InputView(text: $confirmPassword,
-                              title: "Confirm Password",
-                              placeholder: "Confirm your password",
+                // Form fields
+                VStack(spacing: 24) {
+                    InputView(text: $firstName,
+                              title: "First Name",
+                              placeholder: "Enter your first name")
+                    
+                    InputView(text: $lastName,
+                              title: "Last Name",
+                              placeholder: "Enter your last name")
+                    
+                    InputView(text: $email,
+                              title: "Email",
+                              placeholder: "mr.bean@gmail.com")
+                    .autocapitalization(.none)
+                    
+                    InputView(text: $username,
+                              title: "Username",
+                              placeholder: "Enter your username")
+                    .autocapitalization(.none)
+                    
+                    InputView(text: $password,
+                              title: "Password",
+                              placeholder: "Enter your password",
                               isSecureField: true)
                     
-                    if !password.isEmpty && !confirmPassword.isEmpty {
-                        if password == confirmPassword {
-                            Image(systemName: "checkmark.circle.fill")
-                                .imageScale(.large)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(.systemGreen))
-                        } else {
-                            Image(systemName: "xmark.circle.fill")
-                                .imageScale(.large)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(.systemRed))
+                    ZStack(alignment: .trailing) {
+                        InputView(text: $confirmPassword,
+                                  title: "Confirm Password",
+                                  placeholder: "Confirm your password",
+                                  isSecureField: true)
+                        
+                        if !password.isEmpty && !confirmPassword.isEmpty {
+                            if password == confirmPassword {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .imageScale(.large)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(.systemGreen))
+                            } else {
+                                Image(systemName: "xmark.circle.fill")
+                                    .imageScale(.large)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(.systemRed))
+                            }
                         }
                     }
                 }
-            }
-            .padding(.horizontal)
-            .padding(.top, 8)
-            
-            Button {
-                Task {
-                    try await viewModel.createUser(firstName: firstName,
-                                                   lastName: lastName,
-                                                   withEmail: email,
-                                                   username: username,
-                                                   password: password)
+                .padding(.horizontal)
+                .padding(.top, 8)
+                
+                Button {
+                    Task {
+                        try await viewModel.createUser(firstName: firstName,
+                                                       lastName: lastName,
+                                                       withEmail: email,
+                                                       username: username,
+                                                       password: password)
+                    }
+                    
+                } label: {
+                    HStack {
+                        Text("SIGN UP")
+                            .fontWeight(.semibold)
+                        Image(systemName: "arrow.right")
+                    }
+                    .foregroundColor(.white)
+                    .frame(width: UIScreen.main.bounds.width - 50, height: 48)
+                }
+                .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                .disabled(!formIsValid)
+                .opacity(formIsValid ? 1.0 : 0.5)
+                .cornerRadius(24)
+                .padding(.top, 24)
+                
+                Spacer()
+                
+                // Route to login
+                Button {
+                    path = [.login]
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("Already have an account?")
+                        Text("Log in")
+                            .fontWeight(.bold)
+                    }
+                    .foregroundColor(.white)
+                    .font(.system(size: 14))
                 }
                 
-            } label: {
-                HStack {
-                    Text("SIGN UP")
-                        .fontWeight(.semibold)
-                    Image(systemName: "arrow.right")
-                }
-                .foregroundColor(.white)
-                .frame(width: UIScreen.main.bounds.width - 50, height: 48)
+                Spacer()
             }
-            .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-            .disabled(!formIsValid)
-            .opacity(formIsValid ? 1.0 : 0.5)
-            .cornerRadius(24)
-            .padding(.top, 24)
-            
-            Spacer()
-            
-            // Route to login
-            Button {
-                path = [.login]
-            } label: {
-                HStack(spacing: 4) {
-                    Text("Already have an account?")
-                    Text("Log in")
-                        .fontWeight(.bold)
-                }
-                .foregroundColor(.white)
-                .font(.system(size: 14))
-            }
-            
-            Spacer()
+            .scrollDismissesKeyboard(.interactively)
+            .preferredColorScheme(.dark)
         }
-        .preferredColorScheme(.dark)
     }
 }
 

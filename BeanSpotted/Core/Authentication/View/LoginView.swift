@@ -19,74 +19,77 @@ struct LoginView: View {
     @State private var userIndex = 0
     
     var body: some View {
-        VStack {
-            // Image
-            Image("Coffee_Bean_Logo")
-                .resizable()
-                .scaledToFill()
-                .cornerRadius(20)
-                .frame(width: 100, height: 120)
-                .padding(.vertical, 12)
-            
-            // Form fields
-            VStack(spacing: 24) {
-                InputView(text: $email,
-                          title: "Email Address",
-                          placeholder: "name@example.com")
-                .autocapitalization(.none)
+        ScrollView {
+            VStack {
+                // Image
+                Image("Coffee_Bean_Logo")
+                    .resizable()
+                    .scaledToFill()
+                    .cornerRadius(20)
+                    .frame(width: 100, height: 120)
+                    .padding(.vertical, 12)
                 
-                InputView(text: $password,
-                          title: "Password",
-                          placeholder: "Enter your password",
-                          isSecureField: true)
-            }
-            .padding(.horizontal)
-            .padding(.top, 8)
-            
-            
-            // Sign in button
-            Button {
-                
-                Task {
-                    errorMessage = try await viewModel.signIn(withEmail: email, password: password)
+                // Form fields
+                VStack(spacing: 24) {
+                    InputView(text: $email,
+                              title: "Email Address",
+                              placeholder: "name@example.com")
+                    .autocapitalization(.none)
+                    
+                    InputView(text: $password,
+                              title: "Password",
+                              placeholder: "Enter your password",
+                              isSecureField: true)
                 }
+                .padding(.horizontal)
+                .padding(.top, 8)
                 
+                
+                // Sign in button
+                Button {
+                    
+                    Task {
+                        errorMessage = try await viewModel.signIn(withEmail: email, password: password)
+                    }
+                    
+                } label: {
+                    HStack {
+                        Text("SIGN IN")
+                            .fontWeight(.semibold)
+                        Image(systemName: "arrow.right")
+                    }
+                    .foregroundColor(.white)
+                    .frame(width: UIScreen.main.bounds.width - 50, height: 48)
+                }
+                .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
+                .disabled(!formIsValid)
+                .opacity(formIsValid ? 1.0 : 0.5)
+                .cornerRadius(24)
+                .padding(.top, 24)
+                
+                
+                if !errorMessage.isEmpty {
+                    Text("\(errorMessage)")
+                }
+            }
+            
+            Spacer()
+            
+            // Route to sign up
+            Button {
+                path = [.signup]
             } label: {
-                HStack {
-                    Text("SIGN IN")
-                        .fontWeight(.semibold)
-                    Image(systemName: "arrow.right")
+                HStack(spacing: 4) {
+                    Text("Don't have an account?")
+                    Text("Create Account")
+                        .fontWeight(.bold)
                 }
                 .foregroundColor(.white)
-                .frame(width: UIScreen.main.bounds.width - 50, height: 48)
+                .font(.system(size: 14))
             }
-            .background(Color(.sRGB, red: 44/255, green: 145/255, blue: 133/255))
-            .disabled(!formIsValid)
-            .opacity(formIsValid ? 1.0 : 0.5)
-            .cornerRadius(24)
-            .padding(.top, 24)
-            
-            
-            if !errorMessage.isEmpty {
-                Text("\(errorMessage)")
-            }
+            .scrollDismissesKeyboard(.interactively)
+            .preferredColorScheme(.dark)
         }
-        
-        Spacer()
-        
-        // Route to sign up
-        Button {
-            path = [.signup]
-        } label: {
-            HStack(spacing: 4) {
-                Text("Don't have an account?")
-                Text("Create Account")
-                    .fontWeight(.bold)
-            }
-            .foregroundColor(.white)
-            .font(.system(size: 14))
-        }
-        .preferredColorScheme(.dark)
     }
 }
     
